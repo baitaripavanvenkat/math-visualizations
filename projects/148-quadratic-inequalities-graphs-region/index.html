@@ -1,18 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quadratic Inequalities by Graph Regions | Interactive Mathematics</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quadratic Inequalities by Graph Regions | Maths Universe</title>
   <style>
     :root {
       --primary: #635bff;
-      --primary-hover: #4f46e5;
+      --primary-hover: #5148e5;
       --primary-light: #eeedfd;
-      --accent-purple: #8b5cf6;
-      --accent-purple-light: #f3e8ff;
-      --accent-blue: #2563eb;
-      --accent-blue-light: #dbeafe;
       --accent-green: #10b981;
       --accent-green-light: #d1fae5;
       --accent-red: #ef4444;
@@ -83,7 +79,7 @@
       text-align: center;
     }
 
-    .brand-logo svg { width: 36px; height: 36px; }
+    .brand-logo img { width: 36px; height: 36px; object-fit: contain; }
 
     .nav-list {
       list-style: none;
@@ -654,51 +650,36 @@
   <div class="app-layout">
     <!-- Sidebar Navigation -->
     <aside class="sidebar">
-      <a href="#" class="brand-logo">
-        <svg viewBox="0 0 40 40" fill="none">
-          <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2.5"/>
-          <path d="M 12 10 Q 20 20 12 30 M 28 10 Q 20 20 28 30" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-        </svg>
+      <a href="../../index.html" class="brand-logo">
+        <img src="../../assets/logo.png" alt="Maths Universe">
         <span>Maths</span>
       </a>
       <ul class="nav-list">
         <li class="nav-item active">
-          <button title="Explore Visuals">
+          <button type="button" data-section="explore-section" title="Explore Visuals">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
             Explore
           </button>
         </li>
         <li class="nav-item">
-          <button title="Proofs">
+          <button type="button" data-section="proof-section" title="Proofs">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 01-2 2h-0a2 2 0 01-2-2v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
             Proofs
           </button>
         </li>
         <li class="nav-item">
-          <button title="Practice">
+          <button type="button" data-section="practice-section" title="Practice">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
             Practice
           </button>
         </li>
         <li class="nav-item">
-          <button title="Saved">
+          <button type="button" data-section="saved-section" title="Saved">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
             Saved
           </button>
         </li>
-        <li class="nav-item">
-          <button title="Progress">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-            Progress
-          </button>
-        </li>
       </ul>
-      <div class="sidebar-footer nav-item">
-        <button title="Settings">
-          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
-          Settings
-        </button>
-      </div>
     </aside>
 
     <!-- Main Workspace Container -->
@@ -706,7 +687,8 @@
       <!-- Top Header -->
       <header class="top-header">
         <div class="header-title-area">
-          <a href="#" class="breadcrumb">&lsaquo; Visual Proofs / Algebra</a>
+          <a href="../../index.html" class="breadcrumb">&lsaquo; Visual Proofs / Algebra</a>
+          <a href="../../index.html" class="btn-icon-action" style="width:max-content;">Home</a>
           <h1>Quadratic Inequalities by Graph Regions</h1>
           <p class="header-subtitle">See how a quadratic curve splits the number line into positive and negative intervals.</p>
         </div>
@@ -721,7 +703,7 @@
       </header>
 
       <!-- Top Controls Bar -->
-      <section class="top-controls-card">
+      <section class="top-controls-card" id="explore-section">
         <div class="controls-left-group">
           <!-- Natural Equation Input -->
           <div style="display:flex; flex-direction:column; gap:2px;">
@@ -827,7 +809,7 @@
           </section>
 
           <!-- Card 3: Visual Proof Flowchart -->
-          <section class="visual-proof-card">
+          <section class="visual-proof-card" id="proof-section">
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <h3 style="font-size:15px; font-weight:800;">Visual Proof</h3>
               <span class="pill-badge" style="background:var(--accent-green-light); color:#065f46; font-weight:bold;">✔ Proved</span>
@@ -924,7 +906,7 @@
       </div>
 
       <!-- Challenge Bottom Card -->
-      <section class="challenge-bottom-card">
+      <section class="challenge-bottom-card" id="practice-section">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
           <div>
             <h3 style="font-size:16px; font-weight:800;">Challenge (Exact)</h3>
@@ -945,6 +927,13 @@
         </div>
 
         <div id="challenge-feedback" class="feedback-msg" style="display:none;"></div>
+      </section>
+      <section class="challenge-bottom-card" id="saved-section" aria-label="Saved">
+        <div>
+          <h3 style="font-size:16px; font-weight:800;">Saved</h3>
+          <p style="font-size:12.5px; color:var(--text-muted);" id="saved-status">Save the current quadratic inequality state for this lesson.</p>
+        </div>
+        <button class="btn-primary" id="btn-save-state" style="width:max-content;">Save current state</button>
       </section>
     </main>
   </div>
@@ -1087,7 +1076,7 @@
 
         if (a > 0) {
           if (ineq === '>=' || ineq === '>') {
-            solutionInterval = `(-\\infty, ${r1Str}${isInclusive ? ']' : ')'}) \\cup (${isInclusive ? '[' : '('}${r2Str}, \\infty)`;
+            solutionInterval = `(-\\infty, ${r1Str}${isInclusive ? ']' : ')'} \\cup ${isInclusive ? '[' : '('}${r2Str}, \\infty)`;
           } else {
             solutionInterval = `${isInclusive ? '[' : '('}${r1Str}, ${r2Str}${isInclusive ? ']' : ')'}`;
           }
@@ -1095,7 +1084,7 @@
           if (ineq === '>=' || ineq === '>') {
             solutionInterval = `${isInclusive ? '[' : '('}${r1Str}, ${r2Str}${isInclusive ? ']' : ')'}`;
           } else {
-            solutionInterval = `(-\\infty, ${r1Str}${isInclusive ? ']' : ')'}) \\cup (${isInclusive ? '[' : '('}${r2Str}, \\infty)`;
+            solutionInterval = `(-\\infty, ${r1Str}${isInclusive ? ']' : ')'} \\cup ${isInclusive ? '[' : '('}${r2Str}, \\infty)`;
           }
         }
       } else if (Math.abs(disc) <= 1e-9) {
@@ -1648,16 +1637,16 @@
         const r2Str = model.roots[1].toFixed(Number.isInteger(model.roots[1]) ? 0 : 2);
         elements.proofStep1Txt.textContent = `f(${model.v}) = 0 where ${model.v} = ${r1Str}, ${r2Str}.`;
         elements.proofStep2Txt.textContent = `Pick test values in (-\\infty,${r1Str}), (${r1Str},${r2Str}), (${r2Str},\\infty).`;
-        elements.proofStep3Txt.textContent = `Shade regions satisfying f(${model.v}) ${formatOp(model.inequality)} 0.`;
+        elements.proofStep3Txt.textContent = `Shade regions satisfying f(${model.v}) ${formatOp(model.ineq)} 0.`;
       } else if (model.rootType === 'one') {
         const rStr = model.roots[0].toFixed(Number.isInteger(model.roots[0]) ? 0 : 2);
         elements.proofStep1Txt.textContent = `Repeated root at ${model.v} = ${rStr}.`;
         elements.proofStep2Txt.textContent = `Discriminant \u0394 = 0.`;
-        elements.proofStep3Txt.textContent = `Evaluate f(${model.v}) ${formatOp(model.inequality)} 0.`;
+        elements.proofStep3Txt.textContent = `Evaluate f(${model.v}) ${formatOp(model.ineq)} 0.`;
       } else {
         elements.proofStep1Txt.textContent = `No real roots (\u0394 < 0).`;
         elements.proofStep2Txt.textContent = `Parabola is entirely ${model.a > 0 ? 'above' : 'below'} x-axis.`;
-        elements.proofStep3Txt.textContent = `Evaluate f(${model.v}) ${formatOp(model.inequality)} 0.`;
+        elements.proofStep3Txt.textContent = `Evaluate f(${model.v}) ${formatOp(model.ineq)} 0.`;
       }
       elements.proofStep4Txt.textContent = model.solutionInterval;
 
@@ -1669,7 +1658,7 @@
         elements.whyDesc2.textContent = model.a > 0
           ? `The parabola opens upward (a > 0), so it is positive outside the roots and negative between them.`
           : `The parabola opens downward (a < 0), so it is positive between the roots and negative outside them.`;
-        elements.whyDesc3.textContent = `For f(${model.v}) ${formatOp(model.inequality)} 0, select the matching sign intervals.`;
+        elements.whyDesc3.textContent = `For f(${model.v}) ${formatOp(model.ineq)} 0, select the matching sign intervals.`;
       } else if (model.rootType === 'one') {
         const r0Str = model.roots[0].toFixed(Number.isInteger(model.roots[0]) ? 0 : 2);
         elements.whyDesc1.textContent = `For f(${model.v}) = ${canonicalEqStr}, the parabola touches the axis at repeated root ${model.v} = ${r0Str}.`;
@@ -1683,7 +1672,7 @@
       elements.whyBoxSol.textContent = `Solution: ${model.solutionInterval}`;
 
       // Prediction Options Sync
-      elements.predictLeadLbl.textContent = `What is the solution to f(${model.v}) ${formatOp(model.inequality)} 0?`;
+      elements.predictLeadLbl.textContent = `What is the solution to f(${model.v}) ${formatOp(model.ineq)} 0?`;
       const options = [
         model.solutionInterval,
         `[-1, 3]`,
@@ -2015,6 +2004,22 @@
       const model = solveQuadraticMath(state.a, state.b, state.c, state.inequality, state.variable);
       resetViewportToFit(model);
       renderUI();
+    });
+
+    const navButtons = document.querySelectorAll('.nav-item button[data-section]');
+    navButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const target = document.getElementById(button.dataset.section);
+        if (!target) return;
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        navButtons.forEach(item => item.closest('.nav-item').classList.remove('active'));
+        button.closest('.nav-item').classList.add('active');
+      });
+    });
+
+    document.getElementById('btn-save-state').addEventListener('click', () => {
+      localStorage.setItem('maths-universe-148-saved', JSON.stringify(state));
+      document.getElementById('saved-status').textContent = 'Current quadratic inequality state saved on this device.';
     });
 
     // Initial Execution
