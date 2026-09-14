@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Compound Inequalities and Intervals | Interactive Mathematics</title>
+  <title>Compound Inequalities and Intervals | Maths Universe</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
   <style>
     :root {
       --primary: #635bff;
@@ -22,6 +25,7 @@
       --card-bg: #ffffff;
       --text-dark: #1e293b;
       --text-muted: #64748b;
+      --text-light: #94a3b8;
       --border: #e2e8f0;
       --border-focus: #818cf8;
       --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
@@ -36,6 +40,10 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       font-family: var(--font-main);
       background-color: var(--bg-main);
@@ -49,12 +57,16 @@
     /* Layout Structure */
     .app-layout {
       display: grid;
-      grid-template-columns: 80px 1fr;
+      grid-template-columns: 84px 1fr;
       min-height: 100vh;
     }
 
     @media (min-width: 1200px) {
-      .app-layout { grid-template-columns: 100px 1fr; }
+      .app-layout { grid-template-columns: 96px 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .app-layout { grid-template-columns: 1fr; }
     }
 
     /* Sidebar Navigation */
@@ -65,8 +77,28 @@
       flex-direction: column;
       align-items: center;
       padding: 20px 0;
-      gap: 28px;
-      z-index: 10;
+      gap: 24px;
+      z-index: 100;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        bottom: 0;
+        top: auto;
+        left: 0;
+        right: 0;
+        height: auto;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 8px 12px;
+        border-right: none;
+        border-top: 1px solid var(--border);
+        box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
+      }
     }
 
     .brand-logo {
@@ -76,22 +108,43 @@
       gap: 4px;
       color: var(--primary);
       text-decoration: none;
-      font-weight: 700;
-      font-size: 11px;
+      font-weight: 800;
+      font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       text-align: center;
     }
 
-    .brand-logo svg { width: 36px; height: 36px; }
+    .brand-logo-img {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+      border-radius: 8px;
+      transition: transform 0.2s;
+    }
+
+    .brand-logo:hover .brand-logo-img {
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      .brand-logo { display: none; }
+    }
 
     .nav-list {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
       width: 100%;
       align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .nav-list {
+        flex-direction: row;
+        justify-content: space-around;
+      }
     }
 
     .nav-item button {
@@ -103,27 +156,55 @@
       gap: 4px;
       color: var(--text-muted);
       font-size: 11px;
+      font-weight: 600;
       cursor: pointer;
-      padding: 8px 12px;
+      padding: 8px 10px;
       border-radius: var(--radius-sm);
       transition: all 0.2s;
-      width: 64px;
+      width: 66px;
     }
 
-    .nav-item button:hover { color: var(--primary); background: var(--primary-light); }
-    .nav-item.active button { color: var(--primary); background: var(--primary-light); font-weight: 600; }
+    .nav-item button:hover {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .nav-item.active button {
+      color: var(--primary);
+      background: var(--primary-light);
+      font-weight: 700;
+    }
+
     .nav-item svg { width: 22px; height: 22px; }
     .sidebar-footer { margin-top: auto; }
 
+    @media (max-width: 768px) {
+      .sidebar-footer { display: none; }
+    }
+
     /* Main Content Wrapper */
     .main-wrapper {
-      padding: 28px 36px;
+      padding: 24px 32px 64px 32px;
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 28px;
       max-width: 1850px;
       margin: 0 auto;
       width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      .main-wrapper {
+        padding: 16px 16px 80px 16px;
+        gap: 20px;
+      }
+    }
+
+    .page-section {
+      scroll-margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
 
     /* Top Header */
@@ -135,48 +216,73 @@
       flex-wrap: wrap;
     }
 
-    .breadcrumb {
+    .header-nav-row {
       display: flex;
       align-items: center;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+
+    .btn-home {
+      display: inline-flex;
+      align-items: center;
       gap: 6px;
-      font-size: 13px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
       color: var(--primary);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12.5px;
+      font-weight: 700;
       text-decoration: none;
-      font-weight: 500;
-      margin-bottom: 4px;
+      transition: all 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-home:hover {
+      background: var(--primary-light);
+      border-color: var(--border-focus);
+      transform: translateX(-2px);
+    }
+
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
     }
 
     .header-title-area h1 {
-      font-size: 26px;
+      font-size: 28px;
       font-weight: 800;
       color: var(--text-dark);
       display: flex;
       align-items: center;
       gap: 12px;
       flex-wrap: wrap;
+      letter-spacing: -0.5px;
     }
 
-    .header-subtitle { color: var(--text-muted); font-size: 14px; margin-top: 2px; }
-
-    .header-actions { display: flex; align-items: center; gap: 12px; }
+    .header-subtitle { color: var(--text-muted); font-size: 14.5px; margin-top: 4px; }
+    .header-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
     .pill-badge {
-      background: #f1f5f9;
-      color: var(--text-muted);
-      font-size: 13px;
+      background: #eef2f6;
+      color: var(--text-dark);
+      font-size: 12.5px;
       padding: 6px 14px;
       border-radius: 20px;
-      font-weight: 500;
+      font-weight: 600;
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
-    .btn-icon-action {
+    .btn-secondary {
       background: var(--card-bg);
       border: 1px solid var(--border);
       color: var(--text-dark);
-      padding: 8px 12px;
+      padding: 8px 16px;
       border-radius: var(--radius-sm);
       font-weight: 600;
       font-size: 13px;
@@ -188,7 +294,11 @@
       box-shadow: var(--shadow-sm);
     }
 
-    .btn-icon-action:hover { background: #f8fafc; border-color: var(--border-focus); color: var(--primary); }
+    .btn-secondary:hover {
+      background: #f8fafc;
+      border-color: var(--border-focus);
+      color: var(--primary);
+    }
 
     /* Mission Banner */
     .mission-bar {
@@ -200,7 +310,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 600;
       color: var(--text-dark);
     }
@@ -215,6 +325,7 @@
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      font-size: 18px;
     }
 
     /* Custom Inequality Input Card */
@@ -246,9 +357,11 @@
       font-size: 18px;
       font-weight: bold;
       color: var(--primary);
+      outline: none;
+      transition: border-color 0.2s;
     }
 
-    .text-compound-input:focus { outline: none; border-color: var(--primary); }
+    .text-compound-input:focus { border-color: var(--primary); }
 
     .btn-solve-primary {
       background: var(--primary);
@@ -270,14 +383,14 @@
       align-items: center;
       gap: 8px;
       flex-wrap: wrap;
-      font-size: 12px;
+      font-size: 12.5px;
       color: var(--text-muted);
     }
 
     .preset-chip-btn {
       background: #f8fafc;
       border: 1px solid var(--border);
-      padding: 4px 12px;
+      padding: 5px 12px;
       border-radius: 16px;
       font-family: var(--font-math);
       font-size: 13px;
@@ -287,7 +400,11 @@
       transition: all 0.15s;
     }
 
-    .preset-chip-btn:hover { background: var(--primary-light); color: var(--primary); border-color: var(--border-focus); }
+    .preset-chip-btn:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--border-focus);
+    }
 
     .error-alert-banner {
       background: #fce7f3;
@@ -328,7 +445,7 @@
     }
 
     .card-stage-title {
-      font-size: 14px;
+      font-size: 14.5px;
       font-weight: 800;
       color: var(--text-dark);
       display: flex;
@@ -416,6 +533,7 @@
       font-family: var(--font-math);
       font-size: 14px;
       font-weight: bold;
+      outline: none;
     }
 
     .endpoint-toggle-row {
@@ -445,10 +563,10 @@
       background: #ffffff;
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
-      padding: 16px;
+      padding: 18px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
       position: relative;
     }
 
@@ -481,11 +599,12 @@
       font-weight: bold;
       color: var(--primary);
       cursor: pointer;
+      outline: none;
     }
 
     .svg-main-nl-canvas {
       width: 100%;
-      height: 120px;
+      height: 130px;
       display: block;
       cursor: crosshair;
       user-select: none;
@@ -494,7 +613,7 @@
     .target-result-pill {
       align-self: center;
       background: #f8fafc;
-      border: 1px solid var(--border-focus);
+      border: 1.5px solid var(--primary);
       padding: 6px 18px;
       border-radius: 20px;
       font-family: var(--font-math);
@@ -535,7 +654,7 @@
       justify-content: space-between;
     }
 
-    .svg-piece-mini { width: 100%; height: 50px; display: block; }
+    .svg-piece-mini { width: 100%; height: 52px; display: block; }
 
     .piece-interval-footer {
       font-family: var(--font-math);
@@ -563,13 +682,14 @@
       justify-content: center;
       gap: 12px;
       font-family: var(--font-math);
-      font-size: 17px;
+      font-size: 18px;
       font-weight: bold;
       flex-wrap: wrap;
       background: #f8fafc;
-      padding: 12px;
+      padding: 14px;
       border-radius: var(--radius-md);
       border: 1px solid var(--border);
+      color: var(--primary);
     }
 
     .proved-badge {
@@ -621,8 +741,7 @@
       gap: 16px;
     }
 
-    .why-panel-scroll::-webkit-scrollbar { width: 8px; }
-    .why-panel-scroll::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+    .why-panel-scroll::-webkit-scrollbar { width: 6px; }
     .why-panel-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
 
     .why-section {
@@ -693,9 +812,28 @@
       font-weight: bold;
       cursor: pointer;
       text-align: center;
+      transition: all 0.15s;
     }
 
     .predict-choice-btn.selected { background: var(--primary-light); border-color: var(--primary); color: var(--primary); }
+
+    .btn-reveal-main {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+
+    .btn-reveal-main:hover { background: var(--primary-hover); }
 
     .feedback-msg {
       font-size: 12.5px;
@@ -705,6 +843,7 @@
       display: flex;
       align-items: center;
       gap: 6px;
+      line-height: 1.4;
     }
     .feedback-msg.correct { background: var(--accent-green-light); color: #065f46; }
     .feedback-msg.incorrect { background: #fce7f3; color: #9f1239; }
@@ -726,6 +865,69 @@
       align-items: center;
       gap: 14px;
       flex-wrap: wrap;
+    }
+
+    /* Saved Panel Section */
+    .saved-container {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .saved-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .saved-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+
+    .saved-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: all 0.2s;
+    }
+
+    .saved-card:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .saved-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .saved-card-badge {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 12px;
+      background: var(--primary);
+      color: white;
+    }
+
+    .saved-card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
     }
 
     /* Footer Stats Bar */
@@ -750,47 +952,40 @@
   <div class="app-layout">
     <!-- Sidebar Navigation -->
     <aside class="sidebar">
-      <a href="#" class="brand-logo">
-        <svg viewBox="0 0 40 40" fill="none">
-          <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2.5"/>
-          <path d="M 12 10 Q 20 20 12 30 M 28 10 Q 20 20 28 30" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-        </svg>
-        <span>Maths</span>
+      <a href="../../index.html" class="brand-logo" title="Back to Maths Universe">
+        <img src="../../assets/logo.png" alt="Maths Universe" class="brand-logo-img" />
+        <span>Maths Universe</span>
       </a>
+
       <ul class="nav-list">
-        <li class="nav-item active">
-          <button title="Explore Visuals">
+        <li class="nav-item active" data-nav="explore">
+          <button title="Explore Visuals" data-target="explore">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
             Explore
           </button>
         </li>
-        <li class="nav-item">
-          <button title="Proofs">
+        <li class="nav-item" data-nav="proofs">
+          <button title="Why It Works / Proofs" data-target="proofs">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 01-2 2h-0a2 2 0 01-2-2v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
             Proofs
           </button>
         </li>
-        <li class="nav-item">
-          <button title="Practice">
+        <li class="nav-item" data-nav="practice">
+          <button title="Predict & Challenge" data-target="practice">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
             Practice
           </button>
         </li>
-        <li class="nav-item">
-          <button title="Saved">
+        <li class="nav-item" data-nav="saved">
+          <button title="Saved Configurations" data-target="saved">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
             Saved
           </button>
         </li>
-        <li class="nav-item">
-          <button title="History">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            History
-          </button>
-        </li>
       </ul>
+
       <div class="sidebar-footer nav-item">
-        <button title="Settings">
+        <button title="Settings" id="btn-settings">
           <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
           Settings
         </button>
@@ -799,300 +994,375 @@
 
     <!-- Main Workspace Container -->
     <main class="main-wrapper">
-      <!-- Top Header -->
-      <header class="top-header">
-        <div class="header-title-area">
-          <a href="#" class="breadcrumb">&lsaquo; Visual Proofs / Algebra</a>
-          <h1>Compound Inequalities and Intervals</h1>
-          <p class="header-subtitle">See why compound inequalities become overlap intervals or outside unions.</p>
-        </div>
-        <div class="header-actions">
-          <span class="pill-badge">Intermediate</span>
-          <span class="pill-badge">⏱ 12 min</span>
-          <button class="btn-icon-action" id="btn-reset-all" title="Reset lesson">
-            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-            Reset
-          </button>
-        </div>
-      </header>
-
-      <!-- Mission Banner -->
-      <section class="mission-bar">
-        <div class="icon-rocket-badge">🚀</div>
-        <div><strong>Mission:</strong> Build intuition by moving bounds and seeing how inequality regions overlap on the number line.</div>
-      </section>
-
-      <!-- Custom Inequality Input Card -->
-      <section class="custom-input-card">
-        <div style="font-size:14px; font-weight:800; color:var(--text-dark);">
-          Create your own compound inequality
-        </div>
-        <div class="natural-input-row">
-          <input type="text" id="input-natural-compound" class="text-compound-input" value="x > -2 AND x < 4" placeholder="Enter e.g. y >= 1 AND y < 6, z < -3 OR z > 5, -2 < x < 4...">
-          <button class="btn-solve-primary" id="btn-solve-compound">Solve &amp; Graph</button>
-        </div>
-
-        <div class="preset-chips-row">
-          <span>Presets:</span>
-          <button class="preset-chip-btn" data-preset="x > -2 AND x < 4">x &gt; -2 AND x &lt; 4</button>
-          <button class="preset-chip-btn" data-preset="y >= 1 AND y < 6">y &ge; 1 AND y &lt; 6</button>
-          <button class="preset-chip-btn" data-preset="z < -3 OR z > 5">z &lt; -3 OR z &gt; 5</button>
-          <button class="preset-chip-btn" data-preset="a <= 2 OR a >= 7">a &le; 2 OR a &ge; 7</button>
-          <button class="preset-chip-btn" data-preset="m > 1.5 AND m <= 4.75">m &gt; 1.5 AND m &le; 4.75</button>
-        </div>
-
-        <div id="parse-error-banner" class="error-alert-banner" style="display:none;"></div>
-      </section>
-
-      <!-- Dashboard Grid -->
-      <div class="dashboard-grid">
-        <!-- Main Workspace Column -->
-        <div class="workspace-main-col">
-          <!-- Card 1: Primary Interactive Area -->
-          <section class="card-primary-interactive">
-            <div class="card-stage-title">
-              <span class="stage-num-badge">1</span>
-              <span>Drag the bounds &amp; change inequalities</span>
+      <!-- Section 1: Explore -->
+      <section id="explore" class="page-section">
+        <!-- Top Header -->
+        <header class="top-header">
+          <div class="header-title-area">
+            <div class="header-nav-row">
+              <a href="../../index.html" class="btn-home">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                Back to Main
+              </a>
+              <span class="breadcrumb">&lsaquo; Visual Proofs / Algebra</span>
             </div>
+            <h1>Compound Inequalities and Intervals</h1>
+            <p class="header-subtitle">See why compound inequalities become overlap intervals or outside unions.</p>
+          </div>
 
-            <div class="bounds-and-graph-split">
-              <!-- Left Control Box -->
-              <div class="bounds-control-card">
-                <!-- Bound a -->
-                <div class="stepper-row">
-                  <span class="bound-lbl bound-lbl-a" id="lbl-var-a">a</span>
-                  <div class="stepper-unit">
-                    <button class="btn-step" id="btn-dec-a">&lt;</button>
-                    <input type="number" id="input-val-a" class="step-val-input" value="-2" step="1">
-                    <button class="btn-step" id="btn-inc-a">&gt;</button>
-                  </div>
-                  <select id="select-op1" class="toggle-pill-btn">
-                    <option value=">">&gt;</option>
-                    <option value=">=">&ge;</option>
-                    <option value="<">&lt;</option>
-                    <option value="<=">&le;</option>
-                  </select>
-                </div>
+          <div class="header-actions">
+            <span class="pill-badge">Intermediate</span>
+            <span class="pill-badge">⏱ 12 min</span>
+            <button class="btn-secondary" id="btn-save-current" title="Save current configuration">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+              Save State
+            </button>
+            <button class="btn-secondary" id="btn-reset-all" title="Reset inequality parameters">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              Reset
+            </button>
+          </div>
+        </header>
 
-                <!-- Bound b (middle reference) -->
-                <div class="stepper-row">
-                  <span class="bound-lbl bound-lbl-b" id="lbl-var-b">b</span>
-                  <div class="stepper-unit">
-                    <button class="btn-step" id="btn-dec-b">&lt;</button>
-                    <input type="number" id="input-val-b" class="step-val-input" value="1" step="1">
-                    <button class="btn-step" id="btn-inc-b">&gt;</button>
-                  </div>
-                </div>
+        <!-- Mission Banner -->
+        <section class="mission-bar">
+          <div class="icon-rocket-badge">🚀</div>
+          <div><strong>Mission:</strong> Build intuition by moving bounds and seeing how inequality regions overlap on the number line.</div>
+        </section>
 
-                <!-- Bound c -->
-                <div class="stepper-row">
-                  <span class="bound-lbl bound-lbl-c" id="lbl-var-c">c</span>
-                  <div class="stepper-unit">
-                    <button class="btn-step" id="btn-dec-c">&lt;</button>
-                    <input type="number" id="input-val-c" class="step-val-input" value="4" step="1">
-                    <button class="btn-step" id="btn-inc-c">&gt;</button>
-                  </div>
-                  <select id="select-op2" class="toggle-pill-btn">
-                    <option value="<">&lt;</option>
-                    <option value="<=">&le;</option>
-                    <option value=">">&gt;</option>
-                    <option value=">=">&ge;</option>
-                  </select>
-                </div>
+        <!-- Custom Inequality Input Card -->
+        <section class="custom-input-card">
+          <div style="font-size:14px; font-weight:800; color:var(--text-dark);">
+            Create your own compound inequality
+          </div>
+          <div class="natural-input-row">
+            <input type="text" id="input-natural-compound" class="text-compound-input" value="x > -2 AND x < 4" placeholder="Enter e.g. 1 < x < 5, 1 <= x < 5, z < -3 OR z > 5, x > -2 AND x < 4...">
+            <button class="btn-solve-primary" id="btn-solve-compound">Solve &amp; Graph</button>
+          </div>
 
-                <!-- Endpoint open/closed toggle -->
-                <div class="endpoint-toggle-row">
-                  <span>Endpoints:</span>
-                  <div style="display:flex; gap:4px;">
-                    <button class="toggle-pill-btn active" id="btn-toggle-open">Open &#9675;</button>
-                    <button class="toggle-pill-btn" id="btn-toggle-closed">Closed &#9679;</button>
-                  </div>
-                </div>
+          <div class="preset-chips-row">
+            <span style="font-weight:700;">Presets:</span>
+            <button class="preset-chip-btn" data-preset="1 < x < 5">1 &lt; x &lt; 5 (Open)</button>
+            <button class="preset-chip-btn" data-preset="1 <= x < 5">1 &le; x &lt; 5 (Left-closed)</button>
+            <button class="preset-chip-btn" data-preset="1 < x <= 5">1 &lt; x &le; 5 (Right-closed)</button>
+            <button class="preset-chip-btn" data-preset="1 <= x <= 5">1 &le; x &le; 5 (Closed)</button>
+            <button class="preset-chip-btn" data-preset="x > -2 AND x < 4">x &gt; -2 AND x &lt; 4</button>
+            <button class="preset-chip-btn" data-preset="z < -3 OR z > 5">z &lt; -3 OR z &gt; 5 (Union)</button>
+          </div>
 
-                <!-- Animate Button -->
-                <button class="btn-icon-action" id="btn-animate-bounds" style="width:100%; justify-content:center; margin-top:4px;">
-                  ▶ Animate Bounds
-                </button>
-              </div>
+          <div id="parse-error-banner" class="error-alert-banner" style="display:none;"></div>
+        </section>
 
-              <!-- Right Graph Viewport Box -->
-              <div class="graph-viewport-box" id="graph-viewport-box">
-                <!-- Top Badges & Connection Dropdown -->
-                <div class="top-equation-badges-row">
-                  <span class="ineq-badge-pill" id="badge-ineq1">x &gt; -2</span>
-                  <select id="select-connection" class="select-connect-dropdown">
-                    <option value="AND">AND (Intersection)</option>
-                    <option value="OR">OR (Union)</option>
-                  </select>
-                  <span class="ineq-badge-pill" id="badge-ineq2">x &lt; 4</span>
-                </div>
-
-                <!-- SVG Number Line Canvas -->
-                <svg id="svg-main-nl" class="svg-main-nl-canvas"></svg>
-
-                <div class="target-result-pill" id="badge-target-result">
-                  Target: -2 &lt; x &lt; 4
-                </div>
-
-                <div style="font-size:12px; color:var(--text-muted); text-align:center;">
-                  💡 Tip: Try OR to see the outside regions or drag handles along the number line.
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- Card 2: Inequality Pieces (3 Columns) -->
-          <section style="display:flex; flex-direction:column; gap:8px;">
-            <div class="card-stage-title">
-              <span class="stage-num-badge">2</span>
-              <span>Inequality pieces (See each piece as an interval)</span>
-            </div>
-
-            <div class="inequality-pieces-grid">
-              <!-- Piece 1 -->
-              <div class="piece-card-box">
-                <div class="piece-card-title">
-                  <span id="title-piece-1">x &gt; -2</span>
-                  <span style="font-size:11px; color:var(--accent-blue);">Region 1</span>
-                </div>
-                <svg id="svg-piece-1" class="svg-piece-mini"></svg>
-                <div class="piece-interval-footer" id="interval-piece-1">(-2, &infty;)</div>
-              </div>
-
-              <!-- Piece 2 -->
-              <div class="piece-card-box">
-                <div class="piece-card-title">
-                  <span id="title-piece-2">x &lt; 4</span>
-                  <span style="font-size:11px; color:var(--accent-red);">Region 2</span>
-                </div>
-                <svg id="svg-piece-2" class="svg-piece-mini"></svg>
-                <div class="piece-interval-footer" id="interval-piece-2">(-&infty;, 4)</div>
-              </div>
-
-              <!-- Result Piece -->
-              <div class="piece-card-box" style="border-color:var(--primary); background:var(--primary-light);">
-                <div class="piece-card-title">
-                  <span id="title-piece-res">Overlap (AND)</span>
-                  <span style="font-size:11px; color:var(--primary);">Combined</span>
-                </div>
-                <svg id="svg-piece-res" class="svg-piece-mini"></svg>
-                <div class="piece-interval-footer" id="interval-piece-res">(-2, 4)</div>
-              </div>
-            </div>
-          </section>
-
-          <!-- Card 3: Visual Proof Bottom Left -->
-          <section class="visual-proof-card">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+          <!-- Main Workspace Column -->
+          <div class="workspace-main-col">
+            <!-- Card 1: Primary Interactive Area -->
+            <section class="card-primary-interactive">
               <div class="card-stage-title">
-                <span class="stage-num-badge">3</span>
-                <span>Visual Proof (Equation of sets)</span>
+                <span class="stage-num-badge">1</span>
+                <span>Drag the bounds &amp; change inequalities</span>
               </div>
-              <span class="proved-badge">✔ Proved</span>
-            </div>
 
-            <div class="proof-equation-row" id="proof-equation-display">
-              (-2, &infty;) &cap; (-&infty;, 4) = (-2, 4)
-            </div>
+              <div class="bounds-and-graph-split">
+                <!-- Left Control Box -->
+                <div class="bounds-control-card">
+                  <!-- Bound a -->
+                  <div class="stepper-row">
+                    <span class="bound-lbl bound-lbl-a" id="lbl-var-a">a</span>
+                    <div class="stepper-unit">
+                      <button class="btn-step" id="btn-dec-a">&lt;</button>
+                      <input type="number" id="input-val-a" class="step-val-input" value="-2" step="1">
+                      <button class="btn-step" id="btn-inc-a">&gt;</button>
+                    </div>
+                    <select id="select-op1" class="toggle-pill-btn">
+                      <option value=">">&gt;</option>
+                      <option value=">=">&ge;</option>
+                      <option value="<">&lt;</option>
+                      <option value="<=">&le;</option>
+                    </select>
+                  </div>
 
-            <div style="font-family:var(--font-math); font-size:14px; text-align:center; color:var(--text-muted);" id="proof-set-notation">
-              In set notation: { x | -2 &lt; x &lt; 4 } = (-2, 4)
-            </div>
-          </section>
-        </div>
+                  <!-- Bound b (middle reference) -->
+                  <div class="stepper-row">
+                    <span class="bound-lbl bound-lbl-b" id="lbl-var-b">b</span>
+                    <div class="stepper-unit">
+                      <button class="btn-step" id="btn-dec-b">&lt;</button>
+                      <input type="number" id="input-val-b" class="step-val-input" value="1" step="1">
+                      <button class="btn-step" id="btn-inc-b">&gt;</button>
+                    </div>
+                  </div>
 
-        <!-- Viewport 3: Right Educational Panel (Why it works) -->
-        <aside class="why-panel" id="why-panel">
-          <div class="why-panel-header">
-            <span style="color:var(--primary); font-size:18px;">&#9672;</span>
-            <h2>Why it works</h2>
-          </div>
+                  <!-- Bound c -->
+                  <div class="stepper-row">
+                    <span class="bound-lbl bound-lbl-c" id="lbl-var-c">c</span>
+                    <div class="stepper-unit">
+                      <button class="btn-step" id="btn-dec-c">&lt;</button>
+                      <input type="number" id="input-val-c" class="step-val-input" value="4" step="1">
+                      <button class="btn-step" id="btn-inc-c">&gt;</button>
+                    </div>
+                    <select id="select-op2" class="toggle-pill-btn">
+                      <option value="<">&lt;</option>
+                      <option value="<=">&le;</option>
+                      <option value=">">&gt;</option>
+                      <option value=">=">&ge;</option>
+                    </select>
+                  </div>
 
-          <div class="why-panel-scroll">
-            <!-- Section 1 -->
-            <section class="why-section">
-              <div class="why-section-title">
-                <span class="why-num-badge">1</span>
-                <span>First inequality</span>
-              </div>
-              <p style="font-size:12px; color:var(--text-dark);" id="why-text-1">
-                x &gt; a includes all numbers to the right of a.
-              </p>
-              <div style="width:100%; height:45px; background:white; border-radius:6px; border:1px solid var(--border);">
-                <svg id="svg-mini-why-1" style="width:100%; height:100%;"></svg>
+                  <!-- Endpoint open/closed toggle -->
+                  <div class="endpoint-toggle-row">
+                    <span>Endpoints:</span>
+                    <div style="display:flex; gap:4px;">
+                      <button class="toggle-pill-btn active" id="btn-toggle-open">Open &#9675;</button>
+                      <button class="toggle-pill-btn" id="btn-toggle-closed">Closed &#9679;</button>
+                    </div>
+                  </div>
+
+                  <!-- Animate Button -->
+                  <button class="btn-secondary" id="btn-animate-bounds" style="width:100%; justify-content:center; margin-top:4px; font-size:12px;">
+                    ▶ Animate Bounds
+                  </button>
+                </div>
+
+                <!-- Right Graph Viewport Box -->
+                <div class="graph-viewport-box" id="graph-viewport-box">
+                  <!-- Top Badges & Connection Dropdown -->
+                  <div class="top-equation-badges-row">
+                    <span class="ineq-badge-pill" id="badge-ineq1">x &gt; -2</span>
+                    <select id="select-connection" class="select-connect-dropdown">
+                      <option value="AND">AND (Intersection)</option>
+                      <option value="OR">OR (Union)</option>
+                    </select>
+                    <span class="ineq-badge-pill" id="badge-ineq2">x &lt; 4</span>
+                  </div>
+
+                  <!-- SVG Number Line Canvas -->
+                  <svg id="svg-main-nl" class="svg-main-nl-canvas"></svg>
+
+                  <div class="target-result-pill" id="badge-target-result">
+                    Target: -2 &lt; x &lt; 4
+                  </div>
+
+                  <div style="font-size:12px; color:var(--text-muted); text-align:center;">
+                    💡 Tip: Try OR to see the outside regions or drag handles along the number line.
+                  </div>
+                </div>
               </div>
             </section>
 
-            <!-- Section 2 -->
-            <section class="why-section">
-              <div class="why-section-title">
-                <span class="why-num-badge">2</span>
-                <span>Second inequality</span>
+            <!-- Card 2: Inequality Pieces (3 Columns) -->
+            <section style="display:flex; flex-direction:column; gap:8px;">
+              <div class="card-stage-title">
+                <span class="stage-num-badge">2</span>
+                <span>Inequality pieces (See each piece as an interval)</span>
               </div>
-              <p style="font-size:12px; color:var(--text-dark);" id="why-text-2">
-                x &lt; c includes all numbers to the left of c.
-              </p>
-              <div style="width:100%; height:45px; background:white; border-radius:6px; border:1px solid var(--border);">
-                <svg id="svg-mini-why-2" style="width:100%; height:100%;"></svg>
+
+              <div class="inequality-pieces-grid">
+                <!-- Piece 1 -->
+                <div class="piece-card-box">
+                  <div class="piece-card-title">
+                    <span id="title-piece-1">x &gt; -2</span>
+                    <span style="font-size:11px; color:var(--accent-blue);">Region 1</span>
+                  </div>
+                  <svg id="svg-piece-1" class="svg-piece-mini"></svg>
+                  <div class="piece-interval-footer" id="interval-piece-1">(-2, &infty;)</div>
+                </div>
+
+                <!-- Piece 2 -->
+                <div class="piece-card-box">
+                  <div class="piece-card-title">
+                    <span id="title-piece-2">x &lt; 4</span>
+                    <span style="font-size:11px; color:var(--accent-red);">Region 2</span>
+                  </div>
+                  <svg id="svg-piece-2" class="svg-piece-mini"></svg>
+                  <div class="piece-interval-footer" id="interval-piece-2">(-&infty;, 4)</div>
+                </div>
+
+                <!-- Result Piece -->
+                <div class="piece-card-box" style="border-color:var(--primary); background:var(--primary-light);">
+                  <div class="piece-card-title">
+                    <span id="title-piece-res">Overlap (AND)</span>
+                    <span style="font-size:11px; color:var(--primary);">Combined</span>
+                  </div>
+                  <svg id="svg-piece-res" class="svg-piece-mini"></svg>
+                  <div class="piece-interval-footer" id="interval-piece-res">(-2, 4)</div>
+                </div>
               </div>
             </section>
+          </div>
 
-            <!-- Section 3 -->
-            <section class="why-section">
-              <div class="why-section-title">
-                <span class="why-num-badge">3</span>
-                <span id="why-title-3">Overlap (AND)</span>
+          <!-- Viewport 3: Right Educational Panel (Why it works) -->
+          <aside class="why-panel" id="why-panel">
+            <div class="why-panel-header">
+              <span style="color:var(--primary); font-size:18px;">&#9672;</span>
+              <h2>Why it works</h2>
+            </div>
+
+            <div class="why-panel-scroll">
+              <!-- Section 1 -->
+              <section class="why-section">
+                <div class="why-section-title">
+                  <span class="why-num-badge">1</span>
+                  <span>First inequality</span>
+                </div>
+                <p style="font-size:12px; color:var(--text-dark);" id="why-text-1">
+                  x &gt; a includes all numbers to the right of a.
+                </p>
+                <div style="width:100%; height:45px; background:white; border-radius:6px; border:1px solid var(--border);">
+                  <svg id="svg-mini-why-1" style="width:100%; height:100%;"></svg>
+                </div>
+              </section>
+
+              <!-- Section 2 -->
+              <section class="why-section">
+                <div class="why-section-title">
+                  <span class="why-num-badge">2</span>
+                  <span>Second inequality</span>
+                </div>
+                <p style="font-size:12px; color:var(--text-dark);" id="why-text-2">
+                  x &lt; c includes all numbers to the left of c.
+                </p>
+                <div style="width:100%; height:45px; background:white; border-radius:6px; border:1px solid var(--border);">
+                  <svg id="svg-mini-why-2" style="width:100%; height:100%;"></svg>
+                </div>
+              </section>
+
+              <!-- Section 3 -->
+              <section class="why-section">
+                <div class="why-section-title">
+                  <span class="why-num-badge">3</span>
+                  <span id="why-title-3">Overlap (AND)</span>
+                </div>
+                <p style="font-size:12px; color:var(--text-dark);" id="why-text-3">
+                  Numbers satisfying both simultaneously are between a and c.
+                </p>
+                <div class="boxed-formula" id="why-box-3">(-2, &infty;) &cap; (-&infty;, 4) = (-2, 4)</div>
+              </section>
+
+              <!-- Prediction Section -->
+              <div class="prediction-card-box">
+                <h4 style="font-size:14px; font-weight:800; color:var(--text-dark);">Predict the result</h4>
+                <p style="font-size:12px; color:var(--text-muted);">Before revealing, what is the solution interval?</p>
+
+                <div class="predict-choices-row" id="predict-choices-container">
+                  <!-- Buttons rendered dynamically -->
+                </div>
+
+                <button class="btn-reveal-main" id="btn-reveal-predict">
+                  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                  Reveal
+                </button>
+                <div id="predict-feedback" class="feedback-msg" style="display:none;"></div>
               </div>
-              <p style="font-size:12px; color:var(--text-dark);" id="why-text-3">
-                Numbers satisfying both simultaneously are between a and c.
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- Section 2: Proofs & Geometric Rationale -->
+      <section id="proofs" class="page-section">
+        <!-- Card 3: Visual Proof -->
+        <section class="visual-proof-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <div class="card-stage-title">
+              <span class="stage-num-badge">3</span>
+              <span>Visual Proof (Equation of sets on the number line)</span>
+            </div>
+            <span class="proved-badge">✔ Proved</span>
+          </div>
+
+          <div class="proof-equation-row" id="proof-equation-display">
+            (-2, &infty;) &cap; (-&infty;, 4) = (-2, 4)
+          </div>
+
+          <div style="font-family:var(--font-math); font-size:15px; text-align:center; color:var(--text-dark); background:#f8fafc; padding:10px; border-radius:8px;" id="proof-set-notation">
+            In set notation: { x | -2 &lt; x &lt; 4 } = (-2, 4)
+          </div>
+
+          <!-- Deep-dive mathematical guide -->
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-top:8px;">
+            <div style="background:#f8fafc; border:1px solid var(--border); padding:14px; border-radius:var(--radius-md); font-size:13px; line-height:1.6;">
+              <strong style="color:var(--primary);">1. AND (Intersection $\cap$):</strong>
+              An <em>AND</em> compound inequality $a < x < c$ means $x > a$ <strong>AND</strong> $x < c$. The solution is the <strong>overlap</strong> (intersection) of the two regions. If the two rays do not meet, the solution is the empty set $\varnothing$.
+            </div>
+            <div style="background:#f8fafc; border:1px solid var(--border); padding:14px; border-radius:var(--radius-md); font-size:13px; line-height:1.6;">
+              <strong style="color:var(--primary);">2. OR (Union $\cup$):</strong>
+              An <em>OR</em> compound inequality $x < a \text{ OR } x > c$ includes any number satisfying <strong>either</strong> condition. This forms a <strong>union</strong> of disjoint rays $(-\infty, a) \cup (c, \infty)$, or covers all real numbers $\mathbb{R}$ if the rays overlap.
+            </div>
+            <div style="background:#f8fafc; border:1px solid var(--border); padding:14px; border-radius:var(--radius-md); font-size:13px; line-height:1.6;">
+              <strong style="color:var(--primary);">3. Open Circle $\circ$ vs Parenthesis $($:</strong>
+              Strict inequalities ($<$ or $>$) do <strong>not</strong> include the boundary value. On the number line, this is indicated with a <strong>hollow/open circle</strong>, and in interval notation with a <strong>parenthesis</strong>.
+            </div>
+            <div style="background:#f8fafc; border:1px solid var(--border); padding:14px; border-radius:var(--radius-md); font-size:13px; line-height:1.6;">
+              <strong style="color:var(--primary);">4. Closed Circle $\bullet$ vs Bracket $[$:</strong>
+              Inclusive inequalities ($\le$ or $\ge$) <strong>include</strong> the boundary value. This is represented by a <strong>solid/closed circle</strong> and in interval notation with a <strong>square bracket</strong>.
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- Section 3: Practice & Challenge -->
+      <section id="practice" class="page-section">
+        <!-- Challenge Bottom Card -->
+        <section class="challenge-bottom-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+            <div>
+              <h3 style="font-size:16px; font-weight:800;">Challenge</h3>
+              <p style="font-size:12.5px; color:var(--text-muted);">Set your own bounds and prove it on the number line.</p>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+              <div class="challenge-controls-row">
+                <label style="font-size:12px; font-weight:bold;">a:</label>
+                <input type="number" id="ch-val-a" class="step-val-input" style="width:48px; border:1px solid var(--border); border-radius:4px; padding:2px;" value="-3">
+                <label style="font-size:12px; font-weight:bold;">b:</label>
+                <input type="number" id="ch-val-b" class="step-val-input" style="width:48px; border:1px solid var(--border); border-radius:4px; padding:2px;" value="2">
+                <label style="font-size:12px; font-weight:bold;">c:</label>
+                <input type="number" id="ch-val-c" class="step-val-input" style="width:48px; border:1px solid var(--border); border-radius:4px; padding:2px;" value="5">
+                <select id="ch-select-conn" class="toggle-pill-btn">
+                  <option value="OR">OR</option>
+                  <option value="AND">AND</option>
+                </select>
+              </div>
+              <button class="btn-solve-primary" id="btn-check-challenge" style="padding:8px 20px;">Check my result</button>
+            </div>
+          </div>
+
+          <div id="challenge-result-display" style="font-family:var(--font-math); font-size:15px; font-weight:bold; background:#f8fafc; border:1.5px dashed var(--primary); padding:12px 16px; border-radius:var(--radius-md); text-align:center; color:var(--primary);">
+            Your result: (-\infty, -3) \cup (5, \infty)
+          </div>
+          <div id="challenge-feedback" class="feedback-msg" style="display:none;"></div>
+        </section>
+      </section>
+
+      <!-- Section 4: Saved Configurations -->
+      <section id="saved" class="page-section">
+        <div class="saved-container">
+          <div class="saved-header">
+            <div>
+              <h2 style="font-size: 20px; font-weight: 800; color: var(--text-dark); display: flex; align-items: center; gap: 8px;">
+                <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+                Saved Configurations
+              </h2>
+              <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">
+                Bookmark and recall specific compound inequalities and interval configurations.
               </p>
-              <div class="boxed-formula" id="why-box-3">(-2, &infty;) &cap; (-&infty;, 4) = (-2, 4)</div>
-            </section>
+            </div>
 
-            <!-- Prediction Section -->
-            <div class="prediction-card-box">
-              <h4 style="font-size:14px; font-weight:800; color:var(--text-dark);">Predict the result</h4>
-              <p style="font-size:12px; color:var(--text-muted);">Before revealing, what is the solution interval?</p>
-
-              <div class="predict-choices-row" id="predict-choices-container">
-                <!-- Buttons rendered dynamically -->
-              </div>
-
-              <button class="btn-primary" id="btn-reveal-predict">👁 Reveal</button>
-              <div id="predict-feedback" class="feedback-msg" style="display:none;"></div>
+            <div style="display: flex; gap: 10px;">
+              <button class="btn-secondary" id="btn-save-current-2">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                + Save Current
+              </button>
+              <button class="btn-secondary" id="btn-clear-saved" style="color: #9f1239;">
+                Clear All
+              </button>
             </div>
           </div>
-        </aside>
-      </div>
 
-      <!-- Challenge Bottom Card -->
-      <section class="challenge-bottom-card">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
-          <div>
-            <h3 style="font-size:16px; font-weight:800;">Challenge</h3>
-            <p style="font-size:12.5px; color:var(--text-muted);">Set your own bounds and prove it on the number line.</p>
-          </div>
-          <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-            <div class="challenge-controls-row">
-              <label style="font-size:12px; font-weight:bold;">a:</label>
-              <input type="number" id="ch-val-a" class="step-val-input" style="width:48px; border:1px solid var(--border);" value="-3">
-              <label style="font-size:12px; font-weight:bold;">b:</label>
-              <input type="number" id="ch-val-b" class="step-val-input" style="width:48px; border:1px solid var(--border);" value="2">
-              <label style="font-size:12px; font-weight:bold;">c:</label>
-              <input type="number" id="ch-val-c" class="step-val-input" style="width:48px; border:1px solid var(--border);" value="5">
-              <select id="ch-select-conn" class="toggle-pill-btn">
-                <option value="OR">OR</option>
-                <option value="AND">AND</option>
-              </select>
-            </div>
-            <button class="btn-primary" id="btn-check-challenge" style="width:auto; padding:8px 20px;">Check my result</button>
+          <div class="saved-grid" id="saved-list">
+            <!-- Rendered dynamically -->
           </div>
         </div>
-
-        <div id="challenge-result-display" style="font-family:var(--font-math); font-size:15px; font-weight:bold; background:#f8fafc; border:1px dashed var(--primary); padding:10px 16px; border-radius:var(--radius-md); text-align:center; color:var(--primary);">
-          Your result: (-\infty, -3) \cup (5, \infty)
-        </div>
-        <div id="challenge-feedback" class="feedback-msg" style="display:none;"></div>
       </section>
 
       <!-- Footer Stats Bar -->
@@ -1145,7 +1415,7 @@
       let conn = 'AND';
       if (/\bOR\b/i.test(str)) conn = 'OR';
 
-      // Compound form e.g. "-2 < x < 4" or "-2 <= y < 5"
+      // Chain form e.g. "1 < x < 5", "1 <= x < 5", "-2 < x <= 4"
       const chainRegex = /(-?\d+\.?\d*)\s*(<|<=)\s*([a-zA-Z])\s*(<|<=)\s*(-?\d+\.?\d*)/;
       const chainMatch = str.match(chainRegex);
       if (chainMatch) {
@@ -1154,10 +1424,10 @@
         const v = chainMatch[3];
         const o2 = chainMatch[4];
         const b2 = parseFloat(chainMatch[5]);
-        return { variable: v, a: b1, op1: o1, c: b2, op2: o2, connection: 'AND' };
+        return { variable: v, a: b1, op1: o1, b: Math.round((b1+b2)/2), c: b2, op2: o2, connection: 'AND' };
       }
 
-      // Explicit form e.g. "x > -2 AND x < 4"
+      // Explicit form e.g. "x > -2 AND x < 4" or "z < -3 OR z > 5"
       const parts = str.split(/\bAND\b|\bOR\b/i);
       if (parts.length === 2) {
         const p1 = parts[0].trim();
@@ -1167,18 +1437,21 @@
         const match2 = p2.match(/([a-zA-Z])\s*(>|>=|<|<=)\s*(-?\d+\.?\d*)/);
 
         if (match1 && match2) {
+          const valA = parseFloat(match1[3]);
+          const valC = parseFloat(match2[3]);
           return {
             variable: match1[1],
-            a: parseFloat(match1[3]),
+            a: valA,
             op1: match1[2],
-            c: parseFloat(match2[3]),
+            b: Math.round((valA + valC) / 2),
+            c: valC,
             op2: match2[2],
             connection: conn
           };
         }
       }
 
-      return { error: 'Could not parse compound inequality. Try format: x > -2 AND x < 4' };
+      return { error: 'Could not parse compound inequality. Try format: 1 < x < 5 or x > -2 AND x < 4' };
     }
 
     // --- 2. Mathematical Solver & Interval Calculations ---
@@ -1228,12 +1501,14 @@
           }
         } else if (isRight1 && isRight2) { // both right
           const maxVal = Math.max(a, c);
-          combinedInt = `(${maxVal}, \\infty)`;
-          setNotation = `{ ${v} | ${v} > ${maxVal} }`;
+          const incMax = maxVal === a ? inc1 : inc2;
+          combinedInt = `${incMax ? '[' : '('}${maxVal}, \\infty)`;
+          setNotation = `{ ${v} | ${v} ${incMax?'\\ge':'>'} ${maxVal} }`;
         } else { // both left
           const minVal = Math.min(a, c);
-          combinedInt = `(-\\infty, ${minVal})`;
-          setNotation = `{ ${v} | ${v} < ${minVal} }`;
+          const incMin = minVal === a ? inc1 : inc2;
+          combinedInt = `(-\\infty, ${minVal}${incMin ? ']' : ')'}`;
+          setNotation = `{ ${v} | ${v} ${incMin?'\\le':'<'} ${minVal} }`;
         }
       } else { // OR (Union)
         if (isRight1 && !isRight2) { // x > a OR x < c
@@ -1241,14 +1516,14 @@
             isAllReal = true; combinedInt = '(-\\infty, \\infty)'; setNotation = '\\mathbb{R}';
           } else {
             combinedInt = `(-\\infty, ${c}${inc2?']':')'}) \\cup (${inc1?'[':'('}${a}, \\infty)`;
-            setNotation = `{ ${v} | ${v} < ${c} \\text{ or } ${v} > ${a} }`;
+            setNotation = `{ ${v} | ${v} ${inc2?'\\le':'<'} ${c} \\text{ or } ${v} ${inc1?'\\ge':'>'} ${a} }`;
           }
         } else if (!isRight1 && isRight2) { // x < a OR x > c
           if (c <= a) {
             isAllReal = true; combinedInt = '(-\\infty, \\infty)'; setNotation = '\\mathbb{R}';
           } else {
             combinedInt = `(-\\infty, ${a}${inc1?']':')'}) \\cup (${inc2?'[':'('}${c}, \\infty)`;
-            setNotation = `{ ${v} | ${v} < ${a} \\text{ or } ${v} > ${c} }`;
+            setNotation = `{ ${v} | ${v} ${inc1?'\\le':'<'} ${a} \\text{ or } ${v} ${inc2?'\\ge':'>'} ${c} }`;
           }
         } else {
           combinedInt = `(-\\infty, \\infty)`; setNotation = '\\mathbb{R}';
@@ -1275,14 +1550,14 @@
     function renderMainNumberLine(svgElem, model, options = {}) {
       if (!svgElem) return;
       const width = svgElem.clientWidth || svgElem.parentNode.clientWidth || 500;
-      const height = svgElem.clientHeight || 120;
+      const height = svgElem.clientHeight || 130;
       const padding = 45;
       const usableW = width - 2 * padding;
       const centerY = height / 2 + 10;
 
-      // Auto-scale bounds
-      const minVal = Math.min(model.a, model.b, model.c) - 3;
-      const maxVal = Math.max(model.a, model.b, model.c) + 3;
+      // Coordinate scaling
+      const minVal = Math.min(model.a, model.b, model.c, -5) - 1;
+      const maxVal = Math.max(model.a, model.b, model.c, 5) + 1;
       const range = maxVal - minVal;
 
       const mapX = (val) => padding + ((val - minVal) / range) * usableW;
@@ -1294,13 +1569,19 @@
         <marker id="arr-right" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M 0 1 L 10 5 L 10 9 z" fill="#64748b"/>
         </marker>
+        <pattern id="hatch-blue" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+          <line x1="0" y1="0" x2="0" y2="8" stroke="rgba(37, 99, 235, 0.25)" stroke-width="3" />
+        </pattern>
+        <pattern id="hatch-red" width="8" height="8" patternTransform="rotate(-45 0 0)" patternUnits="userSpaceOnUse">
+          <line x1="0" y1="0" x2="0" y2="8" stroke="rgba(239, 68, 68, 0.25)" stroke-width="3" />
+        </pattern>
       </defs>`;
 
-      // Base Axis
+      // Base Axis Line
       html += `<line x1="${padding - 15}" y1="${centerY}" x2="${width - padding + 15}" y2="${centerY}" stroke="#94a3b8" stroke-width="2" marker-start="url(#arr-left)" marker-end="url(#arr-right)"/>`;
 
-      // Ticks & Labels
-      const step = range > 20 ? 5 : (range > 10 ? 2 : 1);
+      // Ticks & Integer Numbers
+      const step = range > 20 ? 5 : (range > 12 ? 2 : 1);
       for (let v = Math.ceil(minVal); v <= Math.floor(maxVal); v += step) {
         const tx = mapX(v);
         html += `<line x1="${tx}" y1="${centerY - 4}" x2="${tx}" y2="${centerY + 4}" stroke="#cbd5e1" stroke-width="1.5"/>`;
@@ -1315,50 +1596,59 @@
 
       // Shaded Ray 1 (Blue)
       if (model.isRight1) {
-        html += `<line x1="${xA}" y1="${centerY - 18}" x2="${width - padding}" y2="${centerY - 18}" stroke="#2563eb" stroke-width="3" opacity="0.7"/>`;
-        html += `<path d="M ${width - padding - 6} ${centerY - 22} L ${width - padding + 2} ${centerY - 18} L ${width - padding - 6} ${centerY - 14}" fill="none" stroke="#2563eb" stroke-width="2.5"/>`;
+        html += `<rect x="${xA}" y="${centerY - 32}" width="${width - padding - xA}" height="32" fill="url(#hatch-blue)" />`;
+        html += `<line x1="${xA}" y1="${centerY - 18}" x2="${width - padding}" y2="${centerY - 18}" stroke="#2563eb" stroke-width="3" opacity="0.8"/>`;
+        html += `<path d="M ${width - padding - 8} ${centerY - 23} L ${width - padding} ${centerY - 18} L ${width - padding - 8} ${centerY - 13}" fill="none" stroke="#2563eb" stroke-width="2.5"/>`;
       } else {
-        html += `<line x1="${padding}" y1="${centerY - 18}" x2="${xA}" y2="${centerY - 18}" stroke="#2563eb" stroke-width="3" opacity="0.7"/>`;
-        html += `<path d="M ${padding + 6} ${centerY - 22} L ${padding - 2} ${centerY - 18} L ${padding + 6} ${centerY - 14}" fill="none" stroke="#2563eb" stroke-width="2.5"/>`;
+        html += `<rect x="${padding}" y="${centerY - 32}" width="${xA - padding}" height="32" fill="url(#hatch-blue)" />`;
+        html += `<line x1="${padding}" y1="${centerY - 18}" x2="${xA}" y2="${centerY - 18}" stroke="#2563eb" stroke-width="3" opacity="0.8"/>`;
+        html += `<path d="M ${padding + 8} ${centerY - 23} L ${padding} ${centerY - 18} L ${padding + 8} ${centerY - 13}" fill="none" stroke="#2563eb" stroke-width="2.5"/>`;
       }
 
       // Shaded Ray 2 (Red)
       if (model.isRight2) {
-        html += `<line x1="${xC}" y1="${centerY - 28}" x2="${width - padding}" y2="${centerY - 28}" stroke="#ef4444" stroke-width="3" opacity="0.7"/>`;
-        html += `<path d="M ${width - padding - 6} ${centerY - 32} L ${width - padding + 2} ${centerY - 28} L ${width - padding - 6} ${centerY - 24}" fill="none" stroke="#ef4444" stroke-width="2.5"/>`;
+        html += `<rect x="${xC}" y="${centerY - 32}" width="${width - padding - xC}" height="32" fill="url(#hatch-red)" />`;
+        html += `<line x1="${xC}" y1="${centerY - 28}" x2="${width - padding}" y2="${centerY - 28}" stroke="#ef4444" stroke-width="3" opacity="0.8"/>`;
+        html += `<path d="M ${width - padding - 8} ${centerY - 33} L ${width - padding} ${centerY - 28} L ${width - padding - 8} ${centerY - 23}" fill="none" stroke="#ef4444" stroke-width="2.5"/>`;
       } else {
-        html += `<line x1="${padding}" y1="${centerY - 28}" x2="${xC}" y2="${centerY - 28}" stroke="#ef4444" stroke-width="3" opacity="0.7"/>`;
-        html += `<path d="M ${padding + 6} ${centerY - 32} L ${padding - 2} ${centerY - 28} L ${padding + 6} ${centerY - 24}" fill="none" stroke="#ef4444" stroke-width="2.5"/>`;
+        html += `<rect x="${padding}" y="${centerY - 32}" width="${xC - padding}" height="32" fill="url(#hatch-red)" />`;
+        html += `<line x1="${padding}" y1="${centerY - 28}" x2="${xC}" y2="${centerY - 28}" stroke="#ef4444" stroke-width="3" opacity="0.8"/>`;
+        html += `<path d="M ${padding + 8} ${centerY - 33} L ${padding} ${centerY - 28} L ${padding + 8} ${centerY - 23}" fill="none" stroke="#ef4444" stroke-width="2.5"/>`;
       }
 
-      // Combined Result Region (Purple)
+      // Combined Result Region (Thick Purple Segment)
       if (!model.isNoSolution) {
         if (model.conn === 'AND') {
           if (xA < xC) {
-            html += `<line x1="${xA}" y1="${centerY}" x2="${xC}" y2="${centerY}" stroke="#635bff" stroke-width="6"/>`;
+            html += `<line x1="${xA}" y1="${centerY}" x2="${xC}" y2="${centerY}" stroke="#635bff" stroke-width="6.5" stroke-linecap="round"/>`;
           }
         } else { // OR
           if (model.isAllReal) {
-            html += `<line x1="${padding - 10}" y1="${centerY}" x2="${width - padding + 10}" y2="${centerY}" stroke="#635bff" stroke-width="6"/>`;
+            html += `<line x1="${padding - 10}" y1="${centerY}" x2="${width - padding + 10}" y2="${centerY}" stroke="#635bff" stroke-width="6.5" stroke-linecap="round"/>`;
           } else {
-            html += `<line x1="${padding}" y1="${centerY}" x2="${xA}" y2="${centerY}" stroke="#635bff" stroke-width="6"/>`;
-            html += `<line x1="${xC}" y1="${centerY}" x2="${width - padding}" y2="${centerY}" stroke="#635bff" stroke-width="6"/>`;
+            html += `<line x1="${padding}" y1="${centerY}" x2="${xA}" y2="${centerY}" stroke="#635bff" stroke-width="6.5" stroke-linecap="round"/>`;
+            html += `<line x1="${xC}" y1="${centerY}" x2="${width - padding}" y2="${centerY}" stroke="#635bff" stroke-width="6.5" stroke-linecap="round"/>`;
           }
         }
       }
 
-      // Circles for a, b, c
-      // Circle a (Blue)
-      html += `<circle cx="${xA}" cy="${centerY}" r="6.5" fill="${model.inc1 ? '#2563eb' : '#ffffff'}" stroke="#2563eb" stroke-width="2.5"/>`;
-      html += `<text x="${xA}" y="${centerY + 34}" font-family="var(--font-math)" font-size="14" font-weight="bold" fill="#2563eb" text-anchor="middle">a</text>`;
+      // Handle A (Blue)
+      html += `<g class="handle-group" data-handle="a" cursor="ew-resize">
+        <circle cx="${xA}" cy="${centerY}" r="7" fill="${model.inc1 ? '#2563eb' : '#ffffff'}" stroke="#2563eb" stroke-width="2.5"/>
+        <text x="${xA}" y="${centerY + 34}" font-family="var(--font-math)" font-size="14" font-weight="bold" fill="#2563eb" text-anchor="middle">a</text>
+      </g>`;
 
-      // Circle b (Green)
-      html += `<circle cx="${xB}" cy="${centerY}" r="5.5" fill="#10b981" stroke="#ffffff" stroke-width="2"/>`;
-      html += `<text x="${xB}" y="${centerY + 34}" font-family="var(--font-math)" font-size="14" font-weight="bold" fill="#10b981" text-anchor="middle">b</text>`;
+      // Handle B (Green Reference)
+      html += `<g class="handle-group" data-handle="b" cursor="ew-resize">
+        <circle cx="${xB}" cy="${centerY}" r="5.5" fill="#10b981" stroke="#ffffff" stroke-width="2"/>
+        <text x="${xB}" y="${centerY + 34}" font-family="var(--font-math)" font-size="14" font-weight="bold" fill="#10b981" text-anchor="middle">b</text>
+      </g>`;
 
-      // Circle c (Red)
-      html += `<circle cx="${xC}" cy="${centerY}" r="6.5" fill="${model.inc2 ? '#ef4444' : '#ffffff'}" stroke="#ef4444" stroke-width="2.5"/>`;
-      html += `<text x="${xC}" y="${centerY + 34}" font-family="var(--font-math)" font-size="14" font-weight="bold" fill="#ef4444" text-anchor="middle">c</text>`;
+      // Handle C (Red)
+      html += `<g class="handle-group" data-handle="c" cursor="ew-resize">
+        <circle cx="${xC}" cy="${centerY}" r="7" fill="${model.inc2 ? '#ef4444' : '#ffffff'}" stroke="#ef4444" stroke-width="2.5"/>
+        <text x="${xC}" y="${centerY + 34}" font-family="var(--font-math)" font-size="14" font-weight="bold" fill="#ef4444" text-anchor="middle">c</text>
+      </g>`;
 
       svgElem.innerHTML = html;
     }
@@ -1367,7 +1657,7 @@
     function renderMiniPieceSVG(svgElem, bound, isRight, isIncluded, colorHex) {
       if (!svgElem) return;
       const width = svgElem.clientWidth || 160;
-      const height = 50;
+      const height = 52;
       const padding = 25;
       const usableW = width - 2 * padding;
       const centerY = height / 2;
@@ -1378,10 +1668,10 @@
       let html = `<line x1="${padding - 5}" y1="${centerY}" x2="${width - padding + 5}" y2="${centerY}" stroke="#cbd5e1" stroke-width="1.5"/>`;
       if (isRight) {
         html += `<line x1="${bX}" y1="${centerY}" x2="${width - padding + 5}" y2="${centerY}" stroke="${colorHex}" stroke-width="4.5"/>`;
-        html += `<circle cx="${bX}" cy="${centerY}" r="5" fill="${isIncluded ? colorHex : '#ffffff'}" stroke="${colorHex}" stroke-width="2"/>`;
+        html += `<circle cx="${bX}" cy="${centerY}" r="5.5" fill="${isIncluded ? colorHex : '#ffffff'}" stroke="${colorHex}" stroke-width="2"/>`;
       } else {
         html += `<line x1="${padding - 5}" y1="${centerY}" x2="${bX}" y2="${centerY}" stroke="${colorHex}" stroke-width="4.5"/>`;
-        html += `<circle cx="${bX}" cy="${centerY}" r="5" fill="${isIncluded ? colorHex : '#ffffff'}" stroke="${colorHex}" stroke-width="2"/>`;
+        html += `<circle cx="${bX}" cy="${centerY}" r="5.5" fill="${isIncluded ? colorHex : '#ffffff'}" stroke="${colorHex}" stroke-width="2"/>`;
       }
       svgElem.innerHTML = html;
     }
@@ -1417,7 +1707,11 @@
       chValA: document.getElementById('ch-val-a'), chValB: document.getElementById('ch-val-b'), chValC: document.getElementById('ch-val-c'), chSelectConn: document.getElementById('ch-select-conn'),
       btnCheckChallenge: document.getElementById('btn-check-challenge'), challengeResultDisplay: document.getElementById('challenge-result-display'), challengeFeedback: document.getElementById('challenge-feedback'),
 
-      btnResetAll: document.getElementById('btn-reset-all')
+      btnResetAll: document.getElementById('btn-reset-all'),
+      btnSaveCurrent: document.getElementById('btn-save-current'),
+      btnSaveCurrent2: document.getElementById('btn-save-current-2'),
+      btnClearSaved: document.getElementById('btn-clear-saved'),
+      savedList: document.getElementById('saved-list')
     };
 
     // --- 5. Central UI Update Dispatcher ---
@@ -1457,7 +1751,6 @@
       renderMiniPieceSVG(elements.svgPieceRes, (model.a + model.c)/2, true, true, '#635bff');
 
       // Card 3: Visual Proof Display
-      const symbolConn = model.conn === 'AND' ? '\\cap' : '\\cup';
       elements.proofEquationDisplay.textContent = `${model.int1Str} ${model.conn === 'AND' ? '\u2229' : '\u222A'} ${model.int2Str} = ${model.combinedInt}`;
       elements.proofSetNotation.textContent = `In set notation: ${model.setNotation} = ${model.combinedInt}`;
 
@@ -1505,10 +1798,19 @@
         connection: elements.chSelectConn.value
       });
       elements.challengeResultDisplay.textContent = `Your result: ${chModel.combinedInt}`;
+
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false }
+          ],
+          throwOnError: false
+        });
+      }
     }
 
     // --- 6. Interaction Event Handlers ---
-
     function handleCustomInput(str) {
       const parsed = parseCompoundInput(str);
       if (parsed.error) {
@@ -1520,6 +1822,7 @@
 
       state.variable = parsed.variable;
       state.a = parsed.a;
+      state.b = parsed.b !== undefined ? parsed.b : Math.round((parsed.a + parsed.c) / 2);
       state.c = parsed.c;
       state.op1 = parsed.op1;
       state.op2 = parsed.op2;
@@ -1636,8 +1939,8 @@
       const usableW = rect.width - 2 * padding;
       const pct = Math.max(0, Math.min(1, (relX - padding) / usableW));
 
-      const minVal = Math.min(state.a, state.b, state.c) - 3;
-      const maxVal = Math.max(state.a, state.b, state.c) + 3;
+      const minVal = Math.min(state.a, state.b, state.c, -5) - 1;
+      const maxVal = Math.max(state.a, state.b, state.c, 5) + 1;
       const range = maxVal - minVal;
 
       const newBound = Math.round(minVal + pct * range);
@@ -1649,14 +1952,202 @@
     }
 
     elements.svgMainNl.addEventListener('mousedown', (e) => {
-      isDraggingBound = 'c'; // default handle drag
+      const handleTarget = e.target.closest('.handle-group');
+      if (handleTarget && handleTarget.dataset.handle) {
+        isDraggingBound = handleTarget.dataset.handle;
+      } else {
+        isDraggingBound = 'c'; // default handle
+      }
       updateBoundFromMouse(e);
     });
 
     window.addEventListener('mousemove', (e) => { if (isDraggingBound) updateBoundFromMouse(e); });
     window.addEventListener('mouseup', () => { isDraggingBound = null; });
 
+    // --- 7. Sidebar Navigation & Active State Controller ---
+    let isManualNavigating = false;
+    let manualNavTimeout = null;
+
+    function updateActiveNavItem(targetId) {
+      const validTargets = ['explore', 'proofs', 'practice', 'saved'];
+      if (!targetId || !validTargets.includes(targetId)) return;
+
+      document.querySelectorAll('.nav-list .nav-item').forEach(item => {
+        if (item.getAttribute('data-nav') === targetId) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+    }
+
+    function navigateToSection(targetId) {
+      if (!targetId) return;
+
+      isManualNavigating = true;
+      if (manualNavTimeout) clearTimeout(manualNavTimeout);
+
+      updateActiveNavItem(targetId);
+
+      const targetEl = document.getElementById(targetId);
+      if (targetEl) {
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      manualNavTimeout = setTimeout(() => {
+        isManualNavigating = false;
+      }, 800);
+    }
+
+    document.querySelectorAll('.nav-list button[data-target]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = btn.getAttribute('data-target');
+        navigateToSection(targetId);
+      });
+    });
+
+    // Strict Scroll-Based Active Section Observer (NEVER fall back to Saved)
+    const pageSectionIds = ['explore', 'proofs', 'practice', 'saved'];
+    const sectionObserver = new IntersectionObserver((entries) => {
+      if (isManualNavigating) return;
+
+      let bestEntry = null;
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          if (!bestEntry || entry.intersectionRatio > bestEntry.intersectionRatio) {
+            bestEntry = entry;
+          }
+        }
+      });
+
+      if (bestEntry && bestEntry.target && pageSectionIds.includes(bestEntry.target.id)) {
+        updateActiveNavItem(bestEntry.target.id);
+      }
+    }, {
+      threshold: [0.15, 0.4, 0.7]
+    });
+
+    pageSectionIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) sectionObserver.observe(el);
+    });
+
+    // --- 8. Saved Configurations State Handler ---
+    let savedStates = [];
+    try {
+      savedStates = JSON.parse(localStorage.getItem('compound_ineq_saved_states') || '[]');
+    } catch (err) {
+      savedStates = [];
+    }
+
+    function renderSavedList() {
+      if (!elements.savedList) return;
+      if (savedStates.length === 0) {
+        elements.savedList.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 32px 16px; color: var(--text-muted); background: #f8fafc; border: 1px dashed var(--border); border-radius: var(--radius-md);">
+            <div style="font-size: 24px; margin-bottom: 6px;">🔖</div>
+            <div style="font-weight: 700; font-size: 14px; color: var(--text-dark);">No saved configurations yet</div>
+            <div style="font-size: 12.5px; margin-top: 4px;">Click "+ Save Current" to bookmark your current inequality and interval.</div>
+          </div>
+        `;
+        return;
+      }
+
+      elements.savedList.innerHTML = savedStates.map((item, idx) => `
+        <div class="saved-card">
+          <div class="saved-card-top">
+            <span class="saved-card-badge">${item.conn}</span>
+            <span style="font-size: 11px; color: var(--text-muted);">${item.date || 'Saved state'}</span>
+          </div>
+          <div style="font-size: 13px; font-weight: 700; color: var(--text-dark);">
+            ${item.v} ${formatOp(item.op1)} ${item.a} ${item.conn} ${item.v} ${formatOp(item.op2)} ${item.c}
+          </div>
+          <div style="font-family: var(--font-math); font-size: 14px; font-weight: bold; color: var(--primary);">
+            Interval: ${item.interval}
+          </div>
+          <div class="saved-card-actions">
+            <button class="btn-secondary" style="flex:1; justify-content:center; padding:5px; font-size:11.5px;" onclick="loadSavedState(${idx})">Load</button>
+            <button class="btn-secondary" style="color:#9f1239; padding:5px 8px; font-size:11.5px;" onclick="deleteSavedState(${idx})" title="Delete">✕</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function saveCurrentState() {
+      const model = calculateCompoundSolution(state);
+      const newItem = {
+        v: state.variable,
+        a: state.a,
+        b: state.b,
+        c: state.c,
+        op1: state.op1,
+        op2: state.op2,
+        conn: state.connection,
+        interval: model.combinedInt,
+        date: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+
+      savedStates.unshift(newItem);
+      if (savedStates.length > 12) savedStates.pop();
+
+      try {
+        localStorage.setItem('compound_ineq_saved_states', JSON.stringify(savedStates));
+      } catch (e) {}
+
+      renderSavedList();
+
+      // Toast feedback
+      const btn = elements.btnSaveCurrent;
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '✓ Saved!';
+      btn.style.background = 'var(--accent-green-light)';
+      btn.style.color = '#065f46';
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.style.background = '';
+        btn.style.color = '';
+      }, 1500);
+    }
+
+    function loadSavedState(idx) {
+      const item = savedStates[idx];
+      if (!item) return;
+      state.variable = item.v;
+      state.a = item.a;
+      state.b = item.b;
+      state.c = item.c;
+      state.op1 = item.op1;
+      state.op2 = item.op2;
+      state.connection = item.conn;
+      renderUI();
+      navigateToSection('explore');
+    }
+
+    function deleteSavedState(idx) {
+      savedStates.splice(idx, 1);
+      try {
+        localStorage.setItem('compound_ineq_saved_states', JSON.stringify(savedStates));
+      } catch (e) {}
+      renderSavedList();
+    }
+
+    function clearAllSavedStates() {
+      if (confirm('Clear all saved configurations?')) {
+        savedStates = [];
+        try {
+          localStorage.removeItem('compound_ineq_saved_states');
+        } catch (e) {}
+        renderSavedList();
+      }
+    }
+
+    elements.btnSaveCurrent.addEventListener('click', saveCurrentState);
+    elements.btnSaveCurrent2.addEventListener('click', saveCurrentState);
+    elements.btnClearSaved.addEventListener('click', clearAllSavedStates);
+
     // Initial Execution
+    renderSavedList();
     handleCustomInput("x > -2 AND x < 4");
   </script>
 </body>

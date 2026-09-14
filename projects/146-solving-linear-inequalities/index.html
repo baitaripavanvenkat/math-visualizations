@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Solving Linear Inequalities | Interactive Mathematics</title>
+  <title>Solving Linear Inequalities | Maths Universe</title>
   <style>
     :root {
       --primary: #635bff;
@@ -12,289 +12,252 @@
       --accent-purple: #8b5cf6;
       --accent-purple-light: #f3e8ff;
       --accent-blue: #2563eb;
-      --accent-blue-light: #dbeafe;
       --accent-green: #10b981;
       --accent-green-light: #d1fae5;
       --accent-red: #ef4444;
-      --accent-red-light: #fee2e2;
-      --accent-orange: #f59e0b;
       --bg-main: #f4f5fb;
       --card-bg: #ffffff;
       --text-dark: #1e293b;
       --text-muted: #64748b;
       --border: #e2e8f0;
-      --border-focus: #818cf8;
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
-      --shadow-md: 0 4px 16px rgba(99,91,255,0.08);
-      --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
-      --radius-sm: 8px;
+      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+      --shadow-md: 0 8px 24px rgba(99, 91, 255, 0.12);
       --radius-md: 12px;
-      --radius-lg: 16px;
-      --font-main: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      --font-math: 'Cambria Math', 'Latin Modern Math', 'Times New Roman', serif;
+      --radius-lg: 18px;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-math: Georgia, 'Times New Roman', serif;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
+      margin: 0;
       font-family: var(--font-main);
-      background-color: var(--bg-main);
+      background: var(--bg-main);
       color: var(--text-dark);
       line-height: 1.5;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
     }
+    a { color: inherit; }
+    button, input { font: inherit; }
 
-    /* App Layout Structure */
     .app-layout {
       display: grid;
-      grid-template-columns: 80px 1fr;
+      grid-template-columns: 92px minmax(0, 1fr);
       min-height: 100vh;
     }
 
-    @media (min-width: 1200px) {
-      .app-layout {
-        grid-template-columns: 100px 1fr;
-      }
-    }
-
-    /* Left Sidebar Navigation */
     .sidebar {
-      background: var(--card-bg);
+      background: rgba(255,255,255,0.96);
       border-right: 1px solid var(--border);
+      padding: 20px 10px 18px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px 0;
-      gap: 28px;
-      z-index: 10;
+      position: sticky;
+      top: 0;
+      height: 100vh;
     }
 
     .brand-logo {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
-      color: var(--primary);
       text-decoration: none;
-      font-weight: 700;
-      font-size: 11px;
+      color: var(--primary);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      text-align: center;
-    }
-
-    .brand-logo svg {
-      width: 36px;
-      height: 36px;
+      margin-bottom: 26px;
+      gap: 6px;
     }
 
     .nav-list {
       list-style: none;
+      margin: 0;
+      padding: 0;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 12px;
       width: 100%;
-      align-items: center;
     }
 
-    .nav-item button {
-      background: none;
-      border: none;
+    .nav-item a {
+      width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      justify-content: center;
+      gap: 6px;
+      text-decoration: none;
       color: var(--text-muted);
+      background: transparent;
+      border-radius: 12px;
+      padding: 10px 6px;
       font-size: 11px;
-      cursor: pointer;
-      padding: 8px 12px;
-      border-radius: var(--radius-sm);
-      transition: all 0.2s;
-      width: 64px;
+      font-weight: 700;
+      transition: 0.18s ease;
     }
 
-    .nav-item button:hover {
+    .nav-item.active a {
       color: var(--primary);
       background: var(--primary-light);
+      box-shadow: inset 0 0 0 1px rgba(99, 91, 255, 0.08);
     }
 
-    .nav-item.active button {
+    .nav-item a:hover {
+      background: #f8fafc;
       color: var(--primary);
-      background: var(--primary-light);
-      font-weight: 600;
     }
 
     .nav-item svg {
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
-    .sidebar-footer {
-      margin-top: auto;
-    }
-
-    /* Main Workspace Container */
     .main-wrapper {
-      padding: 28px 36px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      max-width: 1850px;
+      width: min(1400px, 100%);
       margin: 0 auto;
-      width: 100%;
+      padding: 28px 28px 40px;
     }
 
-    /* Top Header Bar */
     .top-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       gap: 16px;
       flex-wrap: wrap;
+      margin-bottom: 20px;
     }
 
-    .breadcrumb {
-      display: flex;
+    .home-link {
+      display: inline-flex;
       align-items: center;
-      gap: 6px;
-      font-size: 13px;
-      color: var(--primary);
+      gap: 8px;
       text-decoration: none;
-      font-weight: 500;
-      margin-bottom: 4px;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 13px;
+      margin-bottom: 6px;
     }
 
     .header-title-area h1 {
-      font-size: 26px;
-      font-weight: 800;
+      margin: 0;
+      font-size: clamp(2rem, 2vw + 1rem, 2.8rem);
+      line-height: 1.1;
       color: var(--text-dark);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
     }
 
     .header-subtitle {
+      margin: 8px 0 0;
       color: var(--text-muted);
-      font-size: 14px;
-      margin-top: 2px;
+      font-size: 15px;
     }
 
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .pill-badge {
-      background: #f1f5f9;
-      color: var(--text-muted);
-      font-size: 13px;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-weight: 500;
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 6px;
+      justify-content: center;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .btn-icon-action, .btn-solve-primary, .btn-primary, .btn-radio-option, .chip-btn-op, .preset-chip-btn, .btn-op-segment {
+      transition: all 0.18s ease;
     }
 
     .btn-icon-action {
-      background: var(--card-bg);
       border: 1px solid var(--border);
+      background: white;
       color: var(--text-dark);
+      border-radius: 10px;
       padding: 8px 12px;
-      border-radius: var(--radius-sm);
-      font-weight: 600;
-      font-size: 13px;
+      font-weight: 700;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s;
-      box-shadow: var(--shadow-sm);
     }
 
-    .btn-icon-action:hover {
-      background: #f8fafc;
-      border-color: var(--border-focus);
-      color: var(--primary);
+    .btn-icon-action:hover, .btn-solve-primary:hover, .btn-primary:hover, .preset-chip-btn:hover, .chip-btn-op:hover, .btn-radio-option:hover, .btn-op-segment:hover {
+      transform: translateY(-1px);
     }
 
-    /* Top Custom Inequality Input Card */
-    .top-input-card {
+    .top-input-card, .split-workspace-card, .visual-proof-card, .bottom-challenge-card, .why-panel {
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 20px 24px;
       box-shadow: var(--shadow-sm);
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
+    }
+
+    .top-input-card {
+      padding: 20px 22px;
+      margin-bottom: 22px;
     }
 
     .input-card-header {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 10px;
+      align-items: center;
       flex-wrap: wrap;
+      margin-bottom: 14px;
     }
 
     .input-card-title {
-      font-size: 15px;
-      font-weight: 800;
-      color: var(--text-dark);
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 8px;
+      font-weight: 800;
+      font-size: 15px;
     }
 
     .natural-input-row {
       display: flex;
-      align-items: center;
       gap: 12px;
+      align-items: center;
       flex-wrap: wrap;
     }
 
     .text-inequality-input {
-      flex: 1;
-      min-width: 260px;
-      padding: 10px 16px;
+      flex: 1 1 360px;
+      min-width: 200px;
       border: 2px solid var(--border);
-      border-radius: var(--radius-md);
-      font-family: var(--font-math);
+      border-radius: 12px;
+      padding: 12px 14px;
       font-size: 18px;
-      font-weight: bold;
+      font-family: var(--font-math);
       color: var(--primary);
-      transition: border-color 0.2s;
+      background: #fff;
     }
 
     .text-inequality-input:focus {
       outline: none;
       border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(99, 91, 255, 0.09);
     }
 
-    .btn-solve-primary {
+    .btn-solve-primary, .btn-primary {
       background: var(--primary);
       color: white;
       border: none;
-      padding: 10px 24px;
-      border-radius: var(--radius-md);
-      font-size: 14px;
-      font-weight: 700;
+      border-radius: 12px;
+      padding: 11px 18px;
+      font-weight: 800;
       cursor: pointer;
-      transition: background 0.2s;
       box-shadow: var(--shadow-sm);
-    }
-
-    .btn-solve-primary:hover {
-      background: var(--primary-hover);
     }
 
     .preset-chips-row {
@@ -302,6 +265,7 @@
       align-items: center;
       gap: 8px;
       flex-wrap: wrap;
+      margin-top: 14px;
       font-size: 12px;
       color: var(--text-muted);
     }
@@ -309,270 +273,236 @@
     .preset-chip-btn {
       background: #f8fafc;
       border: 1px solid var(--border);
-      padding: 4px 10px;
-      border-radius: 16px;
-      font-family: var(--font-math);
-      font-size: 13px;
-      font-weight: 600;
+      border-radius: 999px;
+      padding: 5px 10px;
       color: var(--text-dark);
+      font-weight: 700;
       cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .preset-chip-btn:hover {
-      background: var(--primary-light);
-      color: var(--primary);
-      border-color: var(--border-focus);
     }
 
     .error-alert-banner {
-      background: #fce7f3;
-      color: #9f1239;
-      padding: 8px 14px;
-      border-radius: var(--radius-sm);
-      font-size: 12.5px;
-      font-weight: 600;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
+      margin-top: 12px;
+      background: #fdf2f8;
+      color: #9f1239;
+      border: 1px solid #fbcfe8;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 12.5px;
+      font-weight: 700;
     }
 
-    /* SPACIOUS DESKTOP GRID ARCHITECTURE */
     .dashboard-grid {
       display: grid;
-      grid-template-columns: minmax(0, 2.2fr) minmax(360px, 1fr);
+      grid-template-columns: minmax(0, 2.2fr) minmax(360px, 0.95fr);
       gap: 24px;
       align-items: start;
     }
 
-    @media (max-width: 1100px) {
-      .dashboard-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* Main Workspace Column */
     .workspace-main-col {
       display: flex;
       flex-direction: column;
       gap: 20px;
     }
 
-    /* Split Workspace Card: Balance Model & Number Line */
     .split-workspace-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 24px;
-      box-shadow: var(--shadow-sm);
       display: grid;
       grid-template-columns: 1.1fr 1fr;
       gap: 24px;
-      align-items: start;
-      position: relative;
+      padding: 22px 20px;
     }
 
-    @media (max-width: 850px) {
+    @media (max-width: 900px) {
       .split-workspace-card {
         grid-template-columns: 1fr;
       }
     }
 
     .section-column-title {
+      margin: 0 0 12px;
       font-size: 15px;
       font-weight: 800;
-      color: var(--text-dark);
       text-align: center;
-      margin-bottom: 12px;
     }
 
-    /* Balance Model Display Box */
     .balance-container-box {
       background: #f8fafc;
       border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 16px;
+      border-radius: 14px;
+      padding: 14px 12px 12px;
+      min-height: 230px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 240px;
-      position: relative;
-    }
-
-    svg.balance-svg {
-      width: 100%;
-      height: 190px;
-      display: block;
     }
 
     .inequality-formula-pill {
-      background: #ffffff;
+      margin-top: 10px;
+      display: inline-flex;
       border: 1px solid var(--border);
-      padding: 8px 18px;
-      border-radius: 20px;
+      background: #fff;
+      border-radius: 999px;
+      padding: 8px 14px;
+      color: var(--primary);
+      font-weight: 800;
       font-family: var(--font-math);
       font-size: 16px;
-      font-weight: bold;
-      color: var(--primary);
-      box-shadow: var(--shadow-sm);
-      margin-top: 10px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      text-align: center;
     }
 
-    /* Right Number Line Section inside Split View */
     .numberline-container-box {
-      background: #ffffff;
+      background: #fff;
       border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 16px;
+      border-radius: 14px;
+      padding: 14px 12px 12px;
       display: flex;
       flex-direction: column;
+      gap: 12px;
       align-items: center;
-      gap: 16px;
     }
 
     .segmented-operators {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
+      flex-wrap: wrap;
       background: #f8fafc;
-      padding: 4px;
       border: 1px solid var(--border);
-      border-radius: var(--radius-md);
+      border-radius: 12px;
+      padding: 5px;
     }
 
     .btn-op-segment {
-      padding: 6px 14px;
-      border-radius: var(--radius-sm);
-      font-family: var(--font-math);
-      font-size: 15px;
-      font-weight: bold;
-      border: 1px solid transparent;
       background: transparent;
+      border: 1px solid transparent;
       color: var(--text-muted);
+      border-radius: 8px;
+      padding: 7px 12px;
       cursor: pointer;
-      transition: all 0.15s;
+      font-size: 18px;
+      font-weight: 800;
+      font-family: var(--font-math);
     }
 
     .btn-op-segment.active {
       background: var(--primary);
-      color: white;
+      color: #fff;
       border-color: var(--primary);
       box-shadow: var(--shadow-sm);
     }
 
     .nl-viewport-container {
       width: 100%;
-      height: 80px;
-      position: relative;
+      height: 84px;
       cursor: crosshair;
       user-select: none;
     }
 
-    svg.main-nl-svg {
+    .main-nl-svg, #challenge-numberline {
       width: 100%;
       height: 100%;
       display: block;
     }
 
     .drag-hint-badge {
+      display: inline-flex;
+      padding: 4px 10px;
+      border-radius: 999px;
       background: var(--primary-light);
       color: var(--primary);
       font-size: 11px;
-      font-weight: 700;
-      padding: 4px 12px;
-      border-radius: 12px;
+      font-weight: 800;
     }
 
-    /* 4-Step Visual Proof Section */
     .visual-proof-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 20px 24px;
-      box-shadow: var(--shadow-sm);
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
+      padding: 18px 20px;
     }
 
     .proof-steps-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr) minmax(160px, 0.8fr);
+      grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(150px, 0.8fr);
       gap: 12px;
+      margin-top: 12px;
     }
 
-    @media (max-width: 1000px) {
+    @media (max-width: 1100px) {
       .proof-steps-grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
     .proof-step-card {
       background: #f8fafc;
       border: 1px solid var(--border);
-      border-radius: var(--radius-md);
+      border-radius: 12px;
       padding: 12px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      position: relative;
-      transition: all 0.2s;
+      gap: 10px;
+      min-height: 120px;
+      transition: all 0.18s ease;
     }
 
     .proof-step-card.active-step {
-      border-color: var(--primary);
-      background: #ffffff;
+      background: white;
+      border-color: rgba(99, 91, 255, 0.55);
       box-shadow: var(--shadow-md);
     }
 
     .step-header-row {
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       font-size: 12px;
       font-weight: 800;
+      color: var(--text-dark);
     }
 
     .step-num-badge {
       width: 20px;
       height: 20px;
-      border-radius: 50%;
-      background: var(--primary-light);
-      color: var(--primary);
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
+      background: var(--primary-light);
+      color: var(--primary);
+      border-radius: 50%;
       font-size: 11px;
+      font-weight: 800;
     }
 
     .step-check-icon {
       color: var(--accent-green);
-      font-size: 14px;
+      font-weight: 900;
     }
 
     .step-mini-canvas {
-      width: 100%;
-      height: 60px;
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
       display: flex;
       align-items: center;
       justify-content: center;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 10px;
+      min-height: 68px;
+      text-align: center;
+      font-family: var(--font-math);
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 15px;
     }
 
     .rule-reminder-card {
       background: var(--accent-purple-light);
       border: 1px dashed var(--accent-purple);
-      border-radius: var(--radius-md);
+      border-radius: 12px;
       padding: 12px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
       font-size: 11.5px;
       color: var(--text-dark);
     }
@@ -580,112 +510,94 @@
     .rule-reminder-title {
       font-weight: 800;
       color: var(--accent-purple);
-      font-size: 12px;
     }
 
-    /* INDEPENDENT SCROLLING RIGHT PANEL (Why it works) */
     .why-panel {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-sm);
-      display: flex;
-      flex-direction: column;
-      max-height: 880px;
-      min-width: 360px;
       overflow: hidden;
       position: sticky;
-      top: 24px;
+      top: 20px;
+      max-height: 900px;
     }
 
     .why-panel-header {
-      flex: 0 0 auto;
-      padding: 18px 24px;
-      background: #f8fafc;
-      border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       gap: 10px;
+      padding: 16px 18px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
     }
 
     .why-header-icon {
       color: var(--primary);
       font-size: 18px;
+      font-weight: 900;
     }
 
     .why-panel-header h2 {
+      margin: 0;
       font-size: 17px;
-      font-weight: 800;
       color: var(--text-dark);
     }
 
     .why-panel-scroll {
-      flex: 1 1 auto;
-      min-height: 0;
       overflow-y: auto;
-      overflow-x: hidden;
-      padding: 18px;
+      padding: 16px 16px 20px;
       display: flex;
       flex-direction: column;
       gap: 16px;
+      max-height: calc(900px - 63px);
     }
 
-    .why-panel-scroll::-webkit-scrollbar { width: 8px; }
-    .why-panel-scroll::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
-    .why-panel-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-
     .why-section {
-      background: var(--card-bg);
+      background: white;
       border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 16px;
+      border-radius: 12px;
+      padding: 14px;
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
 
     .why-section-header-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text-dark);
       display: flex;
       align-items: center;
       gap: 8px;
+      font-weight: 800;
+      font-size: 14px;
     }
 
     .why-badge-num {
       width: 24px;
       height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       border-radius: 50%;
       background: var(--primary);
       color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       font-size: 12px;
       font-weight: 800;
-      flex-shrink: 0;
     }
 
     .boxed-formula {
+      border: 2px solid rgba(99, 91, 255, 0.45);
       background: #f8fafc;
-      border: 2px solid var(--primary);
-      padding: 10px 14px;
-      border-radius: var(--radius-sm);
+      border-radius: 10px;
+      padding: 10px 12px;
       font-family: var(--font-math);
-      font-size: 16px;
-      text-align: center;
-      margin: 8px 0;
+      font-size: 15px;
       color: var(--primary);
-      font-weight: bold;
+      text-align: center;
+      font-weight: 700;
+      line-height: 1.6;
     }
 
-    /* Prediction Box inside Right Panel */
     .prediction-card-box {
-      background: #ffffff;
+      background: white;
       border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 16px;
+      border-radius: 12px;
+      padding: 14px;
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -693,78 +605,56 @@
 
     .radio-options-group {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
     }
 
     .btn-radio-option {
-      padding: 8px 12px;
-      border: 1px solid var(--border);
       background: #f8fafc;
-      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 8px;
       font-family: var(--font-math);
-      font-size: 15px;
       font-weight: 700;
       color: var(--text-dark);
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.15s;
+      text-align: center;
     }
 
     .btn-radio-option.selected {
       background: var(--primary-light);
-      border-color: var(--primary);
       color: var(--primary);
+      border-color: rgba(99, 91, 255, 0.5);
     }
-
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 10px 16px;
-      border-radius: var(--radius-sm);
-      font-size: 13.5px;
-      font-weight: 700;
-      cursor: pointer;
-      width: 100%;
-      transition: background 0.2s;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .btn-primary:hover { background: var(--primary-hover); }
 
     .feedback-msg {
+      border-radius: 10px;
+      padding: 9px 12px;
       font-size: 12.5px;
-      font-weight: 600;
-      padding: 8px 12px;
-      border-radius: var(--radius-sm);
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      font-weight: 700;
+      line-height: 1.4;
     }
 
-    .feedback-msg.correct { background: var(--accent-green-light); color: #065f46; }
-    .feedback-msg.incorrect { background: #fce7f3; color: #9f1239; }
+    .feedback-msg.correct {
+      background: #d1fae5;
+      color: #065f46;
+    }
 
-    /* Bottom Dashboard Challenge Card */
+    .feedback-msg.incorrect {
+      background: #fdf2f8;
+      color: #9f1239;
+    }
+
     .bottom-challenge-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 20px 24px;
-      box-shadow: var(--shadow-sm);
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
+      padding: 18px 20px;
+      margin-top: 22px;
     }
 
     .challenge-row-layout {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
+      gap: 18px;
       flex-wrap: wrap;
     }
 
@@ -778,760 +668,675 @@
     .chip-btn-op {
       background: #f8fafc;
       border: 1px solid var(--border);
+      border-radius: 10px;
       padding: 6px 12px;
-      border-radius: var(--radius-sm);
       font-family: var(--font-math);
-      font-size: 14px;
-      font-weight: bold;
+      font-weight: 700;
       color: var(--text-dark);
       cursor: pointer;
-      transition: all 0.15s;
     }
 
-    .chip-btn-op:hover {
-      background: var(--primary-light);
-      color: var(--primary);
-      border-color: var(--border-focus);
+    .page-section {
+      scroll-margin-top: 16px;
+    }
+
+    @media (max-width: 620px) {
+      .app-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: 16px 10px;
+      }
+
+      .nav-list {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+
+      .nav-item {
+        flex: 1;
+      }
+
+      .main-wrapper {
+        padding: 18px 16px 26px;
+      }
+
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .radio-options-group {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-
   <div class="app-layout">
-    <!-- Left Navigation Sidebar -->
     <aside class="sidebar">
-      <a href="#" class="brand-logo">
-        <svg viewBox="0 0 40 40" fill="none">
-          <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2.5"/>
-          <path d="M 12 10 Q 20 20 12 30 M 28 10 Q 20 20 28 30" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-        </svg>
+      <a href="../../index.html" class="brand-logo" aria-label="Main Maths Universe page">
+        <img src="../../assets/logo.png" alt="Maths Universe logo" style="width:32px;height:32px;display:block;object-fit:contain;" />
         <span>Maths</span>
       </a>
+
       <ul class="nav-list">
-        <li class="nav-item active">
-          <button title="Explore Visuals">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-            Explore
-          </button>
+        <li class="nav-item active" data-nav="explore">
+          <a href="#explore">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3v18" /></svg>
+            <span>Explore</span>
+          </a>
         </li>
-        <li class="nav-item">
-          <button title="Proofs">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 01-2 2h-0a2 2 0 01-2-2v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
-            Proofs
-          </button>
+        <li class="nav-item" data-nav="proofs">
+          <a href="#proofs">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 18h6M12 3a7 7 0 0 1 7 7c0 4.7-4.3 7-7 10-2.7-3-7-5.3-7-10a7 7 0 0 1 7-7Z"/></svg>
+            <span>Proofs</span>
+          </a>
         </li>
-        <li class="nav-item">
-          <button title="Practice">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-            Practice
-          </button>
+        <li class="nav-item" data-nav="practice">
+          <a href="#practice">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/></svg>
+            <span>Practice</span>
+          </a>
         </li>
-        <li class="nav-item">
-          <button title="Saved">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
-            Saved
-          </button>
-        </li>
-        <li class="nav-item">
-          <button title="Glossary">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-            Glossary
-          </button>
+        <li class="nav-item" data-nav="saved">
+          <a href="#saved">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+            <span>Saved</span>
+          </a>
         </li>
       </ul>
-      <div class="sidebar-footer nav-item">
-        <button title="Settings">
-          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
-          Settings
-        </button>
-      </div>
     </aside>
 
-    <!-- Main Workspace Container -->
     <main class="main-wrapper">
-      <!-- Top Header -->
       <header class="top-header">
         <div class="header-title-area">
-          <a href="#" class="breadcrumb">&lsaquo; Visual Proofs / Algebra</a>
+          <a class="home-link" href="../../index.html">← Back to Main</a>
           <h1>Solving Linear Inequalities</h1>
-          <p class="header-subtitle">Balance the equation. Reveal the solution.</p>
+          <p class="header-subtitle">Balance both sides and track the sign change when the coefficient is negative.</p>
         </div>
+
         <div class="header-actions">
-          <span class="pill-badge">Intermediate</span>
-          <span class="pill-badge">⏱ 12 min</span>
-          <button class="btn-icon-action" id="btn-reset-all" title="Reset lesson">
-            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-            Reset
-          </button>
+          <span class="pill-badge">Interactive</span>
+          <span class="pill-badge">12 min</span>
+          <button class="btn-icon-action" id="reset-all" type="button">Reset</button>
         </div>
       </header>
 
-      <!-- Prominent Custom Inequality Input Card -->
-      <section class="top-input-card">
+      <section id="explore" class="page-section top-input-card">
         <div class="input-card-header">
           <div class="input-card-title">
-            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/></svg>
             Try your own inequality
           </div>
-          <span style="font-size:12px; color:var(--text-muted);">Use any single variable letter (e.g. x, y, z, a, m, p, q)</span>
+          <span style="font-size: 12px; color: var(--text-muted);">Use one variable such as x, y, a, m, or z.</span>
         </div>
 
         <div class="natural-input-row">
-          <input type="text" id="input-natural-text" class="text-inequality-input" value="2x + 3 < 11" placeholder="Enter e.g. 3y - 5 >= 10, -4z + 7 < 19...">
-          <button class="btn-solve-primary" id="btn-solve-natural">Solve</button>
+          <input id="custom-inequality" class="text-inequality-input" value="2x + 3 < 11" aria-label="Custom inequality input" />
+          <button id="solve-custom" class="btn-solve-primary" type="button">Solve</button>
         </div>
 
-        <!-- Quick Preset Chips -->
         <div class="preset-chips-row">
           <span>Examples:</span>
-          <button class="preset-chip-btn" data-preset="2x + 3 < 11">2x + 3 &lt; 11</button>
-          <button class="preset-chip-btn" data-preset="3y - 5 >= 10">3y &minus; 5 &ge; 10</button>
-          <button class="preset-chip-btn" data-preset="-4z + 7 < 19">&minus;4z + 7 &lt; 19</button>
-          <button class="preset-chip-btn" data-preset="5a - 2 <= 13">5a &minus; 2 &le; 13</button>
-          <button class="preset-chip-btn" data-preset="-2m + 8 > 14">&minus;2m + 8 &gt; 14</button>
-          <button class="preset-chip-btn" data-preset="7p + 3 >= 24">7p + 3 &ge; 24</button>
-          <button class="preset-chip-btn" data-preset="2.5q - 5 < 10">2.5q &minus; 5 &lt; 10</button>
+          <button class="preset-chip-btn" data-preset="2x + 3 < 11" type="button">2x + 3 &lt; 11</button>
+          <button class="preset-chip-btn" data-preset="2x + 3 ≤ 7" type="button">2x + 3 ≤ 7</button>
+          <button class="preset-chip-btn" data-preset="-2x + 3 > 7" type="button">-2x + 3 &gt; 7</button>
+          <button class="preset-chip-btn" data-preset="-2x + 3 ≤ 7" type="button">-2x + 3 ≤ 7</button>
+          <button class="preset-chip-btn" data-preset="3y - 5 >= 10" type="button">3y − 5 ≥ 10</button>
         </div>
 
-        <div id="parse-error-banner" class="error-alert-banner" style="display:none;"></div>
+        <div id="input-error" class="error-alert-banner" style="display:none;"></div>
       </section>
 
-      <!-- Main Dashboard Grid -->
       <div class="dashboard-grid">
-        <!-- Main Workspace Column -->
         <div class="workspace-main-col">
-          <!-- Split Workspace Card: Balance Model & Number Line -->
-          <div class="split-workspace-card">
-            <!-- Left: Balance Model -->
+          <section class="split-workspace-card" aria-label="Interactive inequality explorer">
             <div>
               <h3 class="section-column-title">Balance model</h3>
               <div class="balance-container-box">
-                <svg id="svg-balance-scale" class="balance-svg"></svg>
-                <div class="inequality-formula-pill" id="display-inequality-pill">
-                  Inequality: 2x + 3 &lt; 11
-                </div>
+                <svg id="balance-svg" class="balance-svg" viewBox="0 0 360 190"></svg>
+                <div id="current-inequality-pill" class="inequality-formula-pill">Inequality: 2x + 3 &lt; 11</div>
               </div>
             </div>
 
-            <!-- Right: Number Line (solution set) -->
             <div>
-              <h3 class="section-column-title" id="nl-section-title">Number line — solution set for x</h3>
+              <h3 id="numberline-title" class="section-column-title">Number line — solution set for x</h3>
               <div class="numberline-container-box">
-                <div class="segmented-operators" id="nl-operator-segments">
-                  <button class="btn-op-segment active" data-op="<">&lt;</button>
-                  <button class="btn-op-segment" data-op="<=">&le;</button>
-                  <button class="btn-op-segment" data-op=">">&gt;</button>
-                  <button class="btn-op-segment" data-op=">=">&ge;</button>
+                <div class="segmented-operators" id="numberline-operators">
+                  <button class="btn-op-segment" data-op="<" type="button">&lt;</button>
+                  <button class="btn-op-segment" data-op="<=" type="button">≤</button>
+                  <button class="btn-op-segment" data-op=">" type="button">&gt;</button>
+                  <button class="btn-op-segment" data-op=">=" type="button">≥</button>
                 </div>
 
-                <div class="nl-viewport-container" id="nl-main-container">
-                  <svg id="svg-main-nl" class="main-nl-svg"></svg>
+                <div class="nl-viewport-container" id="numberline-container">
+                  <svg id="numberline-svg" class="main-nl-svg" viewBox="0 0 360 80"></svg>
                 </div>
 
-                <span class="drag-hint-badge">Drag to set solution boundary</span>
-                <div style="font-family:var(--font-math); font-size:16px; font-weight:bold; color:var(--primary);" id="display-interval-text">
-                  Interval: (-&infty;, 4)
-                </div>
+                <span class="drag-hint-badge">Drag to change the boundary</span>
+                <div id="interval-text" style="font-family:var(--font-math); font-size:16px; font-weight:bold; color:var(--primary);">Interval: (-∞, 4)</div>
               </div>
             </div>
-          </div>
+          </section>
 
-          <!-- 4-Step Visual Proof Section -->
-          <section class="visual-proof-card">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <h3 style="font-size:16px; font-weight:800;">Your visual proof</h3>
-              <div style="display:flex; align-items:center; gap:8px;">
-                <button class="btn-icon-action" id="btn-prev-step" style="padding:4px 10px;">&lsaquo; Prev</button>
-                <span style="font-size:12px; font-weight:bold; color:var(--text-muted);" id="step-indicator-text">Step 4 of 4</span>
-                <button class="btn-icon-action" id="btn-next-step" style="padding:4px 10px;">Next &rsaquo;</button>
+          <section class="visual-proof-card" aria-label="Step-by-step solving process">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+              <h3 style="font-size:16px; font-weight:800; margin:0;">Your visual proof</h3>
+              <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                <button id="prev-step" class="btn-icon-action" type="button">← Prev</button>
+                <span id="step-indicator" style="font-size:12px; font-weight:800; color:var(--text-muted);">Step 4 of 4</span>
+                <button id="next-step" class="btn-icon-action" type="button">Next →</button>
               </div>
             </div>
 
             <div class="proof-steps-grid">
-              <!-- Step 1 -->
-              <div class="proof-step-card" id="card-step-1">
+              <div class="proof-step-card active-step" id="step-card-1">
                 <div class="step-header-row">
-                  <div style="display:flex; align-items:center; gap:6px;">
+                  <div style="display:flex;align-items:center;gap:6px;">
                     <span class="step-num-badge">1</span>
                     <span>Start</span>
                   </div>
-                  <span class="step-check-icon">&#10004;</span>
+                  <span class="step-check-icon">✔</span>
                 </div>
-                <div class="step-mini-canvas" id="canvas-step-1"></div>
+                <div id="step-1-display" class="step-mini-canvas">2x + 3 &lt; 11</div>
               </div>
 
-              <!-- Step 2 -->
-              <div class="proof-step-card" id="card-step-2">
+              <div class="proof-step-card active-step" id="step-card-2">
                 <div class="step-header-row">
-                  <div style="display:flex; align-items:center; gap:6px;">
+                  <div style="display:flex;align-items:center;gap:6px;">
                     <span class="step-num-badge">2</span>
-                    <span id="title-step-2">Subtract 3</span>
+                    <span id="step-2-title">Subtract 3</span>
                   </div>
-                  <span class="step-check-icon">&#10004;</span>
+                  <span class="step-check-icon">✔</span>
                 </div>
-                <div class="step-mini-canvas" id="canvas-step-2"></div>
+                <div id="step-2-display" class="step-mini-canvas">2x &lt; 8</div>
               </div>
 
-              <!-- Step 3 -->
-              <div class="proof-step-card" id="card-step-3">
+              <div class="proof-step-card active-step" id="step-card-3">
                 <div class="step-header-row">
-                  <div style="display:flex; align-items:center; gap:6px;">
+                  <div style="display:flex;align-items:center;gap:6px;">
                     <span class="step-num-badge">3</span>
-                    <span id="title-step-3">Divide by 2</span>
+                    <span id="step-3-title">Divide by 2</span>
                   </div>
-                  <span class="step-check-icon">&#10004;</span>
+                  <span class="step-check-icon">✔</span>
                 </div>
-                <div class="step-mini-canvas" id="canvas-step-3"></div>
+                <div id="step-3-display" class="step-mini-canvas">x &lt; 4</div>
               </div>
 
-              <!-- Step 4 -->
-              <div class="proof-step-card" id="card-step-4">
+              <div class="proof-step-card active-step" id="step-card-4">
                 <div class="step-header-row">
-                  <div style="display:flex; align-items:center; gap:6px;">
+                  <div style="display:flex;align-items:center;gap:6px;">
                     <span class="step-num-badge">4</span>
                     <span>Solution</span>
                   </div>
-                  <span class="step-check-icon">&#10004;</span>
+                  <span class="step-check-icon">✔</span>
                 </div>
-                <div class="step-mini-canvas" id="canvas-step-4"></div>
+                <div id="step-4-display" class="step-mini-canvas">x &lt; 4</div>
               </div>
 
-              <!-- Rule Reminder Card -->
               <div class="rule-reminder-card">
                 <div class="rule-reminder-title">Rule reminder</div>
-                <p>Dividing or multiplying by a negative number reverses the inequality sign.</p>
-                <div style="text-align:center; font-family:var(--font-math); font-weight:bold; color:var(--primary); margin-top:auto;">
-                  &times; (-1) &harr;
-                </div>
+                <p>When you multiply or divide both sides of an inequality by a negative number, the inequality reverses direction.</p>
+                <div style="text-align:center; font-family:var(--font-math); font-weight:bold; color:var(--primary); margin-top:auto;">× (−1) ⇄</div>
               </div>
             </div>
           </section>
         </div>
 
-        <!-- Viewport 3: Right Educational Panel (Why it works) -->
-        <aside class="why-panel" id="why-panel">
+        <aside class="why-panel" id="why-panel" aria-label="Why this works">
           <div class="why-panel-header">
-            <span class="why-header-icon">&#9672;</span>
+            <span class="why-header-icon">◉</span>
             <h2>Why it works</h2>
           </div>
 
           <div class="why-panel-scroll">
-            <!-- SECTION 1: Additive Inverse -->
             <section class="why-section">
               <div class="why-section-header-title">
                 <span class="why-badge-num">1</span>
-                <span>Additive inverse property</span>
+                <span>Linear inequality represents a range</span>
               </div>
-              <p style="font-size:12.5px; color:var(--text-dark);" id="why-desc-1">
-                To isolate the variable term, undo the constant using its additive inverse on both sides.
-              </p>
-              <div class="boxed-formula" id="why-box-1">2x + 3 &minus; 3 &lt; 11 &minus; 3 &rArr; 2x &lt; 8</div>
+              <p style="font-size:12.5px; color:var(--text-dark); margin:0;">A linear inequality compares a variable expression to a number and describes all values that make the comparison true.</p>
+              <div id="why-box-1" class="boxed-formula">2x + 3 &lt; 11</div>
             </section>
 
-            <!-- SECTION 2: Multiplicative Inverse -->
             <section class="why-section">
               <div class="why-section-header-title">
                 <span class="why-badge-num">2</span>
-                <span>Multiplicative inverse property</span>
+                <span>Add and subtract the same amount</span>
               </div>
-              <p style="font-size:12.5px; color:var(--text-dark);" id="why-desc-2">
-                After removing the constant, divide both sides by the coefficient of x.
-              </p>
-              <div class="boxed-formula" id="why-box-2">2x / 2 &lt; 8 / 2 &rArr; x &lt; 4</div>
+              <p id="why-desc-2" style="font-size:12.5px; color:var(--text-dark); margin:0;">Subtract 3 from both sides to isolate the variable term without changing the inequality direction.</p>
+              <div id="why-box-2" class="boxed-formula">2x + 3 − 3 &lt; 11 − 3 ⇒ 2x &lt; 8</div>
             </section>
 
-            <!-- SECTION 3: Sign Flip Rule -->
             <section class="why-section">
               <div class="why-section-header-title">
                 <span class="why-badge-num">3</span>
-                <span>Sign flip rule</span>
+                <span>Divide by the coefficient</span>
               </div>
-              <p style="font-size:12.5px; color:var(--text-dark);">
-                Multiplying or dividing an inequality by a negative number reverses the order.
-              </p>
-              <div class="boxed-formula" style="font-size:14px;" id="why-box-3">
-                a &lt; b &nbsp;&rarr;&nbsp; &divide;(-c) &nbsp;&rarr;&nbsp; a/c &gt; b/c
-              </div>
+              <p id="why-desc-3" style="font-size:12.5px; color:var(--text-dark); margin:0;">Divide both sides by 2 to solve for x. Since 2 is positive, the inequality keeps the same direction.</p>
+              <div id="why-box-3" class="boxed-formula">2x ÷ 2 &lt; 8 ÷ 2 ⇒ x &lt; 4</div>
             </section>
 
-            <!-- Interactive Prediction Card -->
-            <div class="prediction-card-box">
-              <h4 style="font-size:14px; font-weight:800; color:var(--text-dark);">Prediction</h4>
-              <p style="font-size:12px; color:var(--text-muted);" id="predict-lead-text">Predict the final solution for x:</p>
+            <section class="why-section">
+              <div class="why-section-header-title">
+                <span class="why-badge-num">4</span>
+                <span>Negative coefficient rule</span>
+              </div>
+              <p style="font-size:12.5px; color:var(--text-dark); margin:0;">If you multiply or divide by a negative number, the order reverses: &lt; becomes &gt; and vice versa.</p>
+              <div id="why-box-4" class="boxed-formula">−2x &gt; 6 ⇒ x &lt; −3</div>
+            </section>
 
-              <div class="radio-options-group" id="predict-options-grid">
-                <button class="btn-radio-option" data-op="<">x &lt; 4</button>
-                <button class="btn-radio-option" data-op="<=">x &le; 4</button>
-                <button class="btn-radio-option" data-op=">">x &gt; 4</button>
-                <button class="btn-radio-option" data-op=">=">x &ge; 4</button>
+            <div class="prediction-card-box">
+              <h4 style="font-size:14px; font-weight:800; color:var(--text-dark); margin:0;">Predict &amp; Check</h4>
+              <p id="prediction-label" style="font-size:12px; color:var(--text-muted); margin:0;">Predict the final solution for x:</p>
+
+              <div class="radio-options-group" id="prediction-options">
+                <button class="btn-radio-option" type="button" data-op="<">x &lt; 4</button>
+                <button class="btn-radio-option" type="button" data-op="<=">x ≤ 4</button>
+                <button class="btn-radio-option" type="button" data-op=">">x &gt; 4</button>
+                <button class="btn-radio-option" type="button" data-op=">=">x ≥ 4</button>
               </div>
 
-              <button class="btn-primary" id="btn-reveal-predict">Reveal (after trying)</button>
-              <div id="predict-feedback" class="feedback-msg" style="display:none;"></div>
+              <button id="reveal-prediction" class="btn-primary" type="button">Reveal result</button>
+              <div id="prediction-feedback" class="feedback-msg" style="display:none;"></div>
             </div>
           </div>
         </aside>
       </div>
 
-      <!-- Bottom Dashboard Challenge Card -->
-      <section class="bottom-challenge-card">
+      <section id="practice" class="page-section bottom-challenge-card" aria-label="Challenge section">
         <div class="challenge-row-layout">
           <div>
-            <h3 style="font-size:16px; font-weight:800;">Challenge (exact)</h3>
-            <p style="font-size:12.5px; color:var(--text-muted);">Solve and graph the solution set for the given inequality.</p>
+            <h3 style="font-size:16px; font-weight:800; margin:0;">Challenge</h3>
+            <p style="font-size:12.5px; color:var(--text-muted); margin:8px 0 0;">Use the same inequality logic to decide the correct solution.</p>
           </div>
 
           <div style="font-family:var(--font-math); font-size:18px; font-weight:bold; background:#f8fafc; border:1px solid var(--border); padding:6px 16px; border-radius:var(--radius-sm); color:var(--primary);">
-            &minus;3(x &minus; 2) &ge; 12
+            −3(x − 2) ≥ 12
           </div>
 
-          <!-- Operation Chips -->
           <div class="operation-chips-row">
-            <button class="chip-btn-op" data-chip="+2">+2</button>
-            <button class="chip-btn-op" data-chip="-2">&minus;2</button>
-            <button class="chip-btn-op" data-chip="*(-1)">&times;(-1)</button>
-            <button class="chip-btn-op" data-chip="/(-3)">&divide;(-3)</button>
-            <button class="chip-btn-op" data-chip="+6">+6</button>
+            <button class="chip-btn-op" type="button" data-chip="expand">Expand</button>
+            <button class="chip-btn-op" type="button" data-chip="reverse">× (−1)</button>
+            <button class="chip-btn-op" type="button" data-chip="divide">÷ (−3)</button>
           </div>
         </div>
 
-        <!-- Interactive Challenge Number Line -->
-        <div style="width:100%; height:75px; background:white; border-radius:var(--radius-md); border:1px solid var(--border);" id="challenge-nl-container">
-          <svg id="svg-challenge-nl" style="width:100%; height:100%;"></svg>
+        <div style="width:100%; height:80px; background:#fff; border-radius:var(--radius-md); border:1px solid var(--border); overflow:hidden;">
+          <svg id="challenge-numberline" viewBox="0 0 360 80" style="width:100%;height:100%;display:block;"></svg>
         </div>
 
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <div style="display:flex; align-items:center; gap:10px;">
-            <span style="font-size:12px; font-weight:bold; color:var(--text-muted);">Your Graph Target:</span>
-            <div class="segmented-operators" id="challenge-op-segments">
-              <button class="btn-op-segment" data-op="<">&lt;</button>
-              <button class="btn-op-segment active" data-op="<=">&le;</button>
-              <button class="btn-op-segment" data-op=">">&gt;</button>
-              <button class="btn-op-segment" data-op=">=">&ge;</button>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <span style="font-size:12px; font-weight:bold; color:var(--text-muted);">Choose the solution set:</span>
+            <div class="segmented-operators" id="challenge-operators">
+              <button class="btn-op-segment" data-op="<" type="button">&lt;</button>
+              <button class="btn-op-segment" data-op="<=" type="button">≤</button>
+              <button class="btn-op-segment" data-op=">" type="button">&gt;</button>
+              <button class="btn-op-segment" data-op=">=" type="button">≥</button>
             </div>
           </div>
 
-          <button class="btn-primary" id="btn-check-challenge" style="width:auto; padding:10px 28px;">Check answer</button>
+          <button id="check-challenge" class="btn-primary" type="button" style="width:auto; padding:10px 28px;">Check answer</button>
         </div>
 
         <div id="challenge-feedback" class="feedback-msg" style="display:none;"></div>
+      </section>
+
+      <section id="saved" class="page-section bottom-challenge-card" aria-label="Saved inequalities">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+          <div>
+            <h3 style="font-size:16px; font-weight:800; margin:0;">Saved</h3>
+            <p style="font-size:12.5px; color:var(--text-muted); margin:8px 0 0;">Keep useful inequality examples for quick review.</p>
+          </div>
+          <button id="save-current" class="btn-primary" type="button" style="width:auto; padding:10px 18px;">Save current</button>
+        </div>
+
+        <div id="saved-list" style="display:flex; flex-direction:column; gap:10px;"></div>
       </section>
     </main>
   </div>
 
   <script>
-    /**
-     * Dynamic Variable & Expression Parser Engine
-     * Solving Linear Inequalities
-     */
+    const SAVED_KEY = 'math-universe-saved-linear-inequalities';
 
-    // --- 0. Central Application State ---
     const state = {
-      rawInput: "2x + 3 < 11",
-      variable: "x",
+      variable: 'x',
       a: 2,
       b: 3,
       op: '<',
       c: 11,
-
       currentStep: 4,
-
-      // Right Panel Prediction
       predictionSelected: null,
-
-      // Challenge State
-      challenge: {
-        targetA: -3,
-        targetB: 6,
-        targetOp: '>=',
-        targetC: 12,
-        studentBoundary: 0,
-        studentOp: '<='
-      }
+      challengeOp: '<=',
+      challengeBoundary: -2,
+      savedExplicitlySelected: false
     };
 
-    // --- 1. Natural Expression Parser ---
-    function parseLinearInequality(inputStr) {
-      if (!inputStr || typeof inputStr !== 'string') {
+    const elements = {
+      customInequality: document.getElementById('custom-inequality'),
+      solveCustom: document.getElementById('solve-custom'),
+      errorBanner: document.getElementById('input-error'),
+      numberlineTitle: document.getElementById('numberline-title'),
+      currentInequalityPill: document.getElementById('current-inequality-pill'),
+      intervalText: document.getElementById('interval-text'),
+      balanceSvg: document.getElementById('balance-svg'),
+      numberlineSvg: document.getElementById('numberline-svg'),
+      numberlineOperators: document.getElementById('numberline-operators'),
+      numberlineContainer: document.getElementById('numberline-container'),
+      stepIndicator: document.getElementById('step-indicator'),
+      step1Display: document.getElementById('step-1-display'),
+      step2Display: document.getElementById('step-2-display'),
+      step2Title: document.getElementById('step-2-title'),
+      step3Display: document.getElementById('step-3-display'),
+      step3Title: document.getElementById('step-3-title'),
+      step4Display: document.getElementById('step-4-display'),
+      whyBox1: document.getElementById('why-box-1'),
+      whyBox2: document.getElementById('why-box-2'),
+      whyBox3: document.getElementById('why-box-3'),
+      whyBox4: document.getElementById('why-box-4'),
+      whyDesc2: document.getElementById('why-desc-2'),
+      whyDesc3: document.getElementById('why-desc-3'),
+      predictionLabel: document.getElementById('prediction-label'),
+      predictionOptions: document.getElementById('prediction-options'),
+      revealPrediction: document.getElementById('reveal-prediction'),
+      predictionFeedback: document.getElementById('prediction-feedback'),
+      challengeNumberline: document.getElementById('challenge-numberline'),
+      challengeOperators: document.getElementById('challenge-operators'),
+      checkChallenge: document.getElementById('check-challenge'),
+      challengeFeedback: document.getElementById('challenge-feedback'),
+      savedList: document.getElementById('saved-list'),
+      saveCurrent: document.getElementById('save-current'),
+      resetAll: document.getElementById('reset-all'),
+      prevStep: document.getElementById('prev-step'),
+      nextStep: document.getElementById('next-step')
+    };
+
+    function formatSymbol(op) {
+      if (op === '<=') return '≤';
+      if (op === '>=') return '≥';
+      return op;
+    }
+
+    function flipOperator(op) {
+      if (op === '<') return '>';
+      if (op === '>') return '<';
+      if (op === '<=') return '>=';
+      if (op === '>=') return '<=';
+      return op;
+    }
+
+    function prettyNumber(value) {
+      return Number.isInteger(value) ? String(value) : Number(value.toFixed(2)).toString();
+    }
+
+    function parseLinearInequality(rawInput) {
+      if (!rawInput || typeof rawInput !== 'string') {
         return { error: 'Please enter an inequality.' };
       }
 
-      let cleaned = inputStr
-        .trim()
-        .replace(/≤/g, '<=')
-        .replace(/≥/g, '>=')
-        .replace(/\s+/g, '');
-
-      let opMatch = cleaned.match(/(<=|>=|<|>)/);
-      if (!opMatch) {
-        return { error: 'No inequality operator (<, <=, >, >=, \u2264, \u2265) found.' };
+      const cleaned = rawInput.trim().replace(/≤/g, '<=').replace(/≥/g, '>=').replace(/\s+/g, '');
+      const match = cleaned.match(/(<=|>=|<|>)/);
+      if (!match) {
+        return { error: 'No inequality operator (<, ≤, >, ≥) found.' };
       }
 
-      const operator = opMatch[0];
+      const operator = match[0];
       const parts = cleaned.split(operator);
       if (parts.length !== 2) {
         return { error: 'Please enter a valid linear inequality with one operator.' };
       }
 
-      const leftSide = parts[0];
-      const rightSideStr = parts[1];
-
-      const rightSide = parseFloat(rightSideStr);
-      if (isNaN(rightSide)) {
-        return { error: 'Right side must be a valid number.' };
+      const leftPart = parts[0];
+      const rightPart = Number(parts[1]);
+      if (!Number.isFinite(rightPart)) {
+        return { error: 'The right side must be a valid number.' };
       }
 
-      // Detect Variable [a-zA-Z]
-      const vars = leftSide.match(/[a-zA-Z]/g);
-      if (!vars || vars.length === 0) {
-        return { error: 'No variable found. Please include a single variable (e.g. x, y, z, m, a).' };
+      const letterMatches = [...leftPart.matchAll(/[A-Za-z]/g)].map((m) => m[0]);
+      if (!letterMatches.length) {
+        return { error: 'Include a variable such as x, y, a, or m.' };
       }
 
-      const uniqueVars = Array.from(new Set(vars));
-      if (uniqueVars.length > 1) {
-        return { error: 'This lesson supports one variable at a time (e.g. 3y - 5 \u2265 10).' };
+      const unique = [...new Set(letterMatches)];
+      if (unique.length > 1) {
+        return { error: 'Use only one variable at a time.' };
       }
 
-      const variable = uniqueVars[0];
-
-      if (leftSide.includes('^') || leftSide.includes('*' + variable) || leftSide.includes('/' + variable)) {
-        return { error: 'Please enter a linear inequality in one variable (e.g. 3y - 5 \u2265 10).' };
-      }
-
-      // Standardize leftSide terms with signs
-      let termStr = leftSide;
-      if (!termStr.startsWith('+') && !termStr.startsWith('-')) {
-        termStr = '+' + termStr;
-      }
-
-      const termRegex = /([+-][0-9.]*([a-zA-Z])?)/g;
-      const matches = termStr.match(termRegex);
+      const variable = unique[0];
+      const canonical = leftPart.replace(new RegExp(variable, 'g'), 'V');
+      const terms = canonical.split(/(?=[+-])/).filter(Boolean);
 
       let coefficient = 0;
       let constant = 0;
-      let hasVarTerm = false;
+      let foundVariableTerm = false;
 
-      if (matches) {
-        for (let term of matches) {
-          if (!term || term === '+' || term === '-') continue;
-          if (term.includes(variable)) {
-            hasVarTerm = true;
-            let coeffStr = term.replace(variable, '');
-            if (coeffStr === '+' || coeffStr === '') coefficient += 1;
-            else if (coeffStr === '-') coefficient += -1;
-            else coefficient += parseFloat(coeffStr);
-          } else {
-            constant += parseFloat(term);
+      for (const term of terms) {
+        if (term.includes('V')) {
+          foundVariableTerm = true;
+          const coefficientText = term.replace('V', '').replace(/\s+/g, '');
+          const coeffValue = coefficientText === '' || coefficientText === '+' ? 1 : coefficientText === '-' ? -1 : Number(coefficientText);
+          if (!Number.isFinite(coeffValue)) {
+            return { error: 'Could not interpret the variable coefficient correctly.' };
           }
+          coefficient += coeffValue;
+        } else {
+          const numeric = Number(term);
+          if (!Number.isNaN(numeric)) constant += numeric;
         }
       }
 
-      if (!hasVarTerm || isNaN(coefficient) || coefficient === 0) {
-        return { error: 'Could not determine a valid non-zero coefficient for variable ' + variable };
+      if (!foundVariableTerm || coefficient === 0) {
+        return { error: 'The variable term must have a non-zero coefficient.' };
       }
-
-      if (isNaN(constant)) constant = 0;
 
       return {
         variable,
-        coefficient,
-        constant,
+        coefficient: Number(coefficient),
+        constant: Number(constant),
         operator,
-        rightSide,
-        rawInput: inputStr
+        rightSide: Number(rightPart),
+        rawInput
       };
     }
 
-    // --- 2. Pure Mathematical Solver ---
-    function flipOperator(operator) {
-      switch (operator) {
-        case '<':  return '>';
-        case '>':  return '<';
-        case '<=': return '>=';
-        case '>=': return '<=';
-        default:   return operator;
-      }
-    }
+    function solveCurrent() {
+      const a = Number(state.a);
+      const b = Number(state.b);
+      const c = Number(state.c);
+      const finalOperator = a < 0 ? flipOperator(state.op) : state.op;
+      const boundary = (c - b) / a;
+      const step2Rhs = c - b;
 
-    function solveLinearInequality(a, b, op, c, v = 'x') {
-      const coeffStr = a === 1 ? '' : (a === -1 ? '-' : a);
-      const bSignStr = b >= 0 ? '+ ' + b : '- ' + Math.abs(b);
-
-      const step1Text = `${coeffStr}${v} ${bSignStr} ${formatOp(op)} ${c}`;
-
-      const c2 = c - b;
-      const bOpText = b >= 0 ? `Subtract ${b}` : `Add ${Math.abs(b)}`;
-      const step2Eq = `${coeffStr}${v} ${formatOp(op)} ${c2}`;
-
-      let finalOp = op;
-      if (a < 0) {
-        finalOp = flipOperator(op);
-      }
-      const boundary = c2 / a;
-      const aOpText = a < 0 ? `Divide by ${a} (Flip sign!)` : `Divide by ${a}`;
-      const bValStr = boundary.toFixed(Number.isInteger(boundary) ? 0 : 1);
-      const step3Eq = `${v} ${formatOp(finalOp)} ${bValStr}`;
-
-      let interval = '';
-      if (finalOp === '<') interval = `(-\\infty, ${bValStr})`;
-      else if (finalOp === '<=') interval = `(-\\infty, ${bValStr}]`;
-      else if (finalOp === '>') interval = `(${bValStr}, \\infty)`;
-      else if (finalOp === '>=') interval = `[${bValStr}, \\infty)`;
+      const interval =
+        finalOperator === '<' ? `(-∞, ${prettyNumber(boundary)})` :
+        finalOperator === '<=' ? `(-∞, ${prettyNumber(boundary)}]` :
+        finalOperator === '>' ? `(${prettyNumber(boundary)}, ∞)` :
+        `[${prettyNumber(boundary)}, ∞)`;
 
       return {
-        v, a, b, op, c,
-        c2, boundary, finalOp,
-        bOpText, aOpText,
-        step1Text, step2Eq, step3Eq, interval,
-        isSignFlipped: a < 0
+        a,
+        b,
+        c,
+        finalOperator,
+        boundary,
+        interval,
+        step1Text: `${formatExpression(a, b, state.variable)} ${formatSymbol(state.op)} ${c}`,
+        step2Text: `${formatCoefficient(a, state.variable)} ${formatSymbol(state.op)} ${prettyNumber(step2Rhs)}`,
+        finalText: `${state.variable} ${formatSymbol(finalOperator)} ${prettyNumber(boundary)}`,
+        signExplanation: a < 0 ? `Because the coefficient is negative, dividing by ${a} reverses ${formatSymbol(state.op)} to ${formatSymbol(finalOperator)}.` : `Because the coefficient is positive, the inequality keeps the same direction.`
       };
     }
 
-    function formatOp(op) {
-      switch (op) {
-        case '<=': return '\u2264';
-        case '>=': return '\u2265';
-        default:   return op;
-      }
+    function formatCoefficient(a, variable) {
+      const coefficient = a === 1 ? '' : a === -1 ? '-' : prettyNumber(a);
+      return `${coefficient}${variable}`;
     }
 
-    // --- 3. Balance Scale SVG Renderer ---
-    function renderBalanceScaleSVG(svgElem, model) {
-      if (!svgElem) return;
-      const width = svgElem.clientWidth || 360;
-      const height = svgElem.clientHeight || 190;
-      const centerX = width / 2;
-      const centerY = height / 2 + 15;
+    function formatExpression(a, b, variable) {
+      const coefficient = a === 1 ? '' : a === -1 ? '-' : prettyNumber(a);
+      const sign = b >= 0 ? ' + ' : ' − ';
+      return `${coefficient}${variable}${sign}${Math.abs(b)}`;
+    }
 
-      let tiltDeg = 0;
-      if (model.op === '<' || model.op === '<=') tiltDeg = -8;
-      else if (model.op === '>' || model.op === '>=') tiltDeg = 8;
-
-      const beamLength = 220;
-      const rad = (tiltDeg * Math.PI) / 180;
-      const dx = (beamLength / 2) * Math.cos(rad);
-      const dy = (beamLength / 2) * Math.sin(rad);
-
-      const leftPanX = centerX - dx;
-      const leftPanY = centerY - dy;
-      const rightPanX = centerX + dx;
-      const rightPanY = centerY + dy;
+    function renderNumberLine(svg, boundary, operator, highlightColor = '#635bff') {
+      const width = 360;
+      const height = 80;
+      const min = -10;
+      const max = 10;
+      const padding = 30;
+      const usable = width - padding * 2;
+      const axisY = height / 2;
+      const xAt = (value) => padding + ((value - min) / (max - min)) * usable;
+      const boundaryX = xAt(boundary);
+      const leftX = xAt(min);
+      const rightX = xAt(max);
+      const isLeft = operator === '<' || operator === '<=';
+      const isClosed = operator === '<=' || operator === '>=';
 
       let html = `
-        <!-- Stand Base -->
-        <path d="M ${centerX - 35} ${centerY + 55} L ${centerX + 35} ${centerY + 55} L ${centerX + 15} ${centerY + 15} L ${centerX - 15} ${centerY + 15} z" fill="#cbd5e1"/>
-        <line x1="${centerX}" y1="${centerY + 15}" x2="${centerX}" y2="${centerY - 10}" stroke="#64748b" stroke-width="6"/>
-
-        <!-- Tilted Beam -->
-        <line x1="${leftPanX}" y1="${leftPanY}" x2="${rightPanX}" y2="${rightPanY}" stroke="#635bff" stroke-width="6" stroke-linecap="round"/>
-        <circle cx="${centerX}" cy="${centerY - 10}" r="6" fill="#4f46e5"/>
-
-        <!-- Left Hanger & Pan -->
-        <line x1="${leftPanX}" y1="${leftPanY}" x2="${leftPanX - 25}" y2="${leftPanY + 45}" stroke="#94a3b8" stroke-width="2"/>
-        <line x1="${leftPanX}" y1="${leftPanY}" x2="${leftPanX + 25}" y2="${leftPanY + 45}" stroke="#94a3b8" stroke-width="2"/>
-        <path d="M ${leftPanX - 45} ${leftPanY + 45} Q ${leftPanX} ${leftPanY + 55} ${leftPanX + 45} ${leftPanY + 45} Z" fill="#8b5cf6" opacity="0.9"/>
-
-        <!-- Right Hanger & Pan -->
-        <line x1="${rightPanX}" y1="${rightPanY}" x2="${rightPanX - 25}" y2="${rightPanY + 45}" stroke="#94a3b8" stroke-width="2"/>
-        <line x1="${rightPanX}" y1="${rightPanY}" x2="${rightPanX + 25}" y2="${rightPanY + 45}" stroke="#94a3b8" stroke-width="2"/>
-        <path d="M ${rightPanX - 45} ${rightPanY + 45} Q ${rightPanX} ${rightPanY + 55} ${rightPanX + 45} ${rightPanY + 45} Z" fill="#8b5cf6" opacity="0.9"/>
-
-        <!-- Left Pan Blocks -->
-        <g transform="translate(${leftPanX - 35}, ${leftPanY + 12})">
-          <rect width="36" height="30" rx="6" fill="#eeedfd" stroke="#635bff" stroke-width="2"/>
-          <text x="18" y="20" font-family="var(--font-math)" font-size="14" font-weight="bold" fill="#635bff" text-anchor="middle">${model.a}${model.v}</text>
-        </g>
-        <g transform="translate(${leftPanX + 5}, ${leftPanY + 12})">
-          <rect width="32" height="30" rx="6" fill="${model.b >= 0 ? '#fee2e2' : '#fef3c7'}" stroke="${model.b >= 0 ? '#ef4444' : '#f59e0b'}" stroke-width="2"/>
-          <text x="16" y="20" font-family="var(--font-math)" font-size="13" font-weight="bold" fill="${model.b >= 0 ? '#ef4444' : '#b45309'}" text-anchor="middle">${model.b >= 0 ? '+' + model.b : model.b}</text>
-        </g>
-
-        <!-- Right Pan Block -->
-        <g transform="translate(${rightPanX - 22}, ${rightPanY + 12})">
-          <rect width="44" height="30" rx="6" fill="#eeedfd" stroke="#635bff" stroke-width="2"/>
-          <text x="22" y="20" font-family="var(--font-math)" font-size="15" font-weight="bold" fill="#635bff" text-anchor="middle">${model.c}</text>
-        </g>
+        <defs>
+          <marker id="arrow-left" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,4 L8,0 L8,8 Z" fill="#475569"></path>
+          </marker>
+          <marker id="arrow-right" markerWidth="8" markerHeight="8" refX="1" refY="4" orient="auto" markerUnits="strokeWidth">
+            <path d="M8,4 L0,0 L0,8 Z" fill="#475569"></path>
+          </marker>
+        </defs>
+        <line x1="${leftX}" y1="${axisY}" x2="${rightX}" y2="${axisY}" stroke="#64748b" stroke-width="2" marker-start="url(#arrow-left)" marker-end="url(#arrow-right)"/>
       `;
 
-      svgElem.innerHTML = html;
-    }
-
-    // --- 4. SVG Number Line Renderer ---
-    function renderNumberLineSVG(svgElem, boundary, op, min = -10, max = 10, colorHex = '#635bff') {
-      if (!svgElem) return;
-      const width = svgElem.clientWidth || svgElem.parentNode.clientWidth || 360;
-      const height = svgElem.clientHeight || 80;
-      const padding = 35;
-      const usableWidth = width - 2 * padding;
-      const centerY = height / 2;
-
-      const isLeft = (op === '<' || op === '<=');
-      const isIncluded = (op === '<=' || op === '>=');
-
-      const mapX = (val) => padding + ((Math.max(min, Math.min(max, val)) - min) / (max - min)) * usableWidth;
-
-      let html = `<defs>
-        <marker id="nl-arr-l" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M 10 1 L 0 5 L 10 9 z" fill="#64748b"/>
-        </marker>
-        <marker id="nl-arr-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M 0 1 L 10 5 L 10 9 z" fill="#64748b"/>
-        </marker>
-      </defs>`;
-
-      // Base Axis
-      html += `<line x1="${padding - 10}" y1="${centerY}" x2="${width - padding + 10}" y2="${centerY}" stroke="#94a3b8" stroke-width="2" marker-start="url(#nl-arr-l)" marker-end="url(#nl-arr-r)"/>`;
-
-      // Ticks & Labels
-      for (let v = min; v <= max; v += 2) {
-        const tx = mapX(v);
-        html += `<line x1="${tx}" y1="${centerY - 4}" x2="${tx}" y2="${centerY + 4}" stroke="#64748b" stroke-width="1.5"/>`;
-        html += `<text x="${tx}" y="${centerY + 18}" font-family="var(--font-math)" font-size="11" font-weight="600" fill="#475569" text-anchor="middle">${v}</text>`;
+      for (let tick = min; tick <= max; tick += 2) {
+        const tx = xAt(tick);
+        html += `<line x1="${tx}" y1="${axisY - 5}" x2="${tx}" y2="${axisY + 5}" stroke="#94a3b8" stroke-width="1.2"/>`;
+        html += `<text x="${tx}" y="${axisY + 22}" font-size="10" text-anchor="middle" fill="#475569" font-family="Verdana, sans-serif">${tick}</text>`;
       }
 
-      // Solution Ray
-      const bX = mapX(boundary);
-      const rStart = isLeft ? (padding - 6) : bX;
-      const rEnd = isLeft ? bX : (width - padding + 6);
+      const shadeStart = isLeft ? leftX : boundaryX;
+      const shadeEnd = isLeft ? boundaryX : rightX;
+      const rectX = Math.min(shadeStart, shadeEnd);
+      const rectWidth = Math.max(0, Math.abs(shadeEnd - shadeStart));
+      html += `<rect x="${rectX}" y="${axisY - 10}" width="${rectWidth}" height="20" fill="${highlightColor}" opacity="0.18"/>`;
 
-      html += `<line x1="${rStart}" y1="${centerY}" x2="${rEnd}" y2="${centerY}" stroke="${colorHex}" stroke-width="4.5" stroke-linecap="round"/>`;
-
-      // Arrowhead
       if (isLeft) {
-        html += `<path d="M ${rStart + 8} ${centerY - 5} L ${rStart - 2} ${centerY} L ${rStart + 8} ${centerY + 5}" fill="none" stroke="${colorHex}" stroke-width="3.5" stroke-linecap="round"/>`;
+        html += `<path d="M ${boundaryX - 8} ${axisY - 8} L ${boundaryX + 8} ${axisY} L ${boundaryX - 8} ${axisY + 8}" fill="none" stroke="${highlightColor}" stroke-width="3" stroke-linecap="round"/>`;
       } else {
-        html += `<path d="M ${rEnd - 8} ${centerY - 5} L ${rEnd + 2} ${centerY} L ${rEnd - 8} ${centerY + 5}" fill="none" stroke="${colorHex}" stroke-width="3.5" stroke-linecap="round"/>`;
+        html += `<path d="M ${boundaryX + 8} ${axisY - 8} L ${boundaryX - 8} ${axisY} L ${boundaryX + 8} ${axisY + 8}" fill="none" stroke="${highlightColor}" stroke-width="3" stroke-linecap="round"/>`;
       }
 
-      // Circle Marker
-      if (isIncluded) {
-        html += `<circle cx="${bX}" cy="${centerY}" r="6.5" fill="${colorHex}" stroke="#ffffff" stroke-width="2"/>`;
+      if (isClosed) {
+        html += `<circle cx="${boundaryX}" cy="${axisY}" r="6" fill="${highlightColor}" stroke="#ffffff" stroke-width="2"/>`;
       } else {
-        html += `<circle cx="${bX}" cy="${centerY}" r="6.5" fill="#ffffff" stroke="${colorHex}" stroke-width="3"/>`;
+        html += `<circle cx="${boundaryX}" cy="${axisY}" r="6" fill="#ffffff" stroke="${highlightColor}" stroke-width="3"/>`;
       }
 
-      svgElem.innerHTML = html;
+      svg.innerHTML = html;
     }
 
-    // --- 5. DOM Cache ---
-    const elements = {
-      inputNaturalText: document.getElementById('input-natural-text'),
-      btnSolveNatural: document.getElementById('btn-solve-natural'),
-      parseErrorBanner: document.getElementById('parse-error-banner'),
+    function renderBalanceModel(model) {
+      const svg = elements.balanceSvg;
+      const width = 360;
+      const centerX = width / 2;
+      const centerY = 100;
+      const beamTilt = model.finalOperator === '>' || model.finalOperator === '>=' ? 7 : model.finalOperator === '<' || model.finalOperator === '<=' ? -7 : 0;
+      const rad = beamTilt * Math.PI / 180;
+      const leftBeamX = centerX - 90 * Math.cos(rad);
+      const leftBeamY = centerY - 90 * Math.sin(rad);
+      const rightBeamX = centerX + 90 * Math.cos(rad);
+      const rightBeamY = centerY + 90 * Math.sin(rad);
 
-      nlSectionTitle: document.getElementById('nl-section-title'),
-      displayInequalityPill: document.getElementById('display-inequality-pill'),
-      displayIntervalText: document.getElementById('display-interval-text'),
-      svgBalanceScale: document.getElementById('svg-balance-scale'),
-      svgMainNl: document.getElementById('svg-main-nl'),
-      nlMainContainer: document.getElementById('nl-main-container'),
-      nlOperatorSegments: document.getElementById('nl-operator-segments'),
+      svg.innerHTML = `
+        <line x1="${centerX - 65}" y1="${centerY + 48}" x2="${centerX + 65}" y2="${centerY + 48}" stroke="#94a3b8" stroke-width="6"/>
+        <line x1="${centerX}" y1="${centerY}" x2="${centerX}" y2="${centerY + 55}" stroke="#64748b" stroke-width="4"/>
+        <line x1="${leftBeamX}" y1="${leftBeamY}" x2="${rightBeamX}" y2="${rightBeamY}" stroke="#635bff" stroke-width="5" stroke-linecap="round"/>
+        <line x1="${leftBeamX}" y1="${leftBeamY}" x2="${leftBeamX - 28}" y2="${leftBeamY + 36}" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="${rightBeamX}" y1="${rightBeamY}" x2="${rightBeamX + 28}" y2="${rightBeamY + 36}" stroke="#94a3b8" stroke-width="2"/>
+        <path d="M ${leftBeamX - 35} ${leftBeamY + 36} Q ${leftBeamX} ${leftBeamY + 50} ${leftBeamX + 35} ${leftBeamY + 36} Z" fill="#8b5cf6" opacity="0.9"/>
+        <path d="M ${rightBeamX - 35} ${rightBeamY + 36} Q ${rightBeamX} ${rightBeamY + 50} ${rightBeamX + 35} ${rightBeamY + 36} Z" fill="#8b5cf6" opacity="0.9"/>
 
-      btnResetAll: document.getElementById('btn-reset-all'),
-      btnPrevStep: document.getElementById('btn-prev-step'),
-      btnNextStep: document.getElementById('btn-next-step'),
-      stepIndicatorText: document.getElementById('step-indicator-text'),
+        <g transform="translate(${leftBeamX - 42}, ${leftBeamY + 12})">
+          <rect width="38" height="30" rx="6" fill="#eef2ff" stroke="#635bff" stroke-width="2"/>
+          <text x="19" y="20" font-size="14" text-anchor="middle" fill="#4f46e5" font-family="Verdana, sans-serif" font-weight="700">${model.a}${model.v}</text>
+        </g>
+        <g transform="translate(${leftBeamX + 10}, ${leftBeamY + 12})">
+          <rect width="38" height="30" rx="6" fill="${model.b >= 0 ? '#fee2e2' : '#fef3c7'}" stroke="${model.b >= 0 ? '#ef4444' : '#f59e0b'}" stroke-width="2"/>
+          <text x="19" y="20" font-size="13" text-anchor="middle" fill="${model.b >= 0 ? '#b91c1c' : '#b45309'}" font-family="Verdana, sans-serif" font-weight="700">${model.b >= 0 ? '+' + model.b : model.b}</text>
+        </g>
 
-      // Proof Step Cards
-      cardStep1: document.getElementById('card-step-1'), canvasStep1: document.getElementById('canvas-step-1'),
-      cardStep2: document.getElementById('card-step-2'), canvasStep2: document.getElementById('canvas-step-2'), titleStep2: document.getElementById('title-step-2'),
-      cardStep3: document.getElementById('card-step-3'), canvasStep3: document.getElementById('canvas-step-3'), titleStep3: document.getElementById('title-step-3'),
-      cardStep4: document.getElementById('card-step-4'), canvasStep4: document.getElementById('canvas-step-4'),
-
-      // Why boxes & descriptions
-      whyDesc2: document.getElementById('why-desc-2'),
-      whyBox1: document.getElementById('why-box-1'),
-      whyBox2: document.getElementById('why-box-2'),
-      whyBox3: document.getElementById('why-box-3'),
-      predictLeadText: document.getElementById('predict-lead-text'),
-
-      // Prediction
-      predictOptionsGrid: document.getElementById('predict-options-grid'),
-      btnRevealPredict: document.getElementById('btn-reveal-predict'),
-      predictFeedback: document.getElementById('predict-feedback'),
-
-      // Challenge
-      svgChallengeNl: document.getElementById('svg-challenge-nl'),
-      challengeNlContainer: document.getElementById('challenge-nl-container'),
-      challengeOpSegments: document.getElementById('challenge-op-segments'),
-      btnCheckChallenge: document.getElementById('btn-check-challenge'),
-      challengeFeedback: document.getElementById('challenge-feedback')
-    };
-
-    // --- 6. Central UI Dispatcher ---
-    function renderUI() {
-      const model = solveLinearInequality(state.a, state.b, state.op, state.c, state.variable);
-
-      // Section Titles & Variable Labels
-      elements.nlSectionTitle.textContent = `Number line \u2014 solution set for ${state.variable}`;
-      elements.predictLeadText.textContent = `Predict the final solution for ${state.variable}:`;
-
-      // Balance & Formula Pill
-      renderBalanceScaleSVG(elements.svgBalanceScale, model);
-      elements.displayInequalityPill.textContent = `Inequality: ${model.step1Text}`;
-
-      // Operator Segments Active State
-      elements.nlOperatorSegments.querySelectorAll('button').forEach(btn => {
-        if (btn.dataset.op === model.finalOp) btn.classList.add('active');
-        else btn.classList.remove('active');
-      });
-
-      // Number Line Sync
-      renderNumberLineSVG(elements.svgMainNl, model.boundary, model.finalOp, -10, 10);
-      elements.displayIntervalText.textContent = `Interval: ${model.interval}`;
-
-      // 4-Step Proof Cards Sync
-      elements.titleStep2.textContent = model.bOpText;
-      elements.titleStep3.textContent = model.aOpText;
-
-      elements.canvasStep1.innerHTML = `<span style="font-family:var(--font-math); font-size:15px; font-weight:bold; color:var(--primary);">${model.step1Text}</span>`;
-      elements.canvasStep2.innerHTML = `<span style="font-family:var(--font-math); font-size:15px; font-weight:bold; color:var(--primary);">${model.step2Eq}</span>`;
-      elements.canvasStep3.innerHTML = `<span style="font-family:var(--font-math); font-size:15px; font-weight:bold; color:var(--primary);">${model.step3Eq}</span>`;
-      elements.canvasStep4.innerHTML = `<span style="font-family:var(--font-math); font-size:15px; font-weight:bold; color:var(--accent-green);">${model.step3Eq}</span>`;
-
-      // Highlight Active Step
-      [1, 2, 3, 4].forEach(stepNum => {
-        const card = elements[`cardStep${stepNum}`];
-        if (stepNum <= state.currentStep) card.classList.add('active-step');
-        else card.classList.remove('active-step');
-      });
-      elements.stepIndicatorText.textContent = `Step ${state.currentStep} of 4`;
-
-      // Why Section Boxes & Descriptions Sync
-      elements.whyDesc2.textContent = `After removing the constant, divide both sides by the coefficient of ${state.variable}.`;
-      elements.whyBox1.textContent = `${state.a}${state.variable} + ${state.b} - ${state.b} ${formatOp(state.op)} ${state.c} - ${state.b}  \u21D2  ${model.step2Eq}`;
-      elements.whyBox2.textContent = `${model.step2Eq}  \u21D2  \u00F7${state.a}  \u21D2  ${model.step3Eq}`;
-      if (model.isSignFlipped) {
-        elements.whyBox3.innerHTML = `<span style="color:var(--accent-red); font-weight:bold;">Sign Flipped!</span> &divide;(${state.a}) reverses ${formatOp(state.op)} to ${formatOp(model.finalOp)}`;
-      } else {
-        elements.whyBox3.textContent = `Dividing by positive ${state.a} preserves sign direction (${formatOp(state.op)}).`;
-      }
-
-      // Prediction Buttons Sync with detected variable name!
-      const buttons = elements.predictOptionsGrid.querySelectorAll('button');
-      buttons.forEach(btn => {
-        const op = btn.dataset.op;
-        const bStr = model.boundary.toFixed(Number.isInteger(model.boundary) ? 0 : 1);
-        btn.textContent = `${state.variable} ${formatOp(op)} ${bStr}`;
-        if (state.predictionSelected === op) btn.classList.add('selected');
-        else btn.classList.remove('selected');
-      });
-
-      // Render Challenge Number Line
-      renderNumberLineSVG(elements.svgChallengeNl, state.challenge.studentBoundary, state.challenge.studentOp, -10, 10, '#2563eb');
+        <g transform="translate(${rightBeamX - 24}, ${rightBeamY + 12})">
+          <rect width="48" height="30" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+          <text x="24" y="20" font-size="14" text-anchor="middle" fill="#1d4ed8" font-family="Verdana, sans-serif" font-weight="700">${model.c}</text>
+        </g>
+      `;
     }
 
-    // Helper to handle custom inequality solving
-    function processCustomInequality(inputStr) {
-      const parsed = parseLinearInequality(inputStr);
+    function renderChallengeNumberLine() {
+      renderNumberLine(elements.challengeNumberline, state.challengeBoundary, state.challengeOp, '#2563eb');
+    }
+
+    function updateSolutionDisplay() {
+      const model = solveCurrent();
+      const currentExpr = `${formatExpression(state.a, state.b, state.variable)} ${formatSymbol(state.op)} ${state.c}`;
+
+      elements.numberlineTitle.textContent = `Number line — solution set for ${state.variable}`;
+      elements.currentInequalityPill.innerHTML = `Inequality: ${currentExpr}`;
+      elements.intervalText.textContent = `Interval: ${model.interval}`;
+      elements.stepIndicator.textContent = `Step ${state.currentStep} of 4`;
+
+      elements.numberlineOperators.querySelectorAll('button').forEach((button) => {
+        const active = button.dataset.op === model.finalOperator;
+        button.classList.toggle('active', active);
+      });
+
+      renderNumberLine(elements.numberlineSvg, model.boundary, model.finalOperator, '#635bff');
+      renderBalanceModel(model);
+
+      elements.step2Title.textContent = state.b >= 0 ? `Subtract ${Math.abs(state.b)}` : `Add ${Math.abs(state.b)}`;
+      elements.step3Title.textContent = state.a < 0 ? `Divide by ${state.a} and flip` : `Divide by ${state.a}`;
+      elements.step1Display.innerHTML = currentExpr;
+      elements.step2Display.innerHTML = `${formatCoefficient(state.a, state.variable)} ${formatSymbol(state.op)} ${prettyNumber(state.c - state.b)}`;
+      elements.step3Display.innerHTML = `${state.variable} ${formatSymbol(model.finalOperator)} ${prettyNumber(model.boundary)}`;
+      elements.step4Display.innerHTML = `${state.variable} ${formatSymbol(model.finalOperator)} ${prettyNumber(model.boundary)}`;
+
+      document.querySelectorAll('.proof-step-card').forEach((card) => {
+        const number = Number(card.id.replace('step-card-', ''));
+        card.classList.toggle('active-step', number <= state.currentStep);
+      });
+
+      elements.whyBox1.innerHTML = currentExpr;
+      elements.whyBox2.innerHTML = `${formatExpression(state.a, state.b, state.variable)} ${state.b >= 0 ? '− ' + Math.abs(state.b) : '+ ' + Math.abs(state.b)} ${formatSymbol(state.op)} ${state.c}${state.b >= 0 ? ' − ' + Math.abs(state.b) : ' + ' + Math.abs(state.b)} ⇒ ${formatCoefficient(state.a, state.variable)} ${formatSymbol(state.op)} ${prettyNumber(state.c - state.b)}`;
+      elements.whyBox3.innerHTML = `${formatCoefficient(state.a, state.variable)} ${formatSymbol(state.op)} ${prettyNumber(state.c - state.b)} ⇒ ${state.variable} ${formatSymbol(model.finalOperator)} ${prettyNumber(model.boundary)}`;
+      elements.whyBox4.innerHTML = state.a < 0 ? `−${Math.abs(state.a)}${state.variable} ${formatSymbol(state.op)} ${state.c} ⇒ ${state.variable} ${formatSymbol(model.finalOperator)} ${prettyNumber(model.boundary)}` : `Positive coefficient: ${state.variable} ${formatSymbol(model.finalOperator)} ${prettyNumber(model.boundary)}`;
+      elements.whyDesc2.textContent = `Subtract ${Math.abs(state.b)} from both sides to isolate the variable term.`;
+      elements.whyDesc3.textContent = state.a < 0 ? `Divide both sides by ${state.a}. Because the divisor is negative, the sign reverses.` : `Divide both sides by ${state.a}. Because the divisor is positive, the sign stays the same.`;
+
+      elements.predictionLabel.textContent = `Predict the final solution for ${state.variable}:`;
+      elements.predictionOptions.querySelectorAll('button').forEach((button) => {
+        const op = button.dataset.op;
+        button.textContent = `${state.variable} ${formatSymbol(op)} ${prettyNumber(model.boundary)}`;
+        button.classList.toggle('selected', state.predictionSelected === op);
+      });
+
+      renderChallengeNumberLine();
+    }
+
+    function clearError() {
+      elements.errorBanner.style.display = 'none';
+      elements.errorBanner.textContent = '';
+    }
+
+    function applyParsedState(parsed) {
       if (parsed.error) {
-        elements.parseErrorBanner.textContent = `⚠️ ${parsed.error}`;
-        elements.parseErrorBanner.style.display = 'flex';
+        elements.errorBanner.textContent = parsed.error;
+        elements.errorBanner.style.display = 'flex';
         return;
       }
-      elements.parseErrorBanner.style.display = 'none';
 
-      state.rawInput = parsed.rawInput;
       state.variable = parsed.variable;
       state.a = parsed.coefficient;
       state.b = parsed.constant;
@@ -1539,173 +1344,250 @@
       state.c = parsed.rightSide;
       state.currentStep = 4;
       state.predictionSelected = null;
-
-      renderUI();
+      elements.predictionFeedback.style.display = 'none';
+      clearError();
+      updateSolutionDisplay();
     }
 
-    // --- 7. Event Handlers ---
-
-    elements.btnSolveNatural.addEventListener('click', () => {
-      processCustomInequality(elements.inputNaturalText.value);
-    });
-
-    elements.inputNaturalText.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') processCustomInequality(elements.inputNaturalText.value);
-    });
-
-    document.querySelectorAll('.preset-chip-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const presetStr = btn.dataset.preset;
-        elements.inputNaturalText.value = presetStr;
-        processCustomInequality(presetStr);
-      });
-    });
-
-    elements.nlOperatorSegments.querySelectorAll('button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        state.op = btn.dataset.op;
-        renderUI();
-      });
-    });
-
-    elements.btnPrevStep.addEventListener('click', () => {
-      if (state.currentStep > 1) {
-        state.currentStep--;
-        renderUI();
-      }
-    });
-
-    elements.btnNextStep.addEventListener('click', () => {
-      if (state.currentStep < 4) {
-        state.currentStep++;
-        renderUI();
-      }
-    });
-
-    elements.btnResetAll.addEventListener('click', () => {
-      elements.inputNaturalText.value = "2x + 3 < 11";
-      processCustomInequality("2x + 3 < 11");
-    });
-
-    // Direct Dragging on Main Solution Number Line
-    let isDraggingNl = false;
-    function updateNlFromMouse(e) {
-      const rect = elements.nlMainContainer.getBoundingClientRect();
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const relX = clientX - rect.left;
-      const padding = 35;
-      const usableW = rect.width - 2 * padding;
-      const pct = Math.max(0, Math.min(1, (relX - padding) / usableW));
-      const min = -10, max = 10;
-      const newBound = min + pct * (max - min);
-      const roundedBound = Math.round(newBound);
-
-      state.c = roundedBound * state.a + state.b;
-      renderUI();
+    function handleCustomSolve() {
+      const parsed = parseLinearInequality(elements.customInequality.value);
+      applyParsedState(parsed);
     }
 
-    elements.nlMainContainer.addEventListener('mousedown', (e) => {
-      isDraggingNl = true;
-      updateNlFromMouse(e);
-    });
-
-    window.addEventListener('mousemove', (e) => {
-      if (isDraggingNl) updateNlFromMouse(e);
-    });
-
-    window.addEventListener('mouseup', () => { isDraggingNl = false; });
-
-    // Prediction Selection & Verification
-    elements.predictOptionsGrid.querySelectorAll('button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        state.predictionSelected = btn.dataset.op;
-        renderUI();
+    function setActiveNav(target) {
+      document.querySelectorAll('.nav-item').forEach((item) => {
+        item.classList.toggle('active', item.dataset.nav === target);
       });
-    });
+    }
 
-    elements.btnRevealPredict.addEventListener('click', () => {
-      const model = solveLinearInequality(state.a, state.b, state.op, state.c, state.variable);
-      if (!state.predictionSelected) {
-        elements.predictFeedback.className = 'feedback-msg incorrect';
-        elements.predictFeedback.textContent = `Please select a predicted inequality above first.`;
-        elements.predictFeedback.style.display = 'flex';
+    function initializeNav() {
+      document.querySelectorAll('.nav-item a').forEach((link) => {
+        link.addEventListener('click', (event) => {
+          event.preventDefault();
+          const target = link.getAttribute('href').replace('#', '');
+          const section = document.getElementById(target);
+          if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          setActiveNav(target);
+          state.savedExplicitlySelected = target === 'saved';
+        });
+      });
+
+      const observer = new IntersectionObserver((entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .map((entry) => entry.target.id)
+          .filter((id) => ['explore', 'proofs', 'practice'].includes(id));
+
+        if (visible.length && !state.savedExplicitlySelected) {
+          setActiveNav(visible[0]);
+        }
+      }, { rootMargin: '-30% 0px -45% 0px', threshold: [0.15, 0.35] });
+
+      ['explore', 'proofs', 'practice', 'saved'].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) observer.observe(el);
+      });
+
+      setActiveNav('explore');
+      state.savedExplicitlySelected = false;
+    }
+
+    function renderSavedList() {
+      const saved = JSON.parse(localStorage.getItem(SAVED_KEY) || '[]');
+      if (!saved.length) {
+        elements.savedList.innerHTML = '<div style="padding:12px; border:1px dashed #cbd5e1; border-radius:12px; background:#f8fafc; color:#64748b;">No saved inequalities yet.</div>';
         return;
       }
-      if (state.predictionSelected === model.finalOp) {
-        elements.predictFeedback.className = 'feedback-msg correct';
-        elements.predictFeedback.innerHTML = `&#10004; Correct! Final solution is ${state.variable} ${formatOp(model.finalOp)} ${model.boundary.toFixed(Number.isInteger(model.boundary)?0:1)}.`;
-      } else {
-        elements.predictFeedback.className = 'feedback-msg incorrect';
-        elements.predictFeedback.innerHTML = `&#10008; Not quite. The correct answer is ${state.variable} ${formatOp(model.finalOp)} ${model.boundary.toFixed(Number.isInteger(model.boundary)?0:1)}.`;
-      }
-      elements.predictFeedback.style.display = 'flex';
-    });
 
-    // Challenge Dragging & Operation Chips
-    document.querySelectorAll('.chip-btn-op').forEach(chip => {
-      chip.addEventListener('click', () => {
-        const val = chip.dataset.chip;
-        if (val === '/(-3)') {
-          state.challenge.studentBoundary = -2;
-          state.challenge.studentOp = '<=';
-        } else if (val === '-2') {
-          state.challenge.studentBoundary = 2;
-        } else if (val === '+6') {
-          state.challenge.studentBoundary = 6;
-        }
-        renderUI();
+      elements.savedList.innerHTML = saved.map((item, index) => `
+        <button type="button" data-index="${index}" class="btn-radio-option" style="justify-content:flex-start; width:100%; text-align:left;">${item.label}</button>
+      `).join('');
+
+      elements.savedList.querySelectorAll('button').forEach((button) => {
+        button.addEventListener('click', () => {
+          const index = Number(button.dataset.index);
+          const selected = saved[index];
+          if (!selected) return;
+          const parsed = parseLinearInequality(selected.expression);
+          applyParsedState(parsed);
+          setActiveNav('saved');
+          state.savedExplicitlySelected = true;
+          document.getElementById('saved').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
       });
-    });
-
-    elements.challengeOpSegments.querySelectorAll('button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        state.challenge.studentOp = btn.dataset.op;
-        elements.challengeOpSegments.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        renderUI();
-      });
-    });
-
-    let isDraggingChallengeNl = false;
-    function updateChallengeFromMouse(e) {
-      const rect = elements.challengeNlContainer.getBoundingClientRect();
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const relX = clientX - rect.left;
-      const padding = 35;
-      const usableW = rect.width - 2 * padding;
-      const pct = Math.max(0, Math.min(1, (relX - padding) / usableW));
-      const min = -10, max = 10;
-      state.challenge.studentBoundary = Math.round(min + pct * (max - min));
-      renderUI();
     }
 
-    elements.challengeNlContainer.addEventListener('mousedown', (e) => {
-      isDraggingChallengeNl = true;
-      updateChallengeFromMouse(e);
-    });
-
-    window.addEventListener('mousemove', (e) => {
-      if (isDraggingChallengeNl) updateChallengeFromMouse(e);
-    });
-
-    window.addEventListener('mouseup', () => { isDraggingChallengeNl = false; });
-
-    elements.btnCheckChallenge.addEventListener('click', () => {
-      const targetBound = -2;
-      const targetOp = '<=';
-
-      if (state.challenge.studentBoundary === targetBound && state.challenge.studentOp === targetOp) {
-        elements.challengeFeedback.className = 'feedback-msg correct';
-        elements.challengeFeedback.innerHTML = '&#10004; Excellent! Correct solution is x \u2264 -2 (dividing by -3 flipped &ge; to &le;).';
-      } else {
-        elements.challengeFeedback.className = 'feedback-msg incorrect';
-        elements.challengeFeedback.innerHTML = '&#10008; Not quite. Target solution is x \u2264 -2. Remember dividing by -3 flips the sign!';
+    function saveCurrentInequality() {
+      const expression = elements.customInequality.value.trim();
+      const parsed = parseLinearInequality(expression);
+      if (parsed.error) {
+        elements.errorBanner.textContent = parsed.error;
+        elements.errorBanner.style.display = 'flex';
+        return;
       }
-      elements.challengeFeedback.style.display = 'flex';
-    });
 
-    // Initial Execution
-    processCustomInequality("2x + 3 < 11");
+      const saved = JSON.parse(localStorage.getItem(SAVED_KEY) || '[]');
+      const label = `${parsed.variable} ${formatSymbol(parsed.operator)} ${prettyNumber((parsed.rightSide - parsed.constant) / parsed.coefficient)}`;
+      const entry = { expression, label };
+      const exists = saved.some((item) => item.expression === expression);
+      if (!exists) {
+        saved.unshift(entry);
+        localStorage.setItem(SAVED_KEY, JSON.stringify(saved.slice(0, 6)));
+      }
+      renderSavedList();
+      setActiveNav('saved');
+      state.savedExplicitlySelected = true;
+    }
+
+    function attachEventHandlers() {
+      elements.solveCustom.addEventListener('click', handleCustomSolve);
+      elements.customInequality.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') handleCustomSolve();
+      });
+
+      document.querySelectorAll('.preset-chip-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          elements.customInequality.value = button.dataset.preset;
+          handleCustomSolve();
+        });
+      });
+
+      elements.numberlineOperators.querySelectorAll('button').forEach((button) => {
+        button.addEventListener('click', () => {
+          state.op = button.dataset.op;
+          updateSolutionDisplay();
+        });
+      });
+
+      elements.numberlineContainer.addEventListener('mousedown', (event) => {
+        let dragging = true;
+        const handleMove = (moveEvent) => {
+          if (!dragging) return;
+          const rect = elements.numberlineContainer.getBoundingClientRect();
+          const x = Math.min(Math.max(moveEvent.clientX - rect.left, 0), rect.width);
+          const ratio = x / rect.width;
+          const boundary = -10 + ratio * 20;
+          state.c = Math.round(boundary) * state.a + state.b;
+          updateSolutionDisplay();
+        };
+
+        const stop = () => {
+          dragging = false;
+          window.removeEventListener('mousemove', handleMove);
+          window.removeEventListener('mouseup', stop);
+        };
+
+        window.addEventListener('mousemove', handleMove);
+        window.addEventListener('mouseup', stop);
+        handleMove(event);
+      });
+
+      elements.predictionOptions.querySelectorAll('button').forEach((button) => {
+        button.addEventListener('click', () => {
+          state.predictionSelected = button.dataset.op;
+          updateSolutionDisplay();
+        });
+      });
+
+      elements.revealPrediction.addEventListener('click', () => {
+        const model = solveCurrent();
+        if (!state.predictionSelected) {
+          elements.predictionFeedback.className = 'feedback-msg incorrect';
+          elements.predictionFeedback.textContent = 'Choose a prediction before revealing the answer.';
+          elements.predictionFeedback.style.display = 'flex';
+          return;
+        }
+
+        const correct = state.predictionSelected === model.finalOperator;
+        elements.predictionFeedback.className = correct ? 'feedback-msg correct' : 'feedback-msg incorrect';
+        elements.predictionFeedback.innerHTML = correct
+          ? `✔ Correct! The solution is ${state.variable} ${formatSymbol(model.finalOperator)} ${prettyNumber(model.boundary)}.`
+          : `✘ Not quite. The correct solution is ${state.variable} ${formatSymbol(model.finalOperator)} ${prettyNumber(model.boundary)}.`;
+        elements.predictionFeedback.style.display = 'flex';
+      });
+
+      elements.saveCurrent.addEventListener('click', saveCurrentInequality);
+
+      elements.resetAll.addEventListener('click', () => {
+        elements.customInequality.value = '2x + 3 < 11';
+        state.variable = 'x';
+        state.a = 2;
+        state.b = 3;
+        state.op = '<';
+        state.c = 11;
+        state.currentStep = 4;
+        state.predictionSelected = null;
+        state.challengeOp = '<=';
+        state.challengeBoundary = -2;
+        clearError();
+        elements.predictionFeedback.style.display = 'none';
+        updateSolutionDisplay();
+      });
+
+      elements.prevStep.addEventListener('click', () => {
+        state.currentStep = Math.max(1, state.currentStep - 1);
+        updateSolutionDisplay();
+      });
+
+      elements.nextStep.addEventListener('click', () => {
+        state.currentStep = Math.min(4, state.currentStep + 1);
+        updateSolutionDisplay();
+      });
+    }
+
+    function setupChallenge() {
+      elements.challengeOperators.querySelectorAll('button').forEach((button) => {
+        button.addEventListener('click', () => {
+          state.challengeOp = button.dataset.op;
+          elements.challengeOperators.querySelectorAll('button').forEach((b) => b.classList.toggle('active', b.dataset.op === state.challengeOp));
+          renderChallengeNumberLine();
+        });
+      });
+
+      document.querySelectorAll('.chip-btn-op').forEach((button) => {
+        button.addEventListener('click', () => {
+          const chip = button.dataset.chip;
+          if (chip === 'expand') state.challengeBoundary = 2;
+          if (chip === 'reverse') state.challengeBoundary = -2;
+          if (chip === 'divide') {
+            state.challengeBoundary = -2;
+            state.challengeOp = '<=';
+          }
+          elements.challengeOperators.querySelectorAll('button').forEach((b) => b.classList.toggle('active', b.dataset.op === state.challengeOp));
+          renderChallengeNumberLine();
+        });
+      });
+
+      elements.checkChallenge.addEventListener('click', () => {
+        const correct = state.challengeBoundary === -2 && state.challengeOp === '<=';
+        elements.challengeFeedback.style.display = 'flex';
+        if (correct) {
+          elements.challengeFeedback.className = 'feedback-msg correct';
+          elements.challengeFeedback.innerHTML = '✔ Correct! Dividing by −3 reverses the inequality, so x ≤ −2.';
+        } else {
+          elements.challengeFeedback.className = 'feedback-msg incorrect';
+          elements.challengeFeedback.innerHTML = '✘ Not yet. Start with −3x + 6 ≥ 12, subtract 6, then divide by −3 and reverse the sign.';
+        }
+      });
+
+      renderChallengeNumberLine();
+    }
+
+    function initialLoad() {
+      elements.customInequality.value = '2x + 3 < 11';
+      state.variable = 'x';
+      state.a = 2;
+      state.b = 3;
+      state.op = '<';
+      state.c = 11;
+      initializeNav();
+      attachEventHandlers();
+      setupChallenge();
+      renderSavedList();
+      updateSolutionDisplay();
+    }
+
+    initialLoad();
   </script>
 </body>
 </html>

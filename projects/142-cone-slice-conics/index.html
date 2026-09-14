@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Conic Sections from Slicing a Cone | Interactive Mathematics</title>
+  <title>Conic Sections from Slicing a Cone | Maths Universe</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
   <style>
     :root {
       --primary: #635bff;
@@ -39,6 +42,10 @@
       padding: 0;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       font-family: var(--font-main);
       background-color: var(--bg-main);
@@ -52,13 +59,19 @@
     /* App Container Layout */
     .app-layout {
       display: grid;
-      grid-template-columns: 80px 1fr;
+      grid-template-columns: 84px 1fr;
       min-height: 100vh;
     }
 
     @media (min-width: 1200px) {
       .app-layout {
-        grid-template-columns: 100px 1fr;
+        grid-template-columns: 96px 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .app-layout {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -70,8 +83,28 @@
       flex-direction: column;
       align-items: center;
       padding: 20px 0;
-      gap: 28px;
-      z-index: 10;
+      gap: 24px;
+      z-index: 100;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        bottom: 0;
+        top: auto;
+        left: 0;
+        right: 0;
+        height: auto;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 8px 12px;
+        border-right: none;
+        border-top: 1px solid var(--border);
+        box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
+      }
     }
 
     .brand-logo {
@@ -81,24 +114,45 @@
       gap: 4px;
       color: var(--primary);
       text-decoration: none;
-      font-weight: 700;
-      font-size: 11px;
+      font-weight: 800;
+      font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      text-align: center;
     }
 
-    .brand-logo svg {
-      width: 36px;
-      height: 36px;
+    .brand-logo-img {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+      border-radius: 8px;
+      transition: transform 0.2s;
+    }
+
+    .brand-logo:hover .brand-logo-img {
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      .brand-logo {
+        display: none;
+      }
     }
 
     .nav-list {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
       width: 100%;
       align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .nav-list {
+        flex-direction: row;
+        justify-content: space-around;
+      }
     }
 
     .nav-item button {
@@ -110,11 +164,12 @@
       gap: 4px;
       color: var(--text-muted);
       font-size: 11px;
+      font-weight: 600;
       cursor: pointer;
-      padding: 8px 12px;
+      padding: 8px 10px;
       border-radius: var(--radius-sm);
       transition: all 0.2s;
-      width: 64px;
+      width: 66px;
     }
 
     .nav-item button:hover {
@@ -125,7 +180,7 @@
     .nav-item.active button {
       color: var(--primary);
       background: var(--primary-light);
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .nav-item svg {
@@ -137,15 +192,35 @@
       margin-top: auto;
     }
 
+    @media (max-width: 768px) {
+      .sidebar-footer {
+        display: none;
+      }
+    }
+
     /* Main Workspace */
     .main-wrapper {
-      padding: 24px 32px;
+      padding: 24px 32px 64px 32px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 28px;
       max-width: 1750px;
       margin: 0 auto;
       width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      .main-wrapper {
+        padding: 16px 16px 80px 16px;
+        gap: 20px;
+      }
+    }
+
+    .page-section {
+      scroll-margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
 
     /* Top Header */
@@ -157,46 +232,73 @@
       flex-wrap: wrap;
     }
 
-    .breadcrumb {
+    .header-nav-row {
       display: flex;
       align-items: center;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+
+    .btn-home {
+      display: inline-flex;
+      align-items: center;
       gap: 6px;
-      font-size: 13px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
       color: var(--primary);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12.5px;
+      font-weight: 700;
       text-decoration: none;
-      font-weight: 500;
-      margin-bottom: 4px;
+      transition: all 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-home:hover {
+      background: var(--primary-light);
+      border-color: var(--border-focus);
+      transform: translateX(-2px);
+    }
+
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
     }
 
     .header-title-area h1 {
-      font-size: 26px;
+      font-size: 28px;
       font-weight: 800;
       color: var(--text-dark);
       display: flex;
       align-items: center;
       gap: 12px;
       flex-wrap: wrap;
+      letter-spacing: -0.5px;
     }
 
     .header-subtitle {
       color: var(--text-muted);
-      font-size: 14px;
-      margin-top: 2px;
+      font-size: 14.5px;
+      margin-top: 4px;
     }
 
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .pill-badge {
-      background: #f1f5f9;
-      color: var(--text-muted);
-      font-size: 13px;
+      background: #eef2f6;
+      color: var(--text-dark);
+      font-size: 12.5px;
       padding: 6px 14px;
       border-radius: 20px;
-      font-weight: 500;
+      font-weight: 600;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -224,102 +326,23 @@
       color: var(--primary);
     }
 
-    /* Top Controls Bar Card */
-    .top-controls-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 18px 24px;
-      box-shadow: var(--shadow-sm);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-
-    .control-group-inline {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .slider-box {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      min-width: 170px;
-    }
-
-    .slider-box label {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-dark);
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .slider-box label span.val {
-      color: var(--primary);
-    }
-
-    .range-input {
-      width: 100%;
-      accent-color: var(--primary);
-      cursor: pointer;
-    }
-
-    .conic-badges-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .conic-pill-btn {
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 12.5px;
-      font-weight: 700;
-      border: 1px solid var(--border);
-      background: #f8fafc;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.15s ease;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .conic-pill-btn:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-    }
-
-    .conic-pill-btn.active {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-      box-shadow: var(--shadow-sm);
-    }
-
-    /* Main Dashboard Grid with Dedicated Layout Columns */
+    /* Main Dashboard Grid */
     .dashboard-grid {
       display: grid;
-      grid-template-columns: 1.25fr 1.25fr 360px;
+      grid-template-columns: 1.15fr 1.35fr 360px;
       gap: 20px;
-      align-items: start;
-      height: 630px;
+      align-items: stretch;
+      min-height: 640px;
     }
 
-    @media (max-width: 1350px) {
+    @media (max-width: 1400px) {
       .dashboard-grid {
         grid-template-columns: 1fr 1fr;
-        height: auto;
       }
       .why-panel {
         grid-column: span 2;
-        height: 580px !important;
+        height: auto !important;
+        max-height: 600px;
       }
     }
 
@@ -341,7 +364,14 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      height: 630px;
+      height: 640px;
+    }
+
+    @media (max-width: 950px) {
+      .viewport-card {
+        height: auto;
+        min-height: 560px;
+      }
     }
 
     .viewport-header {
@@ -363,68 +393,156 @@
       gap: 8px;
     }
 
+    .badge-step-num {
+      background: var(--primary-light);
+      color: var(--primary);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
     .viewport-body-wrapper {
       flex: 1 1 auto;
       min-height: 0;
       padding: 16px;
       background: #ffffff;
-    }
-
-    /* UN-OVERLAPPED DEDICATED COLUMN CSS GRID LAYOUTS */
-    .slice-workspace {
-      display: grid;
-      grid-template-columns: 185px minmax(0, 1fr);
-      gap: 16px;
-      height: 100%;
-      align-items: center;
-    }
-
-    .slice-parameters {
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 14px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      box-shadow: var(--shadow-sm);
     }
 
-    .slice-parameters h4 {
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      letter-spacing: 0.5px;
-    }
-
-    .cone-visualization {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      min-width: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .locus-workspace {
+    /* 1. Slice Workspace Layout */
+    .slice-workspace {
       display: grid;
-      grid-template-columns: 175px minmax(0, 1fr);
-      gap: 16px;
+      grid-template-columns: 160px 1fr;
+      gap: 14px;
       height: 100%;
-      align-items: center;
+      align-items: stretch;
     }
 
-    .locus-controls {
+    @media (max-width: 550px) {
+      .slice-workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .slice-controls-col {
       display: flex;
       flex-direction: column;
       gap: 12px;
-      height: 100%;
-      justify-content: center;
+      justify-content: space-between;
     }
 
-    .control-card-inner {
+    .control-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .control-box label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-dark);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .control-box .val-text {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .range-input {
+      width: 100%;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .cone-viz-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 380px;
+      background: radial-gradient(circle at center, #ffffff 40%, #f8faff 100%);
+      border: 1px solid #f1f5f9;
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .cone-bottom-pills {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 4px 4px 4px;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    .conic-pill-btn {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .conic-pill-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .conic-pill-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* 2. Locus Workspace Layout */
+    .locus-workspace {
+      display: grid;
+      grid-template-columns: 165px 1fr;
+      gap: 14px;
+      height: 100%;
+      align-items: stretch;
+    }
+
+    @media (max-width: 550px) {
+      .locus-workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .locus-controls-col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      justify-content: space-between;
+    }
+
+    .locus-card-inner {
       background: #f8fafc;
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
@@ -432,10 +550,9 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      box-shadow: var(--shadow-sm);
     }
 
-    .control-card-inner h4 {
+    .locus-card-inner h4 {
       font-size: 11px;
       font-weight: 800;
       text-transform: uppercase;
@@ -443,14 +560,33 @@
       letter-spacing: 0.5px;
     }
 
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+      color: var(--text-dark);
+    }
+
+    .checkbox-row input {
+      accent-color: var(--primary);
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+    }
+
     .locus-graph-container {
       position: relative;
       width: 100%;
       height: 100%;
-      min-width: 0;
+      min-height: 400px;
       background: #ffffff;
+      border: 1px solid #f1f5f9;
+      border-radius: var(--radius-md);
       overflow: hidden;
-      border-radius: var(--radius-sm);
       cursor: crosshair;
       user-select: none;
     }
@@ -461,63 +597,31 @@
       display: block;
     }
 
-    /* Switch styling */
-    .checkbox-toggle-row {
+    .locus-formula-pill {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border: 1.5px solid var(--primary);
+      padding: 6px 16px;
+      border-radius: 20px;
+      box-shadow: var(--shadow-sm);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      z-index: 10;
+      white-space: nowrap;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      user-select: none;
+      gap: 6px;
     }
 
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 32px;
-      height: 18px;
-    }
-
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .slider-switch {
-      position: absolute;
-      cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #cbd5e1;
-      transition: .2s;
-      border-radius: 18px;
-    }
-
-    .slider-switch:before {
-      position: absolute;
-      content: "";
-      height: 12px;
-      width: 12px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      transition: .2s;
-      border-radius: 50%;
-    }
-
-    input:checked + .slider-switch {
-      background-color: var(--primary);
-    }
-
-    input:checked + .slider-switch:before {
-      transform: translateX(14px);
-    }
-
-    /* Zoom Overlay Bottom Right of Graph Container */
+    /* Zoom Overlay Controls */
     .overlay-zoom-controls {
       position: absolute;
-      bottom: 10px;
+      top: 10px;
       right: 10px;
       display: flex;
       align-items: center;
@@ -561,11 +665,7 @@
       cursor: pointer;
     }
 
-    .btn-zoom-text:hover {
-      color: var(--primary);
-    }
-
-    /* Bottom Animation Bar */
+    /* Animation Bar */
     .anim-bar {
       padding: 8px 16px;
       background: #f8fafc;
@@ -581,8 +681,8 @@
       background: var(--primary);
       color: white;
       border: none;
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
@@ -605,7 +705,7 @@
       background: white;
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
-      padding: 3px 7px;
+      padding: 2px 7px;
       font-size: 11px;
       font-weight: 600;
       cursor: pointer;
@@ -617,7 +717,7 @@
       border-color: var(--primary);
     }
 
-    /* PERFECT FLEX SCROLLING RIGHT PANEL */
+    /* 3. Why It Works Panel */
     .why-panel {
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -625,8 +725,7 @@
       box-shadow: var(--shadow-sm);
       display: flex;
       flex-direction: column;
-      height: 630px;
-      min-height: 0;
+      height: 640px;
       overflow: hidden;
     }
 
@@ -651,12 +750,10 @@
       color: var(--text-dark);
     }
 
-    /* INDEPENDENT SCROLL CONTAINER */
     .why-panel-scroll {
       flex: 1 1 auto;
       min-height: 0;
       overflow-y: auto;
-      overflow-x: hidden;
       padding: 16px;
       display: flex;
       flex-direction: column;
@@ -664,12 +761,7 @@
     }
 
     .why-panel-scroll::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    .why-panel-scroll::-webkit-scrollbar-track {
-      background: #f1f5f9;
-      border-radius: 10px;
+      width: 6px;
     }
 
     .why-panel-scroll::-webkit-scrollbar-thumb {
@@ -677,22 +769,11 @@
       border-radius: 10px;
     }
 
-    .why-panel-scroll::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8;
-    }
-
-    .reveal-button {
-      flex: 0 0 auto;
-      margin: 12px 16px 16px 16px;
-    }
-
-    /* Section Cards inside Scroll Container */
     .why-section {
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
-      overflow: visible;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
     .why-section.open {
@@ -701,18 +782,17 @@
     }
 
     .why-section-header {
-      padding: 12px 16px;
+      padding: 12px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      font-size: 14.5px;
+      font-size: 14px;
       font-weight: 700;
       color: var(--text-dark);
       cursor: pointer;
       user-select: none;
       background: #ffffff;
-      transition: background 0.15s;
       border-radius: var(--radius-md);
     }
 
@@ -734,8 +814,8 @@
     }
 
     .why-badge-num {
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
       background: #f1f5f9;
       color: var(--text-muted);
@@ -744,7 +824,6 @@
       justify-content: center;
       font-size: 11px;
       font-weight: 800;
-      flex-shrink: 0;
     }
 
     .why-section.open .why-badge-num {
@@ -777,98 +856,57 @@
       display: block;
     }
 
-    .boxed-formula {
+    .math-formula-box {
       background: #f8fafc;
-      border: 2px solid var(--primary);
-      padding: 8px 14px;
+      border: 1.5px solid var(--primary);
+      padding: 8px 12px;
       border-radius: var(--radius-sm);
-      font-family: var(--font-math);
-      font-size: 18px;
       text-align: center;
-      margin: 10px 0;
+      margin: 8px 0;
       color: var(--primary);
-      font-weight: bold;
+      font-weight: 700;
     }
 
-    .btn-primary {
+    .btn-reveal-action {
+      flex: 0 0 auto;
+      margin: 12px 16px 16px 16px;
       background: var(--primary);
       color: white;
       border: none;
-      padding: 12px 18px;
+      padding: 11px 16px;
       border-radius: var(--radius-sm);
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 700;
       cursor: pointer;
-      width: 100%;
-      transition: background 0.2s;
-      box-shadow: var(--shadow-sm);
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
+      transition: background 0.2s;
     }
 
-    .btn-primary:hover {
+    .btn-reveal-action:hover {
       background: var(--primary-hover);
     }
 
-    /* Verification Card */
-    .verification-card {
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 14px;
-      margin-top: 4px;
-      box-shadow: var(--shadow-sm);
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      font-size: 13px;
-    }
-
-    .verify-step-row {
-      background: #f8fafc;
-      border-left: 3.5px solid var(--primary);
-      padding: 6px 10px;
-      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    }
-
-    .verify-step-title {
-      font-size: 10.5px;
-      font-weight: 800;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      letter-spacing: 0.5px;
-    }
-
-    .verify-step-math {
-      font-family: var(--font-math);
-      font-weight: 700;
-      color: var(--text-dark);
-      font-size: 13.5px;
-    }
-
-    /* Middle Section 3: Identify the Conic Cards Grid */
-    .identify-section-card {
+    /* Middle Section 3: Identify the Conic */
+    .identify-card {
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 18px 24px;
+      padding: 20px 24px;
       box-shadow: var(--shadow-sm);
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 16px;
     }
 
     .identify-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-    }
-
-    .identify-header h3 {
-      font-size: 16px;
-      font-weight: 800;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
     .conic-cards-grid {
@@ -883,11 +921,17 @@
       }
     }
 
+    @media (max-width: 500px) {
+      .conic-cards-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .conic-classify-card {
       background: #f8fafc;
       border: 2px solid var(--border);
       border-radius: var(--radius-md);
-      padding: 14px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -905,16 +949,16 @@
 
     .conic-classify-card.active {
       border-color: var(--primary);
-      background: var(--primary-light);
-      box-shadow: var(--shadow-md);
+      background: #f3f2ff;
+      box-shadow: 0 4px 12px rgba(99,91,255,0.12);
     }
 
     .conic-check-badge {
       position: absolute;
       top: 8px;
       right: 8px;
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
       background: var(--primary);
       color: white;
@@ -932,24 +976,25 @@
     .conic-card-title {
       font-size: 15px;
       font-weight: 800;
+      color: var(--text-dark);
     }
 
     .conic-card-condition {
       font-size: 12px;
       color: var(--text-muted);
-      font-family: var(--font-math);
+      font-weight: 600;
     }
 
     .conic-card-svg {
       width: 100%;
-      height: 60px;
+      height: 56px;
       margin-top: 4px;
     }
 
-    /* Bottom Section Grid */
+    /* Bottom Grid: Visual Proof, Connection, Challenge */
     .bottom-grid {
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr 1fr;
+      grid-template-columns: 1.25fr 0.85fr 1fr;
       gap: 20px;
     }
 
@@ -963,11 +1008,11 @@
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 18px 22px;
+      padding: 20px 24px;
       box-shadow: var(--shadow-sm);
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
     }
 
     .bottom-card h3 {
@@ -976,6 +1021,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      color: var(--text-dark);
     }
 
     .proof-steps-row {
@@ -985,22 +1031,29 @@
       gap: 10px;
     }
 
+    @media (max-width: 600px) {
+      .proof-steps-row {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+
     .proof-step-box {
       background: #f8fafc;
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
-      padding: 10px 8px;
+      padding: 12px 10px;
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
       font-size: 12px;
     }
 
     .proof-step-title {
       font-weight: 800;
-      font-size: 12.5px;
+      font-size: 13px;
       color: var(--primary);
     }
 
@@ -1012,58 +1065,124 @@
     }
 
     .text-input {
-      width: 110px;
+      width: 140px;
       padding: 8px 12px;
-      border: 1px solid var(--border);
+      border: 1.5px solid var(--border);
       border-radius: var(--radius-sm);
       font-size: 14px;
       font-weight: 600;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .text-input:focus {
+      border-color: var(--primary);
     }
 
     .feedback-msg {
-      font-size: 12.5px;
+      font-size: 13px;
       font-weight: 600;
-      padding: 6px 12px;
+      padding: 8px 14px;
       border-radius: var(--radius-sm);
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      line-height: 1.4;
     }
 
     .feedback-msg.correct {
       background: var(--accent-green-light);
       color: #065f46;
+      border: 1px solid #a7f3d0;
     }
 
     .feedback-msg.incorrect {
       background: #fce7f3;
       color: #9f1239;
+      border: 1px solid #fbcfe8;
     }
 
-    /* SVG styling elements */
+    /* Saved Panel Section */
+    .saved-container {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .saved-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .saved-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+
+    .saved-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: all 0.2s;
+    }
+
+    .saved-card:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .saved-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .saved-card-badge {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 12px;
+      color: white;
+    }
+
+    .saved-card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    /* SVG math styling */
     .axis-line { stroke: #64748b; stroke-width: 1.5; }
     .grid-line { stroke: #e2e8f0; stroke-width: 1; }
-    .conic-curve { stroke: #635bff; stroke-width: 3; fill: none; stroke-linecap: round; }
+    .conic-curve { stroke: #635bff; stroke-width: 3.5; fill: none; stroke-linecap: round; }
     .directrix-line { stroke: #2563eb; stroke-width: 2.2; stroke-dasharray: 6 4; }
-    
     .line-pf { stroke: #8b5cf6; stroke-width: 2.5; stroke-dasharray: 5 4; }
     .line-pd { stroke: #2563eb; stroke-width: 2.5; stroke-dasharray: 5 4; }
-
     .point-focus { fill: #8b5cf6; stroke: #ffffff; stroke-width: 2.5; }
     .point-directrix-foot { fill: #2563eb; stroke: #ffffff; stroke-width: 2; }
-    .point-center { fill: #1e293b; stroke: #ffffff; stroke-width: 2; }
     .point-locus { fill: #10b981; stroke: #ffffff; stroke-width: 3; cursor: grab; }
     .point-locus:active { cursor: grabbing; }
-
     .svg-text { font-family: var(--font-main); font-size: 12px; fill: #475569; user-select: none; }
     .svg-text-math { font-family: var(--font-math); font-size: 13px; font-weight: 600; fill: #1e293b; }
     .svg-label-bg { fill: rgba(255,255,255,0.92); rx: 4; ry: 4; }
-    .trail-dot { fill: #10b981; opacity: 0.5; }
 
-    /* 3D Cone Elements */
-    .cone-surface { fill: url(#cone-grad); stroke: #818cf8; stroke-width: 1.2; opacity: 0.75; }
-    .cone-surface-lower { fill: url(#cone-grad-lower); stroke: #818cf8; stroke-width: 1.2; opacity: 0.75; }
-    .cutting-plane { fill: rgba(99, 91, 255, 0.22); stroke: #635bff; stroke-width: 2; stroke-dasharray: none; }
+    /* 3D Cone Styling */
+    .cone-surface { fill: url(#cone-grad); stroke: #818cf8; stroke-width: 1.2; opacity: 0.8; }
+    .cone-surface-lower { fill: url(#cone-grad-lower); stroke: #818cf8; stroke-width: 1.2; opacity: 0.8; }
+    .cutting-plane { fill: rgba(99, 91, 255, 0.22); stroke: #635bff; stroke-width: 2; }
     .slice-intersection { stroke: #ec4899; stroke-width: 3.5; fill: none; stroke-linecap: round; filter: drop-shadow(0 0 3px rgba(236,72,153,0.5)); }
   </style>
 </head>
@@ -1072,41 +1191,40 @@
   <div class="app-layout">
     <!-- Left Navigation Sidebar -->
     <aside class="sidebar">
-      <a href="#" class="brand-logo">
-        <svg viewBox="0 0 40 40" fill="none">
-          <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2.5"/>
-          <path d="M 12 10 Q 20 20 12 30 M 28 10 Q 20 20 28 30" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-        </svg>
-        <span>Maths</span>
+      <a href="../../index.html" class="brand-logo" title="Back to Maths Universe">
+        <img src="../../assets/logo.png" alt="Maths Universe" class="brand-logo-img" />
+        <span>Maths Universe</span>
       </a>
+
       <ul class="nav-list">
-        <li class="nav-item active">
-          <button title="Explore Visuals">
+        <li class="nav-item active" data-nav="explore">
+          <button title="Explore Visuals" data-target="explore">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
             Explore
           </button>
         </li>
-        <li class="nav-item">
-          <button title="Proofs">
+        <li class="nav-item" data-nav="proofs">
+          <button title="Why It Works / Proofs" data-target="proofs">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 01-2 2h-0a2 2 0 01-2-2v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
             Proofs
           </button>
         </li>
-        <li class="nav-item">
-          <button title="Practice">
+        <li class="nav-item" data-nav="practice">
+          <button title="Predict & Challenge" data-target="practice">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
             Practice
           </button>
         </li>
-        <li class="nav-item">
-          <button title="Library">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-            Library
+        <li class="nav-item" data-nav="saved">
+          <button title="Saved Configurations" data-target="saved">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+            Saved
           </button>
         </li>
       </ul>
+
       <div class="sidebar-footer nav-item">
-        <button title="Settings">
+        <button title="Settings" id="btn-settings">
           <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
           Settings
         </button>
@@ -1115,530 +1233,632 @@
 
     <!-- Main Workspace -->
     <main class="main-wrapper">
-      <!-- Top Header -->
-      <header class="top-header">
-        <div class="header-title-area">
-          <a href="#" class="breadcrumb">&lsaquo; Visual Proofs / Geometry</a>
-          <h1>Conic Sections from Slicing a Cone</h1>
-          <p class="header-subtitle">How the angle and position of a plane determine the curve</p>
-        </div>
-        <div class="header-actions">
-          <span class="pill-badge">Intermediate</span>
-          <span class="pill-badge">⏱ 12 min</span>
-          <button class="btn-secondary" id="btn-reset-view" title="Reset view and parameters">
-            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-            Reset view
-          </button>
-        </div>
-      </header>
-
-      <!-- Top Controls Bar Card -->
-      <section class="top-controls-card">
-        <div class="control-group-inline">
-          <div class="slider-box">
-            <label for="slider-alpha">Tilt angle &alpha; <span class="val" id="val-alpha">38&deg;</span></label>
-            <input type="range" id="slider-alpha" class="range-input" min="0" max="85" step="1" value="38">
+      <!-- Section 1: Explore -->
+      <section id="explore" class="page-section">
+        <!-- Top Header with Breadcrumb and Home Button -->
+        <header class="top-header">
+          <div class="header-title-area">
+            <div class="header-nav-row">
+              <a href="../../index.html" class="btn-home">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                Back to Main
+              </a>
+              <span class="breadcrumb">&lsaquo; Visual Proofs / Geometry</span>
+            </div>
+            <h1>Conic Sections from Slicing a Cone</h1>
+            <p class="header-subtitle">How the angle and position of a plane determine the curve</p>
           </div>
 
-          <div class="slider-box">
-            <label for="slider-h">Height h <span class="val" id="val-h">0.35</span></label>
-            <input type="range" id="slider-h" class="range-input" min="0.10" max="0.90" step="0.01" value="0.35">
+          <div class="header-actions">
+            <span class="pill-badge">Intermediate</span>
+            <span class="pill-badge">⏱ 12 min</span>
+            <button class="btn-secondary" id="btn-save-current" title="Save current configuration">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+              Save State
+            </button>
+            <button class="btn-secondary" id="btn-reset-view" title="Reset view and parameters">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              Reset view
+            </button>
           </div>
+        </header>
 
-          <div class="slider-box">
-            <label for="slider-phi">Cone semi-vertical &phi; <span class="val" id="val-phi">45&deg;</span></label>
-            <input type="range" id="slider-phi" class="range-input" min="20" max="70" step="1" value="45">
-          </div>
+        <!-- Main Dashboard 3-Column Grid -->
+        <div class="dashboard-grid">
+          <!-- Card 1: 3D Cone Slicing Illustration -->
+          <section class="viewport-card">
+            <div class="viewport-header">
+              <h3>
+                <span class="badge-step-num">1</span>
+                Slice the cone
+              </h3>
+              <span style="font-size:12px; color:var(--text-muted);">Drag plane to explore.</span>
+            </div>
+
+            <div class="viewport-body-wrapper">
+              <div class="slice-workspace">
+                <!-- Left Sliders Column -->
+                <div class="slice-controls-col">
+                  <div class="control-box">
+                    <label for="slider-alpha">Tilt angle &alpha; <span class="val-text" id="val-alpha">38&deg;</span></label>
+                    <input type="range" id="slider-alpha" class="range-input" min="0" max="85" step="1" value="38" />
+                  </div>
+
+                  <div class="control-box">
+                    <label for="slider-h">Height h <span class="val-text" id="val-h">0.35</span></label>
+                    <input type="range" id="slider-h" class="range-input" min="0.10" max="0.90" step="0.01" value="0.35" />
+                  </div>
+
+                  <div class="control-box">
+                    <label for="slider-phi">Semi-vertical &phi; <span class="val-text" id="val-phi">45&deg;</span></label>
+                    <input type="range" id="slider-phi" class="range-input" min="20" max="70" step="1" value="45" />
+                  </div>
+
+                  <button class="btn-secondary" id="btn-reset-cone-view" style="justify-content: center; font-size: 12px; padding: 6px 10px;">
+                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    Reset view
+                  </button>
+                </div>
+
+                <!-- 3D Cone Visualization SVG -->
+                <div class="cone-viz-container" id="cone-viewport">
+                  <svg id="cone-svg" class="math-svg" viewBox="0 0 500 500">
+                    <defs>
+                      <linearGradient id="cone-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#818cf8" stop-opacity="0.65" />
+                        <stop offset="100%" stop-color="#c7d2fe" stop-opacity="0.35" />
+                      </linearGradient>
+                      <linearGradient id="cone-grad-lower" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#a5b4fc" stop-opacity="0.35" />
+                        <stop offset="100%" stop-color="#635bff" stop-opacity="0.65" />
+                      </linearGradient>
+                    </defs>
+
+                    <g id="cone-3d-g">
+                      <!-- Vertical Cone Axis -->
+                      <line id="cone-axis" x1="250" y1="40" x2="250" y2="460" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 4" />
+                      <text x="256" y="55" class="svg-text" font-weight="bold">Axis</text>
+
+                      <!-- Upper Cone Nappe -->
+                      <path id="cone-upper-path" class="cone-surface" />
+                      <ellipse id="cone-top-ellipse" cx="250" cy="90" rx="140" ry="32" fill="none" stroke="#818cf8" stroke-width="1.5" />
+                      <circle cx="250" cy="90" r="4" fill="#1e293b" />
+                      <text x="258" y="94" class="svg-text-math">A</text>
+
+                      <!-- Lower Cone Nappe -->
+                      <path id="cone-lower-path" class="cone-surface-lower" />
+                      <ellipse id="cone-bottom-ellipse" cx="250" cy="410" rx="140" ry="32" fill="none" stroke="#818cf8" stroke-width="1.5" />
+                      <circle cx="250" cy="410" r="4" fill="#1e293b" />
+                      <text x="258" y="414" class="svg-text-math">A'</text>
+
+                      <!-- Apex O -->
+                      <circle cx="250" cy="250" r="4.5" fill="#635bff" />
+
+                      <!-- Cutting Plane Polygon Quad -->
+                      <polygon id="cutting-plane-polygon" class="cutting-plane" />
+
+                      <!-- Intersection Curves in 3D -->
+                      <path id="slice-intersection-path" class="slice-intersection" />
+                      <path id="slice-intersection-path2" class="slice-intersection" />
+
+                      <!-- Interactive Drag Handle on Cutting Plane -->
+                      <g id="plane-handle-g" cursor="grab">
+                        <circle id="plane-handle-circle" cx="340" cy="220" r="8" fill="#635bff" stroke="#ffffff" stroke-width="2.5" />
+                        <circle cx="340" cy="220" r="16" fill="rgba(99,91,255,0.18)" />
+                        <path d="M 336 216 L 344 224 M 344 216 L 336 224" stroke="white" stroke-width="1.5" />
+                      </g>
+                    </g>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Bottom Conic Badges Row -->
+              <div class="cone-bottom-pills">
+                <button class="conic-pill-btn" id="pill-circle" data-alpha="0"><span style="color:#635bff;">●</span> Circle</button>
+                <button class="conic-pill-btn active" id="pill-ellipse" data-alpha="38"><span style="color:#2563eb;">●</span> Ellipse</button>
+                <button class="conic-pill-btn" id="pill-parabola" data-alpha="45"><span style="color:#10b981;">●</span> Parabola</button>
+                <button class="conic-pill-btn" id="pill-hyperbola" data-alpha="65"><span style="color:#ec4899;">●</span> Hyperbola</button>
+              </div>
+            </div>
+
+            <!-- Bottom Animation Bar -->
+            <div class="anim-bar">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <button class="btn-play" id="btn-play-slice" title="Play tilt animation">
+                  <svg id="svg-play-slice-icon" width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <span style="font-size:12px; font-weight:600; color:var(--text-muted);">Animate tilt &alpha;</span>
+              </div>
+
+              <div class="speed-btn-group">
+                <button class="btn-speed" data-speed="0.5">0.5x</button>
+                <button class="btn-speed active" data-speed="1.0">1x</button>
+                <button class="btn-speed" data-speed="2.0">2x</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Card 2: 2D Locus View -->
+          <section class="viewport-card">
+            <div class="viewport-header">
+              <h3>
+                <span class="badge-step-num">2</span>
+                Locus view
+              </h3>
+              <span style="font-size:12px; color:var(--text-muted);">Watch the curve form.</span>
+            </div>
+
+            <div class="viewport-body-wrapper">
+              <div class="locus-workspace">
+                <!-- Left Options & Definition Column -->
+                <div class="locus-controls-col">
+                  <div class="locus-card-inner">
+                    <h4>Show</h4>
+                    <label class="checkbox-row">
+                      <input type="checkbox" id="chk-focus" checked />
+                      <span>Focus (F)</span>
+                    </label>
+                    <label class="checkbox-row">
+                      <input type="checkbox" id="chk-directrix" checked />
+                      <span>Directrix (&ell;)</span>
+                    </label>
+                    <label class="checkbox-row">
+                      <input type="checkbox" id="chk-pf" checked />
+                      <span>PF</span>
+                    </label>
+                    <label class="checkbox-row">
+                      <input type="checkbox" id="chk-d" checked />
+                      <span>d &perp; &ell;</span>
+                    </label>
+                    <label class="checkbox-row">
+                      <input type="checkbox" id="chk-e" checked />
+                      <span>Eccentricity e</span>
+                    </label>
+                  </div>
+
+                  <div class="locus-card-inner">
+                    <h4>Definition</h4>
+                    <div style="font-size:11.5px; color:var(--text-dark); line-height: 1.4;">
+                      A conic section is the locus of points <strong style="color:var(--primary);">P</strong> where <span style="font-family:var(--font-math); font-weight:bold;">e = PF / d</span> is constant.
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 2D Locus Graph Canvas -->
+                <div class="locus-graph-container" id="locus-viewport">
+                  <!-- Zoom Controls Overlay -->
+                  <div class="overlay-zoom-controls">
+                    <button class="btn-zoom" id="btn-locus-zoom-out" title="Zoom Out">&minus;</button>
+                    <button class="btn-zoom-text" id="btn-locus-zoom-reset">100%</button>
+                    <button class="btn-zoom" id="btn-locus-zoom-in" title="Zoom In">+</button>
+                  </div>
+
+                  <!-- SVG 2D Locus Canvas -->
+                  <svg id="locus-svg" class="math-svg">
+                    <defs>
+                      <marker id="arrow-lx" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b"/>
+                      </marker>
+                      <marker id="arrow-ly" viewBox="0 0 10 10" refX="5" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 1 10 L 5 0 L 9 10 z" fill="#64748b"/>
+                      </marker>
+                    </defs>
+
+                    <g id="locus-viewport-g">
+                      <g id="locus-grid-group"></g>
+
+                      <g id="locus-axes-group">
+                        <line id="locus-axis-x" class="axis-line" marker-end="url(#arrow-lx)"/>
+                        <line id="locus-axis-y" class="axis-line" marker-end="url(#arrow-ly)"/>
+                        <text id="locus-label-x" class="svg-text-math">x</text>
+                        <text id="locus-label-y" class="svg-text-math">y</text>
+                      </g>
+
+                      <!-- Directrix Line -->
+                      <line id="locus-directrix-line" class="directrix-line"/>
+                      <g id="locus-directrix-label-g">
+                        <rect class="svg-label-bg" width="92" height="20"/>
+                        <text id="locus-directrix-text" class="svg-text-math" fill="#2563eb">Directrix &ell;</text>
+                      </g>
+
+                      <!-- Curves -->
+                      <path id="locus-curve-path" class="conic-curve"/>
+                      <path id="locus-curve-path2" class="conic-curve"/>
+
+                      <!-- Dotted Trail -->
+                      <g id="locus-trail-group"></g>
+
+                      <!-- PF and PD Distance Segments -->
+                      <line id="locus-line-pf" class="line-pf"/>
+                      <line id="locus-line-pd" class="line-pd"/>
+                      <path id="locus-perp-indicator" fill="none" stroke="#2563eb" stroke-width="1.3"/>
+
+                      <!-- PF Value Label -->
+                      <g id="locus-label-pf-g">
+                        <rect class="svg-label-bg" width="75" height="18"/>
+                        <text id="locus-text-pf" class="svg-text-math" fill="#8b5cf6">PF = 1.84</text>
+                      </g>
+
+                      <!-- Points -->
+                      <circle id="locus-point-d" class="point-directrix-foot" r="5"/>
+                      <text id="locus-label-d" class="svg-text-math" fill="#2563eb">d</text>
+
+                      <circle id="locus-point-f" class="point-focus" r="6"/>
+                      <text id="locus-label-f" class="svg-text-math" fill="#8b5cf6">F</text>
+
+                      <!-- Point P with Glow and Handle -->
+                      <circle id="locus-point-p-halo" fill="rgba(16, 185, 129, 0.2)" r="14"/>
+                      <circle id="locus-point-p" class="point-locus" r="7"/>
+                      <text id="locus-label-p" class="svg-text-math" fill="#047857">P</text>
+                    </g>
+                  </svg>
+
+                  <!-- Live Conic Formula Overlay Pill -->
+                  <div class="locus-formula-pill" id="locus-formula-pill">
+                    <span id="pill-formula-text">e = \frac{PF}{d} = 0.871</span>
+                    <span id="pill-conic-name">(Ellipse: 0 &lt; e &lt; 1)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bottom Animation Bar -->
+            <div class="anim-bar">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <button class="btn-play" id="btn-play-locus" title="Play P point trajectory animation">
+                  <svg id="svg-play-locus-icon" width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <span style="font-size:12px; font-weight:600; color:var(--text-muted);">Trace point P along curve</span>
+              </div>
+              <span style="font-size:12px; font-weight:700; color:var(--primary);" id="locus-ratio-live">PF / d = 0.871</span>
+            </div>
+          </section>
+
+          <!-- Card 3: Educational Panel (Why it works) -->
+          <aside class="why-panel" id="why-panel">
+            <div class="why-panel-header">
+              <span class="why-header-icon">&#10022;</span>
+              <h2>Why it works</h2>
+            </div>
+
+            <div class="why-panel-scroll">
+              <!-- SECTION 1: Slice -->
+              <section class="why-section open" id="sec-card-slice">
+                <div class="why-section-header" onclick="toggleWhySection('slice')">
+                  <div class="why-title-group">
+                    <span class="why-badge-num">1</span>
+                    <span>1. Slice</span>
+                  </div>
+                  <span class="why-arrow-icon" id="arrow-slice">&#9660;</span>
+                </div>
+                <div class="why-section-content" id="content-slice">
+                  <p>
+                    A plane cuts both nappes of a cone at a fixed tilt angle <strong>&alpha;</strong> and height <strong>h</strong>.
+                  </p>
+                  <div class="math-formula-box">
+                    e = \frac{\sin\alpha}{\sin\phi}
+                  </div>
+                  <div style="font-size:12px; background:#f8fafc; padding:8px 10px; border-radius:6px; margin-top:8px;">
+                    <div>• <strong>&alpha; (Tilt angle):</strong> angle between cutting plane &amp; base.</div>
+                    <div>• <strong>&phi; (Semi-vertical angle):</strong> angle of cone generator.</div>
+                    <div>• <strong>h (Height):</strong> position along axis.</div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- SECTION 2: Locus -->
+              <section class="why-section open" id="sec-card-locus">
+                <div class="why-section-header" onclick="toggleWhySection('locus')">
+                  <div class="why-title-group">
+                    <span class="why-badge-num">2</span>
+                    <span>2. Locus</span>
+                  </div>
+                  <span class="why-arrow-icon" id="arrow-locus">&#9660;</span>
+                </div>
+                <div class="why-section-content" id="content-locus">
+                  <p>
+                    For any point <strong>P</strong> on the intersection, the ratio of focus distance <strong>PF</strong> to directrix distance <strong>d</strong> is constant:
+                  </p>
+                  <div class="math-formula-box">
+                    e = \frac{PF}{d} = \text{constant}
+                  </div>
+                  <div style="font-size:12.5px; color:var(--primary); font-weight:700; background:var(--primary-light); padding:8px; border-radius:6px; margin-top:8px;">
+                    Current ratio: <span id="why-live-ratio">PF / d = 0.871</span>
+                  </div>
+                </div>
+              </section>
+
+              <!-- SECTION 3: Conic type -->
+              <section class="why-section open" id="sec-card-conictype">
+                <div class="why-section-header" onclick="toggleWhySection('conictype')">
+                  <div class="why-title-group">
+                    <span class="why-badge-num">3</span>
+                    <span>3. Conic type</span>
+                  </div>
+                  <span class="why-arrow-icon" id="arrow-conictype">&#9660;</span>
+                </div>
+                <div class="why-section-content" id="content-conictype">
+                  <p style="margin-bottom:8px;">The eccentricity <strong>e</strong> determines the curve:</p>
+                  <div style="display:flex; flex-direction:column; gap:6px;">
+                    <div style="background:#f8fafc; border-left:3.5px solid #635bff; padding:6px 10px; border-radius:0 4px 4px 0;">
+                      <strong>Circle (e = 0):</strong> Horizontal plane (&alpha; = 0&deg;).
+                    </div>
+                    <div style="background:#f8fafc; border-left:3.5px solid #2563eb; padding:6px 10px; border-radius:0 4px 4px 0;">
+                      <strong>Ellipse (0 &lt; e &lt; 1):</strong> Cuts one nappe (&alpha; &lt; &phi;).
+                    </div>
+                    <div style="background:#f8fafc; border-left:3.5px solid #10b981; padding:6px 10px; border-radius:0 4px 4px 0;">
+                      <strong>Parabola (e = 1):</strong> Parallel to generator (&alpha; = &phi;).
+                    </div>
+                    <div style="background:#f8fafc; border-left:3.5px solid #ec4899; padding:6px 10px; border-radius:0 4px 4px 0;">
+                      <strong>Hyperbola (e &gt; 1):</strong> Cuts both nappes (&alpha; &gt; &phi;).
+                    </div>
+                  </div>
+                  <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 6px; font-style: italic;">
+                    * e = 0 is a Circle (special ellipse).
+                  </div>
+                </div>
+              </section>
+
+              <!-- SECTION 4: Borders -->
+              <section class="why-section" id="sec-card-borders">
+                <div class="why-section-header" onclick="toggleWhySection('borders')">
+                  <div class="why-title-group">
+                    <span>What happens at the borders?</span>
+                  </div>
+                  <span class="why-arrow-icon" id="arrow-borders">&#9660;</span>
+                </div>
+                <div class="why-section-content" id="content-borders">
+                  <p style="margin-bottom:8px;">
+                    At the boundary angle <strong>&alpha; = &phi;</strong> (e = 1), the ellipse opens towards infinity, turning into a parabola. When &alpha; exceeds &phi;, the cutting plane strikes both nappes of the double cone, creating two mirrored hyperbolic branches!
+                  </p>
+                  <div style="text-align:center; font-weight:800; font-size:12.5px; color:var(--primary); background:var(--primary-light); padding:6px; border-radius:6px;">
+                    Circle &rarr; Ellipse &rarr; Parabola &rarr; Hyperbola
+                  </div>
+                </div>
+              </section>
+
+              <!-- REVEAL CARD -->
+              <div class="why-section open" id="sec-card-verification">
+                <div class="why-section-header" onclick="toggleWhySection('verification')">
+                  <div class="why-title-group">
+                    <span style="color:var(--primary); font-size:14px;">&#9881;</span>
+                    <span>Mathematical Analysis</span>
+                  </div>
+                  <span class="why-arrow-icon" id="arrow-verification">&#9660;</span>
+                </div>
+                <div class="why-section-content" id="content-verification" style="display:block;">
+                  <div style="display:flex; flex-direction:column; gap:6px; font-size:12.5px;">
+                    <div style="background:#f8fafc; padding:6px 8px; border-radius:4px;">
+                      <strong>Semi-vertical angle:</strong> <span id="rev-phi-val">&phi; = 45&deg;</span>
+                    </div>
+                    <div style="background:#f8fafc; padding:6px 8px; border-radius:4px;">
+                      <strong>Tilt angle:</strong> <span id="rev-alpha-val">&alpha; = 38&deg;</span>
+                    </div>
+                    <div style="background:#f8fafc; padding:6px 8px; border-radius:4px;">
+                      <strong>Calculated e:</strong> <span id="rev-e-val">e = 0.871</span>
+                    </div>
+                    <div style="background:var(--accent-green-light); color:#065f46; padding:8px 10px; border-radius:6px; font-weight:800; font-size:12.5px;" id="rev-conclusion">
+                      ✓ Therefore: 0 &lt; e &lt; 1 &rarr; Ellipse
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Reveal Button -->
+            <button class="btn-reveal-action" id="btn-reveal-neutral" onclick="toggleWhySection('verification')">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+              Reveal (neutral)
+            </button>
+          </aside>
         </div>
 
-        <div class="conic-badges-row">
-          <button class="conic-pill-btn" id="pill-circle" data-alpha="0"><span style="color:#635bff;">●</span> Circle</button>
-          <button class="conic-pill-btn active" id="pill-ellipse" data-alpha="38"><span style="color:#2563eb;">●</span> Ellipse</button>
-          <button class="conic-pill-btn" id="pill-parabola" data-alpha="45"><span style="color:#10b981;">●</span> Parabola</button>
-          <button class="conic-pill-btn" id="pill-hyperbola" data-alpha="65"><span style="color:#ec4899;">●</span> Hyperbola</button>
+        <!-- 3. Identify the Conic Section Interactive Cards -->
+        <section class="identify-card" id="identify">
+          <div class="identify-header">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="badge-step-num">3</span>
+              <h3 style="font-size:16px; font-weight:800;">Identify the conic</h3>
+            </div>
+            <span style="font-size:13px; color:var(--text-muted);">Based on the current slice parameters.</span>
+          </div>
+
+          <div class="conic-cards-grid">
+            <!-- Circle -->
+            <div class="conic-classify-card" id="card-quiz-circle" onclick="selectConicPreset('Circle')">
+              <span class="conic-check-badge">&#10003;</span>
+              <div class="conic-card-title">Circle</div>
+              <div class="conic-card-condition">&alpha; = 0&deg;, e = 0</div>
+              <svg class="conic-card-svg" viewBox="0 0 100 50">
+                <circle cx="50" cy="25" r="18" stroke="#635bff" stroke-width="2" fill="none"/>
+                <circle cx="50" cy="25" r="2.5" fill="#8b5cf6"/>
+              </svg>
+            </div>
+
+            <!-- Ellipse -->
+            <div class="conic-classify-card active" id="card-quiz-ellipse" onclick="selectConicPreset('Ellipse')">
+              <span class="conic-check-badge">&#10003;</span>
+              <div class="conic-card-title">Ellipse</div>
+              <div class="conic-card-condition">0&deg; &lt; &alpha; &lt; &phi;, 0 &lt; e &lt; 1</div>
+              <svg class="conic-card-svg" viewBox="0 0 100 50">
+                <ellipse cx="50" cy="25" rx="26" ry="14" stroke="#2563eb" stroke-width="2" fill="none"/>
+                <circle cx="64" cy="25" r="2.5" fill="#8b5cf6"/>
+              </svg>
+            </div>
+
+            <!-- Parabola -->
+            <div class="conic-classify-card" id="card-quiz-parabola" onclick="selectConicPreset('Parabola')">
+              <span class="conic-check-badge">&#10003;</span>
+              <div class="conic-card-title">Parabola</div>
+              <div class="conic-card-condition">&alpha; = &phi;, e = 1</div>
+              <svg class="conic-card-svg" viewBox="0 0 100 50">
+                <path d="M 75 6 Q 25 25 75 44" stroke="#10b981" stroke-width="2" fill="none"/>
+                <circle cx="48" cy="25" r="2.5" fill="#8b5cf6"/>
+              </svg>
+            </div>
+
+            <!-- Hyperbola -->
+            <div class="conic-classify-card" id="card-quiz-hyperbola" onclick="selectConicPreset('Hyperbola')">
+              <span class="conic-check-badge">&#10003;</span>
+              <div class="conic-card-title">Hyperbola</div>
+              <div class="conic-card-condition">&phi; &lt; &alpha; &lt; 90&deg;, e &gt; 1</div>
+              <svg class="conic-card-svg" viewBox="0 0 100 50">
+                <path d="M 38 6 Q 16 25 38 44" stroke="#ec4899" stroke-width="2" fill="none"/>
+                <path d="M 62 6 Q 84 25 62 44" stroke="#ec4899" stroke-width="2" fill="none"/>
+                <circle cx="28" cy="25" r="2" fill="#8b5cf6"/>
+                <circle cx="72" cy="25" r="2" fill="#8b5cf6"/>
+              </svg>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- Section 2: Proofs & Geometric Rationale -->
+      <section id="proofs" class="page-section">
+        <div class="bottom-grid">
+          <!-- Visual Proof Flow -->
+          <div class="bottom-card" style="grid-column: span 2;">
+            <h3>
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              Visual Proof &amp; Geometric Rationale
+            </h3>
+
+            <div class="proof-steps-row">
+              <div class="proof-step-box">
+                <span class="proof-step-title">1. Slice the cone</span>
+                <svg width="60" height="45" viewBox="0 0 60 45">
+                  <path d="M 15 5 L 30 22 L 45 5 Z M 15 39 L 30 22 L 45 39 Z" fill="none" stroke="#818cf8" stroke-width="1.2"/>
+                  <line x1="8" y1="28" x2="52" y2="16" stroke="#635bff" stroke-width="2"/>
+                </svg>
+                <span style="color:var(--text-muted);">A plane with angle &alpha; cuts the double cone.</span>
+              </div>
+
+              <div style="font-size:18px; color:var(--primary); font-weight:bold;">&rarr;</div>
+
+              <div class="proof-step-box">
+                <span class="proof-step-title">2. Constant ratio</span>
+                <div class="math-formula-box" style="margin:4px 0; font-size:13px;">
+                  \frac{PF}{d} = e
+                </div>
+                <span style="color:var(--text-muted);">PF (to focus) &amp; d (to directrix) keep a fixed ratio as P moves.</span>
+              </div>
+
+              <div style="font-size:18px; color:var(--primary); font-weight:bold;">&rarr;</div>
+
+              <div class="proof-step-box">
+                <span class="proof-step-title">3. Locus forms</span>
+                <svg width="60" height="45" viewBox="0 0 60 45">
+                  <ellipse cx="30" cy="22" rx="20" ry="12" fill="none" stroke="#2563eb" stroke-width="2"/>
+                  <circle cx="38" cy="22" r="2.5" fill="#8b5cf6"/>
+                </svg>
+                <span style="color:var(--text-muted);">All points P form the conic section.</span>
+              </div>
+            </div>
+
+            <!-- Dandelin Spheres Proof Insight -->
+            <div style="background:#f8fafc; border:1px solid var(--border); border-radius:var(--radius-md); padding:14px; font-size:13px; line-height:1.6; margin-top:4px;">
+              <strong style="color:var(--primary);">The Dandelin Spheres Theorem:</strong>
+              When an inscribed sphere is placed inside the cone such that it is tangent to both the cone surface and the cutting plane, the point of contact with the plane becomes the geometric <strong>Focus (F)</strong>! The intersection of the sphere's contact circle with the cutting plane produces the <strong>Directrix line (&ell;)</strong>. This proves why every slice is precisely a conic section.
+            </div>
+          </div>
+
+          <!-- Connection Card -->
+          <div class="bottom-card">
+            <h3>
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+              Connection
+            </h3>
+            <p style="font-size:13px; color:var(--text-muted);">
+              The conic's shape is uniquely determined by <strong>e</strong>, which is set by <strong>&alpha;</strong> (and <strong>&phi;</strong>).
+            </p>
+            <div style="background:var(--primary-light); color:var(--primary); padding:12px 14px; border-radius:var(--radius-sm); text-align:center; font-size:17px; font-weight:bold;">
+              &alpha; &uarr; &nbsp;&implies;&nbsp; e &uarr;
+            </div>
+            <p style="font-size:12.5px; color:var(--text-muted); line-height:1.5;">
+              As tilt angle &alpha; increases from 0&deg; to 90&deg;, the intersection transitions continuously from <strong>Circle &rarr; Ellipse &rarr; Parabola &rarr; Hyperbola</strong>.
+            </p>
+          </div>
         </div>
       </section>
 
-      <!-- Main Dashboard Grid -->
-      <div class="dashboard-grid">
-        <!-- Viewport 1: 3D Cone Slicing Illustration -->
-        <section class="viewport-card">
-          <div class="viewport-header">
+      <!-- Section 3: Practice & Challenge -->
+      <section id="practice" class="page-section">
+        <div class="bottom-grid">
+          <!-- Exact Challenge Card -->
+          <div class="bottom-card" style="grid-column: span 2;">
             <h3>
-              <span style="background:var(--primary-light); color:var(--primary); width:24px; height:24px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:12px;">1</span>
-              Slice the cone
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Exact Challenge
             </h3>
-            <span style="font-size:12px; color:var(--text-muted);">Drag plane to explore.</span>
-          </div>
+            <p style="font-size:13.5px; color:var(--text-dark);" id="challenge-prompt-text">
+              A plane cuts a double cone with semi-vertical angle <strong>&phi; = 30&deg;</strong>. The intersection is an ellipse with eccentricity <strong>e = 0.75</strong>. Find the tilt angle <strong>&alpha;</strong>.
+            </p>
 
-          <div class="viewport-body-wrapper">
-            <!-- REBUILT 2-COLUMN UN-OVERLAPPED LAYOUT -->
-            <div class="slice-workspace">
-              <!-- Dedicated Left Column for Parameter Readouts -->
-              <div class="slice-parameters">
-                <h4>Cutting Plane Parameters</h4>
-                <div style="font-size:12.5px; font-weight:700;">Tilt angle &alpha; = <span id="readout-alpha" style="color:var(--primary);">38&deg;</span></div>
-                <div style="font-size:12.5px; font-weight:700;">Height h = <span id="readout-h" style="color:var(--primary);">0.35</span></div>
-                <div style="font-size:12.5px; font-weight:700;">Semi-vertical &phi; = <span id="readout-phi" style="color:var(--primary);">45&deg;</span></div>
-                <div style="font-size:13px; font-weight:800; border-top:1px dashed var(--border); padding-top:6px; margin-top:2px;">
-                  Calculated e = <span id="readout-e-cone" style="color:var(--primary);">0.871</span>
-                </div>
-              </div>
-
-              <!-- Dedicated Unobstructed Right Column for 3D Cone SVG -->
-              <div class="cone-visualization" id="cone-viewport">
-                <svg id="cone-svg" class="math-svg" viewBox="0 0 500 500">
-                  <defs>
-                    <linearGradient id="cone-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stop-color="#818cf8" stop-opacity="0.65"/>
-                      <stop offset="100%" stop-color="#c7d2fe" stop-opacity="0.35"/>
-                    </linearGradient>
-                    <linearGradient id="cone-grad-lower" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stop-color="#a5b4fc" stop-opacity="0.35"/>
-                      <stop offset="100%" stop-color="#635bff" stop-opacity="0.65"/>
-                    </linearGradient>
-                  </defs>
-
-                  <g id="cone-3d-g">
-                    <!-- Vertical Cone Axis -->
-                    <line id="cone-axis" x1="250" y1="40" x2="250" y2="460" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 4"/>
-                    <text x="256" y="55" class="svg-text" font-weight="bold">Axis</text>
-
-                    <!-- Upper Cone Nappe -->
-                    <path id="cone-upper-path" class="cone-surface"/>
-                    <ellipse id="cone-top-ellipse" cx="250" cy="90" rx="140" ry="32" fill="none" stroke="#818cf8" stroke-width="1.5"/>
-                    <circle cx="250" cy="90" r="4" fill="#1e293b"/>
-                    <text x="258" y="94" class="svg-text-math">A</text>
-
-                    <!-- Lower Cone Nappe -->
-                    <path id="cone-lower-path" class="cone-surface-lower"/>
-                    <ellipse id="cone-bottom-ellipse" cx="250" cy="410" rx="140" ry="32" fill="none" stroke="#818cf8" stroke-width="1.5"/>
-                    <circle cx="250" cy="410" r="4" fill="#1e293b"/>
-                    <text x="258" y="414" class="svg-text-math">A'</text>
-
-                    <!-- Apex O -->
-                    <circle cx="250" cy="250" r="4.5" fill="#635bff"/>
-
-                    <!-- Cutting Plane Polygon Quad -->
-                    <polygon id="cutting-plane-polygon" class="cutting-plane"/>
-
-                    <!-- Intersection Curve in 3D -->
-                    <path id="slice-intersection-path" class="slice-intersection"/>
-                    <path id="slice-intersection-path2" class="slice-intersection"/>
-
-                    <!-- Interactive Drag Handle on Cutting Plane -->
-                    <g id="plane-handle-g" cursor="grab">
-                      <circle id="plane-handle-circle" cx="340" cy="220" r="8" fill="#635bff" stroke="#ffffff" stroke-width="2.5"/>
-                      <circle cx="340" cy="220" r="16" fill="rgba(99,91,255,0.15)"/>
-                    </g>
-                  </g>
-                </svg>
-              </div>
-            </div>
-          </div>
-
-          <!-- Bottom Animation Bar -->
-          <div class="anim-bar">
-            <div style="display:flex; align-items:center; gap:10px;">
-              <button class="btn-play" id="btn-play-slice" title="Play angle slice animation">
-                <svg id="svg-play-slice-icon" width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-              </button>
-              <span style="font-size:12px; font-weight:600; color:var(--text-muted);">Animate tilt &alpha;</span>
+            <div class="input-group-row">
+              <span style="font-family:var(--font-math); font-weight:bold; font-size:16px;">&alpha; =</span>
+              <input type="number" id="input-challenge-alpha" class="text-input" placeholder="e.g. 22.0" step="0.1" />
+              <span style="font-weight:bold; font-size:15px;">&deg;</span>
+              <button class="btn-secondary" id="btn-check-challenge" style="background:var(--primary); color:white; border-color:var(--primary);">Check</button>
+              <button class="btn-secondary" id="btn-new-challenge">New Challenge</button>
             </div>
 
-            <div class="speed-btn-group">
-              <button class="btn-speed" data-speed="0.5">0.5x</button>
-              <button class="btn-speed active" data-speed="1.0">1x</button>
-              <button class="btn-speed" data-speed="2.0">2x</button>
+            <div style="font-size:12px; color:var(--text-muted); background:#f8fafc; padding:8px 12px; border-radius:6px;">
+              <strong>Hint:</strong> For a right circular cone, <span style="font-family:var(--font-math); font-weight:bold;">e = \sin(\alpha) / \sin(\phi)</span>, where &phi; is the semi-vertical angle.
             </div>
-          </div>
-        </section>
 
-        <!-- Viewport 2: 2D Locus View -->
-        <section class="viewport-card">
-          <div class="viewport-header">
+            <div id="challenge-feedback" class="feedback-msg" style="display: none;"></div>
+          </div>
+
+          <!-- Quick Predict & Check Card -->
+          <div class="bottom-card">
             <h3>
-              <span style="background:var(--primary-light); color:var(--primary); width:24px; height:24px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:12px;">2</span>
-              Locus view
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Predict &amp; Check
             </h3>
-            <span style="font-size:12px; color:var(--text-muted);">Watch the curve form.</span>
-          </div>
-
-          <div class="viewport-body-wrapper">
-            <!-- REBUILT 2-COLUMN UN-OVERLAPPED LAYOUT -->
-            <div class="locus-workspace">
-              <!-- Dedicated Left Column for Show Toggles & Definition Box -->
-              <div class="locus-controls">
-                <div class="control-card-inner">
-                  <h4>Show</h4>
-                  <label class="checkbox-toggle-row">
-                    <span>Focus (F)</span>
-                    <span class="switch"><input type="checkbox" id="chk-focus" checked><span class="slider-switch"></span></span>
-                  </label>
-                  <label class="checkbox-toggle-row">
-                    <span>Directrix (&ell;)</span>
-                    <span class="switch"><input type="checkbox" id="chk-directrix" checked><span class="slider-switch"></span></span>
-                  </label>
-                  <label class="checkbox-toggle-row">
-                    <span>PF</span>
-                    <span class="switch"><input type="checkbox" id="chk-pf" checked><span class="slider-switch"></span></span>
-                  </label>
-                  <label class="checkbox-toggle-row">
-                    <span>d and &ell;</span>
-                    <span class="switch"><input type="checkbox" id="chk-d" checked><span class="slider-switch"></span></span>
-                  </label>
-                  <label class="checkbox-toggle-row">
-                    <span>Eccentricity e</span>
-                    <span class="switch"><input type="checkbox" id="chk-e" checked><span class="slider-switch"></span></span>
-                  </label>
-                </div>
-
-                <div class="control-card-inner">
-                  <h4>Definition</h4>
-                  <div style="font-size:11.5px; color:var(--text-dark);">
-                    Locus of P where <span style="font-family:var(--font-math); font-weight:bold;">e = PF / d</span> is constant.
-                  </div>
-                  <div style="font-family:var(--font-math); font-size:13px; font-weight:bold; color:var(--primary); margin-top:2px;" id="definition-math-readout">
-                    e = PF / d = 0.871
-                  </div>
-                </div>
-              </div>
-
-              <!-- Dedicated Unobstructed Right Column for 2D Locus Graph -->
-              <div class="locus-graph-container" id="locus-viewport">
-                <!-- Zoom Controls Overlay (Bottom Right Corner Only) -->
-                <div class="overlay-zoom-controls">
-                  <button class="btn-zoom" id="btn-locus-zoom-out" title="Zoom Out">&minus;</button>
-                  <button class="btn-zoom-text" id="btn-locus-zoom-reset">100%</button>
-                  <button class="btn-zoom" id="btn-locus-zoom-in" title="Zoom In">+</button>
-                </div>
-
-                <!-- SVG 2D Locus Canvas -->
-                <svg id="locus-svg" class="math-svg">
-                  <defs>
-                    <marker id="arrow-lx" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                      <path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b"/>
-                    </marker>
-                    <marker id="arrow-ly" viewBox="0 0 10 10" refX="5" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                      <path d="M 1 10 L 5 0 L 9 10 z" fill="#64748b"/>
-                    </marker>
-                  </defs>
-
-                  <g id="locus-viewport-g">
-                    <g id="locus-grid-group"></g>
-
-                    <g id="locus-axes-group">
-                      <line id="locus-axis-x" class="axis-line" marker-end="url(#arrow-lx)"/>
-                      <line id="locus-axis-y" class="axis-line" marker-end="url(#arrow-ly)"/>
-                      <text id="locus-label-x" class="svg-text-math">x</text>
-                      <text id="locus-label-y" class="svg-text-math">y</text>
-                    </g>
-
-                    <line id="locus-directrix-line" class="directrix-line"/>
-                    <g id="locus-directrix-label-g">
-                      <rect class="svg-label-bg" width="90" height="20"/>
-                      <text id="locus-directrix-text" class="svg-text-math" fill="#2563eb">Directrix &ell;</text>
-                    </g>
-
-                    <path id="locus-curve-path" class="conic-curve"/>
-                    <path id="locus-curve-path2" class="conic-curve"/>
-
-                    <g id="locus-trail-group"></g>
-
-                    <line id="locus-line-pf" class="line-pf"/>
-                    <line id="locus-line-pd" class="line-pd"/>
-                    <path id="locus-perp-indicator" fill="none" stroke="#2563eb" stroke-width="1.2"/>
-
-                    <g id="locus-label-pf-g">
-                      <rect class="svg-label-bg" width="75" height="18"/>
-                      <text id="locus-text-pf" class="svg-text-math" fill="#8b5cf6">PF = 1.84</text>
-                    </g>
-
-                    <circle id="locus-point-d" class="point-directrix-foot" r="5"/>
-                    <text id="locus-label-d" class="svg-text-math" fill="#2563eb">d</text>
-
-                    <circle id="locus-point-f" class="point-focus" r="6"/>
-                    <text id="locus-label-f" class="svg-text-math" fill="#8b5cf6">F</text>
-
-                    <circle id="locus-point-p-halo" fill="rgba(16, 185, 129, 0.2)" r="14"/>
-                    <circle id="locus-point-p" class="point-locus" r="7"/>
-                    <text id="locus-label-p" class="svg-text-math" fill="#047857">P</text>
-                  </g>
-                </svg>
-              </div>
+            <p style="font-size:13px; color:var(--text-dark);" id="quiz-question-text">
+              If &phi; = 45&deg; and the plane is tilted at &alpha; = 55&deg;, what conic is formed?
+            </p>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;" id="quiz-options-grid">
+              <button class="btn-secondary" style="justify-content:center;" onclick="checkPredictQuiz('Circle')">Circle</button>
+              <button class="btn-secondary" style="justify-content:center;" onclick="checkPredictQuiz('Ellipse')">Ellipse</button>
+              <button class="btn-secondary" style="justify-content:center;" onclick="checkPredictQuiz('Parabola')">Parabola</button>
+              <button class="btn-secondary" style="justify-content:center;" onclick="checkPredictQuiz('Hyperbola')">Hyperbola</button>
             </div>
-          </div>
-
-          <!-- Bottom Animation Bar -->
-          <div class="anim-bar">
-            <div style="display:flex; align-items:center; gap:10px;">
-              <button class="btn-play" id="btn-play-locus" title="Play P point trajectory animation">
-                <svg id="svg-play-locus-icon" width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-              </button>
-              <span style="font-size:12px; font-weight:600; color:var(--text-muted);">Trace point P along locus</span>
-            </div>
-            <span style="font-size:12px; font-weight:700; color:var(--primary);" id="locus-ratio-live">PF / d = 0.871</span>
-          </div>
-        </section>
-
-        <!-- Viewport 3: Right Educational Panel (PERFECT FLEX SCROLLING) -->
-        <aside class="why-panel" id="why-panel">
-          <div class="why-panel-header">
-            <span class="why-header-icon">&#9672;</span>
-            <h2>Why it works</h2>
-          </div>
-
-          <div class="why-panel-scroll">
-            <!-- SECTION 1: 1. Slice -->
-            <section class="why-section open" id="sec-card-slice">
-              <div class="why-section-header" onclick="toggleWhySection('slice')">
-                <div class="why-title-group">
-                  <span class="why-badge-num">1</span>
-                  <span>1. Slice</span>
-                </div>
-                <span class="why-arrow-icon" id="arrow-slice">&#9660;</span>
-              </div>
-              <div class="why-section-content" id="content-slice">
-                <p>
-                  A plane cuts both nappes of a double cone at a fixed tilt angle <strong>&alpha;</strong> and position height <strong>h</strong>. The orientation relative to the cone's semi-vertical angle <strong>&phi;</strong> determines the shape of the intersection curve.
-                </p>
-                <div class="boxed-formula">
-                  e = \sin\alpha / \sin\phi
-                </div>
-                <div style="font-size:12px; background:#f8fafc; padding:8px 10px; border-radius:6px; margin-top:8px;">
-                  <div>• <strong>&alpha; (Tilt angle):</strong> angle between cutting plane and horizontal base.</div>
-                  <div>• <strong>&phi; (Semi-vertical angle):</strong> angle between cone axis and generator line.</div>
-                  <div>• <strong>h (Height):</strong> position along axis (changes scale, not conic type).</div>
-                </div>
-              </div>
-            </section>
-
-            <!-- SECTION 2: 2. Locus -->
-            <section class="why-section open" id="sec-card-locus">
-              <div class="why-section-header" onclick="toggleWhySection('locus')">
-                <div class="why-title-group">
-                  <span class="why-badge-num">2</span>
-                  <span>2. Locus</span>
-                </div>
-                <span class="why-arrow-icon" id="arrow-locus">&#9660;</span>
-              </div>
-              <div class="why-section-content" id="content-locus">
-                <p>
-                  For any point <strong>P</strong> on the intersection, the ratio of its distance to focus <strong>F</strong> and perpendicular distance <strong>d</strong> to directrix <strong>&ell;</strong> is constant.
-                </p>
-                <div class="boxed-formula">
-                  e = PF / d = \text{constant}
-                </div>
-                <div style="font-size:12.5px; color:var(--primary); font-weight:700; background:var(--primary-light); padding:8px; border-radius:6px; margin-top:8px;">
-                  Current ratio: <span id="why-live-ratio">PF / d = 0.871</span>
-                </div>
-              </div>
-            </section>
-
-            <!-- SECTION 3: 3. Conic type -->
-            <section class="why-section open" id="sec-card-conictype">
-              <div class="why-section-header" onclick="toggleWhySection('conictype')">
-                <div class="why-title-group">
-                  <span class="why-badge-num">3</span>
-                  <span>3. Conic type</span>
-                </div>
-                <span class="why-arrow-icon" id="arrow-conictype">&#9660;</span>
-              </div>
-              <div class="why-section-content" id="content-conictype">
-                <p style="margin-bottom:8px;">The value of eccentricity <strong>e</strong> determines the curve classification:</p>
-
-                <div style="display:flex; flex-direction:column; gap:6px;">
-                  <div style="background:#f8fafc; border-left:3.5px solid #635bff; padding:6px 10px; border-radius:0 4px 4px 0;">
-                    <strong>Circle (e = 0):</strong> Plane is horizontal (&alpha; = 0&deg;).
-                  </div>
-                  <div style="background:#f8fafc; border-left:3.5px solid #2563eb; padding:6px 10px; border-radius:0 4px 4px 0;">
-                    <strong>Ellipse (0 &lt; e &lt; 1):</strong> Plane cuts one nappe (0&deg; &lt; &alpha; &lt; &phi;).
-                  </div>
-                  <div style="background:#f8fafc; border-left:3.5px solid #10b981; padding:6px 10px; border-radius:0 4px 4px 0;">
-                    <strong>Parabola (e = 1):</strong> Plane parallel to generator (&alpha; = &phi;).
-                  </div>
-                  <div style="background:#f8fafc; border-left:3.5px solid #ec4899; padding:6px 10px; border-radius:0 4px 4px 0;">
-                    <strong>Hyperbola (e &gt; 1):</strong> Plane cuts both nappes (&phi; &lt; &alpha; &lt; 90&deg;).
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <!-- SECTION 4: What happens at the borders? -->
-            <section class="why-section" id="sec-card-borders">
-              <div class="why-section-header" onclick="toggleWhySection('borders')">
-                <div class="why-title-group">
-                  <span>What happens at the borders?</span>
-                </div>
-                <span class="why-arrow-icon" id="arrow-borders">&#9660;</span>
-              </div>
-              <div class="why-section-content" id="content-borders">
-                <p style="margin-bottom:8px;">
-                  At the boundary angle <strong>&alpha; = &phi;</strong> (e = 1), the closed right oval of the ellipse stretches to infinity, transforming into an open parabola. When &alpha; exceeds &phi;, the plane cuts the upper nappe as well, creating the twin branches of a hyperbola!
-                </p>
-                <div style="text-align:center; font-weight:800; font-size:12.5px; color:var(--primary); background:var(--primary-light); padding:6px; border-radius:6px;">
-                  Circle &rarr; Ellipse &rarr; Parabola &rarr; Hyperbola
-                </div>
-              </div>
-            </section>
-
-            <!-- REVEAL CARD BELOW DROPDOWNS -->
-            <div class="verification-card" id="content-verification" style="display: flex;">
-              <div style="font-size:13px; font-weight:800; color:var(--text-dark);">Mathematical Analysis</div>
-              <div class="verify-step-row">
-                <div class="verify-step-title">Semi-vertical angle &phi;</div>
-                <div class="verify-step-math" id="rev-phi-val">&phi; = 45&deg; (sin &phi; = 0.707)</div>
-              </div>
-              <div class="verify-step-row">
-                <div class="verify-step-title">Current tilt angle &alpha;</div>
-                <div class="verify-step-math" id="rev-alpha-val">&alpha; = 38&deg; (sin &alpha; = 0.616)</div>
-              </div>
-              <div class="verify-step-row">
-                <div class="verify-step-title">Calculated eccentricity</div>
-                <div class="verify-step-math" id="rev-e-val">e = sin(38&deg;) / sin(45&deg;) = 0.871</div>
-              </div>
-              <div style="background:var(--accent-green-light); color:#065f46; padding:8px 10px; border-radius:6px; font-weight:800; font-size:13px;" id="rev-conclusion">
-                ✓ Therefore: 0 &lt; e &lt; 1 &rarr; Ellipse
-              </div>
-            </div>
-          </div>
-
-          <!-- FIXED REVEAL BUTTON -->
-          <button class="btn-primary reveal-button" id="btn-reveal-neutral" onclick="toggleWhySection('verification')">
-            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-            Reveal (neutral)
-          </button>
-        </aside>
-      </div>
-
-      <!-- Middle Section 3: Identify the Conic -->
-      <section class="identify-section-card">
-        <div class="identify-header">
-          <h3>3. Identify the conic</h3>
-          <span style="font-size:13px; color:var(--text-muted);">Based on the slice.</span>
-        </div>
-
-        <div class="conic-cards-grid">
-          <div class="conic-classify-card" id="card-quiz-circle" onclick="selectConicQuiz('Circle')">
-            <span class="conic-check-badge">&#10003;</span>
-            <div class="conic-card-title">Circle</div>
-            <div class="conic-card-condition">&alpha; = 0&deg;, e = 0</div>
-            <svg class="conic-card-svg" viewBox="0 0 100 60">
-              <circle cx="50" cy="30" r="20" stroke="#635bff" stroke-width="2" fill="none"/>
-              <circle cx="50" cy="30" r="2.5" fill="#8b5cf6"/>
-            </svg>
-          </div>
-
-          <div class="conic-classify-card active" id="card-quiz-ellipse" onclick="selectConicQuiz('Ellipse')">
-            <span class="conic-check-badge">&#10003;</span>
-            <div class="conic-card-title">Ellipse</div>
-            <div class="conic-card-condition">0&deg; &lt; &alpha; &lt; &phi;, 0 &lt; e &lt; 1</div>
-            <svg class="conic-card-svg" viewBox="0 0 100 60">
-              <ellipse cx="50" cy="30" rx="26" ry="15" stroke="#2563eb" stroke-width="2" fill="none"/>
-              <circle cx="64" cy="30" r="2.5" fill="#8b5cf6"/>
-            </svg>
-          </div>
-
-          <div class="conic-classify-card" id="card-quiz-parabola" onclick="selectConicQuiz('Parabola')">
-            <span class="conic-check-badge">&#10003;</span>
-            <div class="conic-card-title">Parabola</div>
-            <div class="conic-card-condition">&alpha; = &phi;, e = 1</div>
-            <svg class="conic-card-svg" viewBox="0 0 100 60">
-              <path d="M 80 8 Q 26 30 80 52" stroke="#10b981" stroke-width="2" fill="none"/>
-              <circle cx="46" cy="30" r="2.5" fill="#8b5cf6"/>
-            </svg>
-          </div>
-
-          <div class="conic-classify-card" id="card-quiz-hyperbola" onclick="selectConicQuiz('Hyperbola')">
-            <span class="conic-check-badge">&#10003;</span>
-            <div class="conic-card-title">Hyperbola</div>
-            <div class="conic-card-condition">&phi; &lt; &alpha; &lt; 90&deg;, e &gt; 1</div>
-            <svg class="conic-card-svg" viewBox="0 0 100 60">
-              <path d="M 42 8 Q 20 30 42 52" stroke="#ec4899" stroke-width="2" fill="none"/>
-              <path d="M 58 8 Q 80 30 58 52" stroke="#ec4899" stroke-width="2" fill="none"/>
-              <circle cx="30" cy="30" r="2" fill="#8b5cf6"/>
-              <circle cx="70" cy="30" r="2" fill="#8b5cf6"/>
-            </svg>
+            <div id="quiz-feedback" class="feedback-msg" style="display:none;"></div>
           </div>
         </div>
       </section>
 
-      <!-- Bottom Grid: Visual Proof, Connection, Exact Challenge -->
-      <div class="bottom-grid">
-        <!-- Bottom Card 1: Visual Proof -->
-        <section class="bottom-card">
-          <h3>
-            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-            Visual Proof
-          </h3>
-
-          <div class="proof-steps-row">
-            <div class="proof-step-box">
-              <span class="proof-step-title">1. Slice the cone</span>
-              <svg width="60" height="45" viewBox="0 0 60 45">
-                <path d="M 15 5 L 30 22 L 45 5 Z M 15 39 L 30 22 L 45 39 Z" fill="none" stroke="#818cf8" stroke-width="1"/>
-                <line x1="8" y1="28" x2="52" y2="16" stroke="#635bff" stroke-width="1.8"/>
-              </svg>
-              <span style="color:var(--text-muted);">Plane at angle &alpha; cuts double cone.</span>
+      <!-- Section 4: Saved Configurations -->
+      <section id="saved" class="page-section">
+        <div class="saved-container">
+          <div class="saved-header">
+            <div>
+              <h2 style="font-size: 20px; font-weight: 800; color: var(--text-dark); display: flex; align-items: center; gap: 8px;">
+                <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+                Saved Configurations
+              </h2>
+              <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">
+                Bookmark and recall specific cone slicing angles, heights, and conic parameters.
+              </p>
             </div>
 
-            <div style="font-size:16px; color:var(--primary); font-weight:bold;">&rarr;</div>
-
-            <div class="proof-step-box">
-              <span class="proof-step-title">2. Constant ratio</span>
-              <div style="font-family:var(--font-math); font-size:14px; font-weight:bold; color:var(--primary); margin:8px 0;">
-                PF / d = e
-              </div>
-              <span style="color:var(--text-muted);">PF &amp; d maintain a fixed ratio e.</span>
-            </div>
-
-            <div style="font-size:16px; color:var(--primary); font-weight:bold;">&rarr;</div>
-
-            <div class="proof-step-box">
-              <span class="proof-step-title">3. Locus forms</span>
-              <svg width="60" height="45" viewBox="0 0 60 45">
-                <ellipse cx="30" cy="22" rx="20" ry="12" fill="none" stroke="#2563eb" stroke-width="1.8"/>
-                <circle cx="30" cy="22" r="2" fill="#8b5cf6"/>
-              </svg>
-              <span style="color:var(--text-muted);">All points P form the conic section.</span>
+            <div style="display: flex; gap: 10px;">
+              <button class="btn-secondary" id="btn-save-current-2">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                + Save Current
+              </button>
+              <button class="btn-secondary" id="btn-clear-saved" style="color: #9f1239;">
+                Clear All
+              </button>
             </div>
           </div>
-        </section>
 
-        <!-- Bottom Card 2: Connection -->
-        <section class="bottom-card">
-          <h3>
-            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
-            Connection
-          </h3>
-          <p style="font-size:13px; color:var(--text-muted);">
-            The conic's shape is uniquely determined by its eccentricity <strong>e</strong>, which is set by <strong>&alpha;</strong> and <strong>&phi;</strong>.
-          </p>
-          <div style="background:var(--primary-light); color:var(--primary); padding:10px 14px; border-radius:var(--radius-sm); text-align:center; font-family:var(--font-math); font-size:18px; font-weight:bold;">
-            &alpha; &uarr; &nbsp;&implies;&nbsp; e &uarr;
+          <div class="saved-grid" id="saved-list">
+            <!-- Rendered dynamically -->
           </div>
-        </section>
-
-        <!-- Bottom Card 3: Exact Challenge -->
-        <section class="bottom-card">
-          <h3>
-            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            Exact Challenge
-          </h3>
-          <p style="font-size:12.5px; color:var(--text-muted);" id="challenge-prompt-text">
-            A plane cuts a double cone with <strong>&phi; = 30&deg;</strong>. The intersection is an ellipse with <strong>e = 0.75</strong>. Find angle <strong>&alpha;</strong>.
-          </p>
-
-          <div class="input-group-row">
-            <span style="font-family:var(--font-math); font-weight:bold; font-size:14px;">&alpha; =</span>
-            <input type="number" id="input-challenge-alpha" class="text-input" placeholder="e.g. 22.0" step="0.1">
-            <span style="font-weight:bold;">&deg;</span>
-            <button class="btn-secondary" id="btn-check-challenge">Check</button>
-            <button class="btn-secondary" id="btn-new-challenge" style="padding:6px 10px; font-size:11px;">New</button>
-          </div>
-          <div id="challenge-feedback" class="feedback-msg" style="display: none;"></div>
-        </section>
-      </div>
+        </div>
+      </section>
     </main>
   </div>
 
@@ -1663,8 +1883,8 @@
       isAnimSlice: false,
       isAnimLocus: false,
       animSpeed: 1.0,
-      trailPoints: [],
-      challenge: { phi: 30, e: 0.75, targetAlpha: 22.02 }
+      challenge: { phi: 30, e: 0.75, targetAlpha: 22.02 },
+      predictQuiz: { phi: 45, alpha: 55, answer: 'Hyperbola' }
     };
 
     // --- 1. Independent Accordion Section State Map ---
@@ -1687,12 +1907,6 @@
       for (const [key, isOpen] of Object.entries(openSections)) {
         const card = document.getElementById(`sec-card-${key}`);
         const content = document.getElementById(`content-${key}`);
-
-        if (key === 'verification') {
-          const vcard = document.getElementById('content-verification');
-          if (vcard) vcard.style.display = isOpen ? 'flex' : 'none';
-          continue;
-        }
 
         if (card && content) {
           if (isOpen) {
@@ -1797,9 +2011,9 @@
     // --- 3. View Transformation State (2D Graph) ---
     const locusView = {
       width: 400,
-      height: 520,
+      height: 480,
       originX: 180,
-      originY: 260,
+      originY: 240,
       scale: 45,
       isPanning: false,
       dragStartScreen: { x: 0, y: 0 },
@@ -1836,12 +2050,8 @@
         hyperbola: document.getElementById('pill-hyperbola')
       },
 
-      readoutAlpha: document.getElementById('readout-alpha'),
-      readoutH: document.getElementById('readout-h'),
-      readoutPhi: document.getElementById('readout-phi'),
-      readoutECone: document.getElementById('readout-e-cone'),
-
       // 3D Cone Elements
+      coneSvg: document.getElementById('cone-svg'),
       coneUpperPath: document.getElementById('cone-upper-path'),
       coneLowerPath: document.getElementById('cone-lower-path'),
       coneTopEllipse: document.getElementById('cone-top-ellipse'),
@@ -1850,6 +2060,7 @@
       sliceIntersectionPath: document.getElementById('slice-intersection-path'),
       sliceIntersectionPath2: document.getElementById('slice-intersection-path2'),
       planeHandleCircle: document.getElementById('plane-handle-circle'),
+      planeHandleG: document.getElementById('plane-handle-g'),
 
       // 2D Locus Elements
       locusViewport: document.getElementById('locus-viewport'),
@@ -1876,8 +2087,9 @@
       locusPointP: document.getElementById('locus-point-p'),
       locusPointPHalo: document.getElementById('locus-point-p-halo'),
       locusLabelP: document.getElementById('locus-label-p'),
-      definitionMathReadout: document.getElementById('definition-math-readout'),
       locusRatioLive: document.getElementById('locus-ratio-live'),
+      pillFormulaText: document.getElementById('pill-formula-text'),
+      pillConicName: document.getElementById('pill-conic-name'),
 
       // Checkboxes
       chkFocus: document.getElementById('chk-focus'),
@@ -1897,21 +2109,33 @@
       btnPlayLocus: document.getElementById('btn-play-locus'),
       svgPlayLocusIcon: document.getElementById('svg-play-locus-icon'),
 
-      // Why It Works Live Elements
+      // Why Panel
       whyLiveRatio: document.getElementById('why-live-ratio'),
       revPhiVal: document.getElementById('rev-phi-val'),
       revAlphaVal: document.getElementById('rev-alpha-val'),
       revEVal: document.getElementById('rev-e-val'),
       revConclusion: document.getElementById('rev-conclusion'),
 
-      // Challenge Elements
+      // Challenge
       challengePromptText: document.getElementById('challenge-prompt-text'),
       inputChallengeAlpha: document.getElementById('input-challenge-alpha'),
       btnCheckChallenge: document.getElementById('btn-check-challenge'),
       btnNewChallenge: document.getElementById('btn-new-challenge'),
       challengeFeedback: document.getElementById('challenge-feedback'),
 
-      btnResetView: document.getElementById('btn-reset-view')
+      // Predict Quiz
+      quizQuestionText: document.getElementById('quiz-question-text'),
+      quizFeedback: document.getElementById('quiz-feedback'),
+
+      // Reset
+      btnResetView: document.getElementById('btn-reset-view'),
+      btnResetConeView: document.getElementById('btn-reset-cone-view'),
+
+      // Saved
+      btnSaveCurrent: document.getElementById('btn-save-current'),
+      btnSaveCurrent2: document.getElementById('btn-save-current-2'),
+      btnClearSaved: document.getElementById('btn-clear-saved'),
+      savedList: document.getElementById('saved-list')
     };
 
     // --- 5. 3D Double Cone & Plane SVG Renderer ---
@@ -2145,23 +2369,19 @@
       elements.sliderH.value = state.h;
       elements.sliderPhi.value = state.phi;
 
-      elements.readoutAlpha.textContent = `${state.alpha}°`;
-      elements.readoutH.textContent = state.h.toFixed(2);
-      elements.readoutPhi.textContent = `${state.phi}°`;
-      elements.readoutECone.textContent = eCalc.toFixed(3);
-
       // Pill Badges Active State
       Object.values(elements.pills).forEach(p => p.classList.remove('active'));
       const activePillKey = classification.type.toLowerCase();
       if (elements.pills[activePillKey]) elements.pills[activePillKey].classList.add('active');
 
-      // Quiz Cards Active State
+      // Identify Cards Active State
       document.querySelectorAll('.conic-classify-card').forEach(card => card.classList.remove('active'));
       const quizCard = document.getElementById(`card-quiz-${activePillKey}`);
       if (quizCard) quizCard.classList.add('active');
 
-      // Readouts in Overlays
-      elements.definitionMathReadout.textContent = `e = PF / d = ${eCalc.toFixed(3)}`;
+      // Locus Overlays
+      elements.pillFormulaText.textContent = `e = PF / d = ${eCalc.toFixed(2)}`;
+      elements.pillConicName.textContent = `(${classification.type}: ${classification.range})`;
       elements.locusRatioLive.textContent = `PF / d = ${eCalc.toFixed(3)}`;
 
       // Why Panel Readouts
@@ -2173,6 +2393,16 @@
 
       render3DCone();
       render2DLocus();
+
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false }
+          ],
+          throwOnError: false
+        });
+      }
     }
 
     // --- 8. Event Listeners ---
@@ -2212,21 +2442,25 @@
     // Zoom Controls
     elements.btnLocusZoomIn.addEventListener('click', () => { locusView.scale = Math.min(150, locusView.scale * 1.15); render2DLocus(); });
     elements.btnLocusZoomOut.addEventListener('click', () => { locusView.scale = Math.max(15, locusView.scale / 1.15); render2DLocus(); });
-    elements.btnLocusZoomReset.addEventListener('click', () => { locusView.originX = 180; locusView.originY = 260; locusView.scale = 45; render2DLocus(); });
+    elements.btnLocusZoomReset.addEventListener('click', () => { locusView.originX = 180; locusView.originY = 240; locusView.scale = 45; render2DLocus(); });
 
-    elements.btnResetView.addEventListener('click', () => {
+    function resetAllViews() {
       state.alpha = 38;
       state.h = 0.35;
       state.phi = 45;
       state.paramT = 0.6;
       locusView.originX = 180;
-      locusView.originY = 260;
+      locusView.originY = 240;
       locusView.scale = 45;
       syncUI();
-    });
+    }
 
-    // --- 9. Interactive Dragging of Point P ---
+    elements.btnResetView.addEventListener('click', resetAllViews);
+    elements.btnResetConeView.addEventListener('click', resetAllViews);
+
+    // --- 9. Interactive Dragging of Point P & 3D Plane Handle ---
     let isDraggingLocusP = false;
+    let isDraggingPlaneHandle = false;
 
     function getLocusSVGCoordinates(e) {
       const rect = elements.locusSvg.getBoundingClientRect();
@@ -2251,9 +2485,14 @@
       }
     });
 
+    elements.planeHandleG.addEventListener('mousedown', (e) => {
+      e.stopPropagation();
+      isDraggingPlaneHandle = true;
+    });
+
     window.addEventListener('mousemove', (e) => {
-      const coords = getLocusSVGCoordinates(e);
       if (isDraggingLocusP) {
+        const coords = getLocusSVGCoordinates(e);
         const mathPt = locusView.toMath(coords.sx, coords.sy);
         const geom = MathEngine.getConic2DGeometry(state.alpha, state.phi, state.h);
         if (geom.type === 'Circle' || geom.type === 'Ellipse') {
@@ -2265,7 +2504,15 @@
           state.paramT = Math.asinh(mathPt.my / geom.b);
         }
         render2DLocus();
+      } else if (isDraggingPlaneHandle) {
+        const rect = elements.coneSvg.getBoundingClientRect();
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const relY = clientY - rect.top;
+        const normalizedY = 1 - (relY / rect.height);
+        state.h = Math.max(0.10, Math.min(0.90, normalizedY));
+        syncUI();
       } else if (locusView.isPanning) {
+        const coords = getLocusSVGCoordinates(e);
         const dx = coords.sx - locusView.dragStartScreen.x;
         const dy = coords.sy - locusView.dragStartScreen.y;
         locusView.originX = locusView.dragStartOrigin.x + dx;
@@ -2276,6 +2523,7 @@
 
     window.addEventListener('mouseup', () => {
       isDraggingLocusP = false;
+      isDraggingPlaneHandle = false;
       locusView.isPanning = false;
     });
 
@@ -2328,8 +2576,8 @@
       });
     });
 
-    // --- 11. Quiz & Challenge Solver ---
-    function selectConicQuiz(type) {
+    // --- 11. Presets, Challenge & Quiz ---
+    function selectConicPreset(type) {
       if (type === 'Circle') state.alpha = 0;
       else if (type === 'Ellipse') state.alpha = Math.min(38, state.phi - 7);
       else if (type === 'Parabola') state.alpha = state.phi;
@@ -2346,7 +2594,7 @@
       const targetAlpha = MathEngine.radToDeg(targetRad);
 
       state.challenge = { phi: randomPhi, e: randomE, targetAlpha };
-      elements.challengePromptText.innerHTML = `A plane cuts a double cone with <strong>&phi; = ${randomPhi}&deg;</strong>. The intersection is an ellipse with <strong>e = ${randomE}</strong>. Find angle <strong>&alpha;</strong>.`;
+      elements.challengePromptText.innerHTML = `A plane cuts a double cone with semi-vertical angle <strong>&phi; = ${randomPhi}&deg;</strong>. The intersection is an ellipse with eccentricity <strong>e = ${randomE}</strong>. Find the tilt angle <strong>&alpha;</strong>.`;
       elements.inputChallengeAlpha.value = '';
       elements.challengeFeedback.style.display = 'none';
     }
@@ -2373,8 +2621,196 @@
 
     elements.btnNewChallenge.addEventListener('click', generateNewChallenge);
 
+    function checkPredictQuiz(selectedConic) {
+      if (selectedConic === state.predictQuiz.answer) {
+        elements.quizFeedback.className = 'feedback-msg correct';
+        elements.quizFeedback.innerHTML = `&#10004; Correct! Since &alpha; (${state.predictQuiz.alpha}&deg;) &gt; &phi; (${state.predictQuiz.phi}&deg;), it cuts both nappes forming a Hyperbola.`;
+      } else {
+        elements.quizFeedback.className = 'feedback-msg incorrect';
+        elements.quizFeedback.innerHTML = `&#10008; Not quite. Compare &alpha; (${state.predictQuiz.alpha}&deg;) with &phi; (${state.predictQuiz.phi}&deg;). &alpha; &gt; &phi; means Hyperbola!`;
+      }
+      elements.quizFeedback.style.display = 'inline-flex';
+    }
+
+    // --- 12. Sidebar Navigation & Active State Controller ---
+    let isManualNavigating = false;
+    let manualNavTimeout = null;
+
+    function updateActiveNavItem(targetId) {
+      const validTargets = ['explore', 'proofs', 'practice', 'saved'];
+      if (!targetId || !validTargets.includes(targetId)) return;
+
+      document.querySelectorAll('.nav-list .nav-item').forEach(item => {
+        if (item.getAttribute('data-nav') === targetId) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+    }
+
+    function navigateToSection(targetId) {
+      if (!targetId) return;
+
+      isManualNavigating = true;
+      if (manualNavTimeout) clearTimeout(manualNavTimeout);
+
+      updateActiveNavItem(targetId);
+
+      const targetEl = document.getElementById(targetId);
+      if (targetEl) {
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      manualNavTimeout = setTimeout(() => {
+        isManualNavigating = false;
+      }, 800);
+    }
+
+    document.querySelectorAll('.nav-list button[data-target]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = btn.getAttribute('data-target');
+        navigateToSection(targetId);
+      });
+    });
+
+    // Strict Scroll-Based Active Section Observer (NEVER fall back to Saved)
+    const pageSectionIds = ['explore', 'proofs', 'practice', 'saved'];
+    const sectionObserver = new IntersectionObserver((entries) => {
+      if (isManualNavigating) return;
+
+      let bestEntry = null;
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          if (!bestEntry || entry.intersectionRatio > bestEntry.intersectionRatio) {
+            bestEntry = entry;
+          }
+        }
+      });
+
+      if (bestEntry && bestEntry.target && pageSectionIds.includes(bestEntry.target.id)) {
+        updateActiveNavItem(bestEntry.target.id);
+      }
+    }, {
+      threshold: [0.15, 0.4, 0.7]
+    });
+
+    pageSectionIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) sectionObserver.observe(el);
+    });
+
+    // --- 13. Saved Configurations State Handler ---
+    let savedStates = [];
+    try {
+      savedStates = JSON.parse(localStorage.getItem('conic_slice_saved_states') || '[]');
+    } catch (err) {
+      savedStates = [];
+    }
+
+    function renderSavedList() {
+      if (!elements.savedList) return;
+      if (savedStates.length === 0) {
+        elements.savedList.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 32px 16px; color: var(--text-muted); background: #f8fafc; border: 1px dashed var(--border); border-radius: var(--radius-md);">
+            <div style="font-size: 24px; margin-bottom: 6px;">🔖</div>
+            <div style="font-weight: 700; font-size: 14px; color: var(--text-dark);">No saved configurations yet</div>
+            <div style="font-size: 12.5px; margin-top: 4px;">Click "+ Save Current" to bookmark your current cone slice angles &amp; eccentricity.</div>
+          </div>
+        `;
+        return;
+      }
+
+      elements.savedList.innerHTML = savedStates.map((item, idx) => `
+        <div class="saved-card">
+          <div class="saved-card-top">
+            <span class="saved-card-badge" style="background: ${item.color || 'var(--primary)'};">${item.type}</span>
+            <span style="font-size: 11px; color: var(--text-muted);">${item.date || 'Saved state'}</span>
+          </div>
+          <div style="font-size: 12.5px; font-weight: 600; color: var(--text-dark); display: flex; flex-direction: column; gap: 3px;">
+            <div>Tilt &alpha;: <strong>${item.alpha}&deg;</strong> &nbsp;|&nbsp; Semi-vertical &phi;: <strong>${item.phi}&deg;</strong></div>
+            <div>Height h: <strong>${item.h.toFixed(2)}</strong> &nbsp;|&nbsp; Eccentricity e: <strong>${item.e.toFixed(3)}</strong></div>
+          </div>
+          <div class="saved-card-actions">
+            <button class="btn-secondary" style="flex:1; justify-content:center; padding:5px; font-size:11.5px;" onclick="loadSavedState(${idx})">Load</button>
+            <button class="btn-secondary" style="color:#9f1239; padding:5px 8px; font-size:11.5px;" onclick="deleteSavedState(${idx})" title="Delete">✕</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function saveCurrentState() {
+      const classification = MathEngine.classifyConic(state.alpha, state.phi);
+      const eCalc = MathEngine.calculateEccentricity(state.alpha, state.phi);
+
+      const newItem = {
+        alpha: state.alpha,
+        h: state.h,
+        phi: state.phi,
+        type: classification.type,
+        color: classification.color,
+        e: eCalc,
+        date: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+
+      savedStates.unshift(newItem);
+      if (savedStates.length > 12) savedStates.pop();
+
+      try {
+        localStorage.setItem('conic_slice_saved_states', JSON.stringify(savedStates));
+      } catch (e) {}
+
+      renderSavedList();
+
+      // Gentle toast / alert
+      const btn = elements.btnSaveCurrent;
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '✓ Saved!';
+      btn.style.background = 'var(--accent-green-light)';
+      btn.style.color = '#065f46';
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.style.background = '';
+        btn.style.color = '';
+      }, 1500);
+    }
+
+    function loadSavedState(idx) {
+      const item = savedStates[idx];
+      if (!item) return;
+      state.alpha = item.alpha;
+      state.h = item.h;
+      state.phi = item.phi;
+      syncUI();
+      navigateToSection('explore');
+    }
+
+    function deleteSavedState(idx) {
+      savedStates.splice(idx, 1);
+      try {
+        localStorage.setItem('conic_slice_saved_states', JSON.stringify(savedStates));
+      } catch (e) {}
+      renderSavedList();
+    }
+
+    function clearAllSavedStates() {
+      if (confirm('Clear all saved configurations?')) {
+        savedStates = [];
+        try {
+          localStorage.removeItem('conic_slice_saved_states');
+        } catch (e) {}
+        renderSavedList();
+      }
+    }
+
+    elements.btnSaveCurrent.addEventListener('click', saveCurrentState);
+    elements.btnSaveCurrent2.addEventListener('click', saveCurrentState);
+    elements.btnClearSaved.addEventListener('click', clearAllSavedStates);
+
     // Initial Execution
     renderAccordionStates();
+    renderSavedList();
     syncUI();
   </script>
 </body>

@@ -3,10 +3,482 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Maths Universe - Math Visualizations & Proofs</title>
-  
-  <!-- Main Catalog Stylesheet -->
-  <link rel="stylesheet" href="styles.css">
+  <title>Math Visualizations & Proofs | Maths Universe</title>
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <style>
+    :root {
+      --bg-main: #f5f6fc;
+      --card-bg: #ffffff;
+      --text-main: #1e1b4b;
+      --text-muted: #64748b;
+      --text-purple: #4c1d95;
+      
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-light: #ede9fe;
+      --primary-dark: #4338ca;
+
+      --accent-purple: #8b5cf6;
+      --accent-green: #10b981;
+      --accent-orange: #ea580c;
+      --accent-blue: #0284c7;
+
+      --border-color: #e2e8f0;
+      --border-purple: #ddd6fe;
+      
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 14px rgba(99, 102, 241, 0.08);
+      --shadow-lg: 0 10px 25px -5px rgba(99, 102, 241, 0.12);
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* App Container Layout */
+    .app-container {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    /* Left Sidebar */
+    .sidebar {
+      width: 240px;
+      background-color: var(--card-bg);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      padding: 28px 18px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      z-index: 20;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 36px;
+      padding: 0 4px;
+      text-decoration: none;
+    }
+
+    .brand-logo-img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      border-radius: 8px;
+      flex-shrink: 0;
+      display: block;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .brand-title {
+      font-weight: 800;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+      color: var(--text-main);
+    }
+
+    .brand-subtitle {
+      font-weight: 700;
+      font-size: 0.75rem;
+      color: var(--primary);
+      letter-spacing: 1px;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .nav-item a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.92rem;
+      transition: all 0.2s ease;
+    }
+
+    .nav-item a:hover {
+      background-color: #f1f5f9;
+      color: var(--text-main);
+    }
+
+    .nav-item.active a {
+      background-color: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 32px 44px;
+      max-width: 1500px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      min-width: 0;
+    }
+
+    /* Top Banner Header / Hero */
+    .catalog-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .header-title-group h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+
+    .header-title-group p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+    }
+
+    .counter-badge {
+      background: white;
+      border: 1px solid var(--border-purple);
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .counter-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-green);
+    }
+
+    /* Search & Filter Toolbar */
+    .toolbar-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      padding: 16px 20px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1;
+      min-width: 260px;
+      max-width: 420px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px 14px 10px 42px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      font-size: 0.9rem;
+      outline: none;
+      background: #f8fafc;
+      transition: all 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+      background: white;
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+
+    .category-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      background: white;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn:hover {
+      background: #f8fafc;
+      color: var(--text-main);
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+    }
+
+    /* Category Section Header */
+    .category-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .category-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .category-title::before {
+      content: '';
+      width: 4px;
+      height: 20px;
+      background: var(--primary);
+      border-radius: 4px;
+    }
+
+    /* Project Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .project-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--border-purple);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .card-num {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 4px 10px;
+      border-radius: 12px;
+    }
+
+    .card-badges {
+      display: flex;
+      gap: 6px;
+    }
+
+    .badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-calculus { background: #ede9fe; color: #5b21b6; }
+    .badge-geometry { background: #e0f2fe; color: #0369a1; }
+    .badge-conics { background: #fef3c7; color: #b45309; }
+    .badge-inequalities { background: #dcfce7; color: #15803d; }
+
+    .badge-diff-inter { background: #f1f5f9; color: #475569; }
+    .badge-diff-beginner { background: #f0fdf4; color: #166534; }
+    .badge-diff-advanced { background: #fef2f2; color: #991b1b; }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+
+    .card-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .card-action {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 14px;
+      border-top: 1px solid #f1f5f9;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--primary);
+      transition: color 0.2s;
+    }
+
+    .project-card:hover .card-action {
+      color: var(--primary-dark);
+    }
+
+    .card-action svg {
+      transition: transform 0.2s;
+    }
+
+    .project-card:hover .card-action svg {
+      transform: translateX(4px);
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px dashed var(--border-color);
+    }
+
+    .empty-state h3 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+
+    .empty-state p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+    }
+
+    .clear-search-btn {
+      padding: 8px 18px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .clear-search-btn:hover {
+      background: var(--primary-hover);
+    }
+
+    /* Responsive Breakpoints */
+    @media (max-width: 1200px) {
+      .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .sidebar {
+        display: none;
+      }
+      .main-content {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+      .toolbar-card {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .search-box {
+        max-width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -15,9 +487,7 @@
   <!-- Left Navigation Sidebar -->
   <aside class="sidebar">
     <a href="#" class="brand">
-      <div class="brand-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18"/><path d="M3 12h18"/><circle cx="12" cy="12" r="3"/></svg>
-      </div>
+      <img src="assets/logo.png" alt="Maths Universe Logo" class="brand-logo-img">
       <div class="brand-text">
         <span class="brand-title">MATHS</span>
         <span class="brand-subtitle">UNIVERSE</span>
@@ -59,7 +529,7 @@
 
     <div class="sidebar-footer">
       <p>Maths Universe Catalog</p>
-      <p style="font-weight:700; margin-top:2px;">18 Interactive Modules</p>
+      <p style="font-weight:700; margin-top:2px;" id="sidebar-count">18 Interactive Modules</p>
     </div>
   </aside>
 
@@ -83,15 +553,15 @@
     <div class="toolbar-card">
       <div class="search-box">
         <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" class="search-input" id="search-input" placeholder="Search visualizations, topics, or formulas...">
+        <input type="text" class="search-input" id="search-input" placeholder="Search visualizations...">
       </div>
 
       <div class="category-tabs">
-        <button class="tab-btn active" data-category="All">All</button>
-        <button class="tab-btn" data-category="Calculus">Calculus</button>
-        <button class="tab-btn" data-category="Geometry & Solids">Geometry & Solids</button>
-        <button class="tab-btn" data-category="Conic Sections">Conic Sections</button>
-        <button class="tab-btn" data-category="Inequalities">Inequalities</button>
+        <button class="tab-btn active" data-category="All" aria-selected="true">All</button>
+        <button class="tab-btn" data-category="Calculus" aria-selected="false">Calculus</button>
+        <button class="tab-btn" data-category="Geometry & Solids" aria-selected="false">Geometry & Solids</button>
+        <button class="tab-btn" data-category="Conic Sections" aria-selected="false">Conic Sections</button>
+        <button class="tab-btn" data-category="Inequalities" aria-selected="false">Inequalities</button>
       </div>
     </div>
 
@@ -101,8 +571,444 @@
   </main>
 </div>
 
-<!-- Main Catalog Application Script -->
-<script src="app.js"></script>
+<!-- Embedded Application Engine -->
+<script>
+(function() {
+  'use strict';
 
+  // Centralized Metadata for all 18 Interactive Mathematics Projects
+  const projectsData = [
+    {
+      id: "67",
+      num: "01",
+      title: "Fundamental Theorem of Calculus",
+      folder: "67-fundamental-theorem-of-calculus",
+      category: "Calculus",
+      categoryClass: "calculus",
+      difficulty: "Intermediate",
+      description: "Explore why the derivative of an accumulated area function A(x) = ∫_a^x f(t)dt equals the original function f(x)."
+    },
+    {
+      id: "72",
+      num: "02",
+      title: "Optimization: Maximum and Minimum from Derivative",
+      folder: "72-optimization-derivative-max-min",
+      category: "Calculus",
+      categoryClass: "calculus",
+      difficulty: "Intermediate",
+      description: "Explore tangent slopes, critical points where f'(x)=0, derivative sign changes, and local extrema classification."
+    },
+    {
+      id: "135",
+      num: "03",
+      title: "Sphere: Surface Area & Volume",
+      folder: "135-sphere-surface-area-volume",
+      category: "Geometry & Solids",
+      categoryClass: "geometry",
+      difficulty: "Beginner",
+      description: "Interactive 3D WebGL visualization for understanding sphere surface area (4πr²) and volume (4/3πr³) derivation."
+    },
+    {
+      id: "136",
+      num: "04",
+      title: "Composite Solids and Units",
+      folder: "136-composite-solids-and-units",
+      category: "Geometry & Solids",
+      categoryClass: "geometry",
+      difficulty: "Intermediate",
+      description: "Interactively decompose complex 3D shapes into standard solid primitives and calculate unit volumes."
+    },
+    {
+      id: "137",
+      num: "05",
+      title: "Circle: Locus of Equal Distance",
+      folder: "137-circle-locus-equal-distance",
+      category: "Conic Sections",
+      categoryClass: "conics",
+      difficulty: "Beginner",
+      description: "Understand circles geometrically as the locus of points equidistant from a fixed central point."
+    },
+    {
+      id: "138",
+      num: "06",
+      title: "Parabola: Focus & Directrix",
+      folder: "138-parabola-focus-directrix",
+      category: "Conic Sections",
+      categoryClass: "conics",
+      difficulty: "Intermediate",
+      description: "Visualize the locus definition of a parabola where distance to focus equals perpendicular distance to directrix."
+    },
+    {
+      id: "139",
+      num: "07",
+      title: "Ellipse: Sum of Distances",
+      folder: "139-ellipse-sum-of-distances",
+      category: "Conic Sections",
+      categoryClass: "conics",
+      difficulty: "Intermediate",
+      description: "Discover how the sum of distances from any point on an ellipse to two foci remains constant (d₁ + d₂ = 2a)."
+    },
+    {
+      id: "140",
+      num: "08",
+      title: "Hyperbola: Difference of Distances",
+      folder: "140-hyperbola-difference-of-distances",
+      category: "Conic Sections",
+      categoryClass: "conics",
+      difficulty: "Intermediate",
+      description: "Explore hyperbola branches defined by constant absolute difference of distances to two foci (|d₁ - d₂| = 2a)."
+    },
+    {
+      id: "141",
+      num: "09",
+      title: "Eccentricity Classification",
+      folder: "141-eccentricity-classification",
+      category: "Conic Sections",
+      categoryClass: "conics",
+      difficulty: "Intermediate",
+      description: "Understand how eccentricity e classifies all conics: Circle (e=0), Ellipse (0<e<1), Parabola (e=1), Hyperbola (e>1)."
+    },
+    {
+      id: "142",
+      num: "10",
+      title: "Cone Slice: Conics",
+      folder: "142-cone-slice-conics",
+      category: "Conic Sections",
+      categoryClass: "conics",
+      difficulty: "Advanced",
+      description: "Visualize 3D double cone planar intersections yielding circles, ellipses, parabolas, and hyperbolas."
+    },
+    {
+      id: "143",
+      num: "11",
+      title: "Parabola: Reflective Property",
+      folder: "143-parabola-reflective-property",
+      category: "Conic Sections",
+      categoryClass: "conics",
+      difficulty: "Intermediate",
+      description: "Interactively prove how incoming parallel rays reflect through the focal point of a parabolic mirror."
+    },
+    {
+      id: "144",
+      num: "12",
+      title: "Directrix-Focus Standard Equation",
+      folder: "144-directrix-focus-standard-equation",
+      category: "Conic Sections",
+      categoryClass: "conics",
+      difficulty: "Advanced",
+      description: "Derive and explore standard algebraic equations for conics directly from focus-directrix locus definitions."
+    },
+    {
+      id: "145",
+      num: "13",
+      title: "Inequality on a Number Line",
+      folder: "145-inequality-number-line",
+      category: "Inequalities",
+      categoryClass: "inequalities",
+      difficulty: "Beginner",
+      description: "Represent single and open/closed interval inequalities visually on an interactive real number line."
+    },
+    {
+      id: "146",
+      num: "14",
+      title: "Solving Linear Inequalities",
+      folder: "146-solving-linear-inequalities",
+      category: "Inequalities",
+      categoryClass: "inequalities",
+      difficulty: "Beginner",
+      description: "Step-by-step interactive solver for linear inequalities with real-time graph transformation visualizer."
+    },
+    {
+      id: "147",
+      num: "15",
+      title: "Compound Inequalities & Intervals",
+      folder: "147-compound-inequalities-intervals",
+      category: "Inequalities",
+      categoryClass: "inequalities",
+      difficulty: "Intermediate",
+      description: "Explore AND / OR compound inequalities, interval notation, and union/intersection solution regions."
+    },
+    {
+      id: "148",
+      num: "16",
+      title: "Quadratic Inequalities by Graph Regions",
+      folder: "148-quadratic-inequalities-graphs-region",
+      category: "Inequalities",
+      categoryClass: "inequalities",
+      difficulty: "Intermediate",
+      description: "Solve quadratic inequalities by examining positive and negative parabolic graph regions above and below x-axis."
+    },
+    {
+      id: "149",
+      num: "17",
+      title: "AM-GM Inequality",
+      folder: "149-am-gm-inequality",
+      category: "Inequalities",
+      categoryClass: "inequalities",
+      difficulty: "Advanced",
+      description: "Visual geometric and algebraic proofs demonstrating Arithmetic Mean ≥ Geometric Mean with equality when a = b."
+    },
+    {
+      id: "150",
+      num: "18",
+      title: "Triangle Inequality",
+      folder: "150-triangle-inequality",
+      category: "Inequalities",
+      categoryClass: "inequalities",
+      difficulty: "Beginner",
+      description: "Explore side length constraints proving the sum of any two sides of a triangle exceeds the third side length."
+    }
+  ];
+
+  // State
+  const state = {
+    category: "All",
+    search: ""
+  };
+
+  // Helper: Escape HTML
+  function escapeHTML(value) {
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  // Helper: Get project URL (handles local file:// and server/Vercel)
+  function getProjectURL(project) {
+    let folder = project.folder;
+    if (!folder.startsWith("projects/")) {
+      folder = "projects/" + folder;
+    }
+    if (window.location.protocol === "file:") {
+      return folder + "/index.html";
+    }
+    return folder + "/";
+  }
+
+  // Filter projects by category and search term
+  function getFilteredProjects() {
+    const query = state.search.trim().toLowerCase();
+
+    return projectsData.filter((project) => {
+      const matchesCategory =
+        state.category === "All" ||
+        project.category === state.category;
+
+      const matchesSearch =
+        !query ||
+        project.title.toLowerCase().includes(query) ||
+        project.description.toLowerCase().includes(query) ||
+        project.category.toLowerCase().includes(query) ||
+        project.folder.toLowerCase().includes(query) ||
+        project.id.toLowerCase().includes(query);
+
+      return matchesCategory && matchesSearch;
+    });
+  }
+
+  // Render Projects Grid
+  function renderProjects() {
+    const container = document.getElementById("catalog-content");
+    const countElement = document.getElementById("project-count");
+
+    if (!container) return;
+
+    const filtered = getFilteredProjects();
+
+    // Update count dynamically
+    if (countElement) {
+      countElement.textContent = filtered.length + " Interactive Visualization" + (filtered.length === 1 ? "" : "s");
+    }
+
+    // Empty state
+    if (filtered.length === 0) {
+      container.innerHTML = '<div class="empty-state"><h3>No visualizations found</h3><p>Try a different search term or category.</p><button type="button" class="clear-search-btn" id="clear-search">Clear Search</button></div>';
+
+      const clearBtn = document.getElementById("clear-search");
+      if (clearBtn) {
+        clearBtn.addEventListener("click", () => {
+          state.search = "";
+          const searchInput = document.getElementById("search-input");
+          if (searchInput) {
+            searchInput.value = "";
+            searchInput.focus();
+          }
+          renderProjects();
+        });
+      }
+      return;
+    }
+
+    // Category Order
+    const categoryOrder = [
+      "Calculus",
+      "Geometry & Solids",
+      "Conic Sections",
+      "Inequalities"
+    ];
+
+    const categoriesToRender =
+      state.category === "All"
+        ? categoryOrder
+        : [state.category];
+
+    let html = "";
+
+    categoriesToRender.forEach((category) => {
+      const categoryProjects = filtered.filter((p) => p.category === category);
+      if (categoryProjects.length === 0) return;
+
+      html += '<section class="category-section" data-category="' + escapeHTML(category) + '">';
+      html += '<h2 class="category-title">' + escapeHTML(category) + '</h2>';
+      html += '<div class="cards-grid">';
+
+      categoryProjects.forEach((project) => {
+        const projectURL = getProjectURL(project);
+        const diffClass = project.difficulty.toLowerCase();
+
+        html += '<a href="' + escapeHTML(projectURL) + '" class="project-card" data-project-id="' + escapeHTML(project.id) + '" aria-label="Open ' + escapeHTML(project.title) + '">';
+        html += '<div class="project-card-content">';
+        html += '<div class="card-top">';
+        html += '<span class="card-num">' + escapeHTML(project.num) + '</span>';
+        html += '<div class="card-badges">';
+        html += '<span class="badge badge-' + escapeHTML(project.categoryClass) + '">' + escapeHTML(project.category) + '</span>';
+        html += '<span class="badge badge-diff-' + escapeHTML(diffClass) + '">' + escapeHTML(project.difficulty) + '</span>';
+        html += '</div></div>';
+        html += '<h3 class="card-title">' + escapeHTML(project.title) + '</h3>';
+        html += '<p class="card-desc">' + escapeHTML(project.description) + '</p>';
+        html += '</div>';
+        html += '<div class="card-action">';
+        html += '<span>Open Project</span>';
+        html += '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
+        html += '<line x1="5" y1="12" x2="19" y2="12"/>';
+        html += '<polyline points="12 5 19 12 12 19"/>';
+        html += '</svg></div></a>';
+      });
+
+      html += '</div></section>';
+    });
+
+    container.innerHTML = html;
+  }
+
+  // Set active category tab
+  function setActiveCategory(category) {
+    state.category = category;
+
+    document.querySelectorAll(".tab-btn").forEach((btn) => {
+      const isActive = btn.dataset.category === state.category;
+      btn.classList.toggle("active", isActive);
+      btn.setAttribute("aria-selected", String(isActive));
+    });
+
+    // Sync sidebar active state
+    document.querySelectorAll(".sidebar .nav-item").forEach((item) => {
+      const link = item.querySelector("a");
+      if (!link) return;
+      const href = link.getAttribute("href") || "";
+      const catMap = {
+        "#": "All",
+        "#calculus": "Calculus",
+        "#geometry": "Geometry & Solids",
+        "#conics": "Conic Sections",
+        "#inequalities": "Inequalities"
+      };
+      const cat = catMap[href.toLowerCase()];
+      item.classList.toggle("active", cat === state.category);
+    });
+
+    renderProjects();
+  }
+
+  // Initialize event handlers
+  function initEvents() {
+    // Category tabs
+    document.querySelectorAll(".tab-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const cat = btn.dataset.category || "All";
+        setActiveCategory(cat);
+      });
+    });
+
+    // Search input
+    const searchInput = document.getElementById("search-input");
+    if (searchInput) {
+      searchInput.addEventListener("input", (e) => {
+        state.search = e.target.value;
+        renderProjects();
+      });
+
+      searchInput.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          searchInput.value = "";
+          state.search = "";
+          renderProjects();
+        }
+      });
+    }
+
+    // Keyboard shortcut ('/')
+    document.addEventListener("keydown", (e) => {
+      if (
+        e.key === "/" &&
+        document.activeElement?.tagName !== "INPUT" &&
+        document.activeElement?.tagName !== "TEXTAREA"
+      ) {
+        e.preventDefault();
+        if (searchInput) searchInput.focus();
+      }
+    });
+
+    // Sidebar hash links
+    document.querySelectorAll(".sidebar a[href^='#']").forEach((link) => {
+      link.addEventListener("click", (e) => {
+        const href = link.getAttribute("href") || "#";
+        const catMap = {
+          "#": "All",
+          "#calculus": "Calculus",
+          "#geometry": "Geometry & Solids",
+          "#conics": "Conic Sections",
+          "#inequalities": "Inequalities"
+        };
+        const cat = catMap[href.toLowerCase()];
+        if (cat) {
+          setActiveCategory(cat);
+        }
+      });
+    });
+
+    // Hash navigation
+    function applyHash() {
+      const hash = window.location.hash.toLowerCase();
+      const hashMap = {
+        "": "All",
+        "#": "All",
+        "#calculus": "Calculus",
+        "#geometry": "Geometry & Solids",
+        "#conics": "Conic Sections",
+        "#inequalities": "Inequalities"
+      };
+      if (hashMap[hash]) {
+        setActiveCategory(hashMap[hash]);
+      }
+    }
+    window.addEventListener("hashchange", applyHash);
+    applyHash();
+  }
+
+  // Init on DOM Content Loaded
+  document.addEventListener("DOMContentLoaded", () => {
+    const sidebarCount = document.getElementById("sidebar-count");
+    if (sidebarCount) {
+      sidebarCount.textContent = projectsData.length + " Interactive Modules";
+    }
+    initEvents();
+    renderProjects();
+  });
+})();
+</script>
 </body>
 </html>

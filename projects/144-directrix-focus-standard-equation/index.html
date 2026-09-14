@@ -82,14 +82,13 @@
       color: var(--primary);
       text-decoration: none;
       font-weight: 700;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      font-size: 0;
     }
 
-    .brand-logo svg {
-      width: 36px;
-      height: 36px;
+    .brand-logo img {
+      width: 58px;
+      height: auto;
+      display: block;
     }
 
     .nav-list {
@@ -101,7 +100,7 @@
       align-items: center;
     }
 
-    .nav-item button {
+    .nav-item a {
       background: none;
       border: none;
       display: flex;
@@ -115,14 +114,15 @@
       border-radius: var(--radius-sm);
       transition: all 0.2s;
       width: 64px;
+      text-decoration: none;
     }
 
-    .nav-item button:hover {
+    .nav-item a:hover {
       color: var(--primary);
       background: var(--primary-light);
     }
 
-    .nav-item.active button {
+    .nav-item.active a {
       color: var(--primary);
       background: var(--primary-light);
       font-weight: 600;
@@ -147,6 +147,18 @@
       margin: 0 auto;
       width: 100%;
     }
+
+    html { scroll-behavior: smooth; }
+    .page-section { scroll-margin-top: 18px; }
+    .home-link { display:inline-flex; align-items:center; margin-bottom:10px; color:var(--primary); font-size:13px; font-weight:700; text-decoration:none; }
+    .home-link:hover { color:var(--primary-hover); text-decoration:underline; }
+    .saved-section { background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius-lg); box-shadow:var(--shadow-sm); padding:18px; }
+    .saved-section h2 { font-size:17px; color:var(--text-dark); margin-bottom:6px; }
+    .saved-section p { color:var(--text-muted); font-size:13px; }
+    .saved-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+    .saved-list { display:grid; gap:8px; margin-top:14px; }
+    .saved-item { padding:10px 12px; border:1px solid var(--border); border-radius:var(--radius-sm); background:#f8fafc; color:var(--text-dark); text-align:left; cursor:pointer; font-size:13px; }
+    .saved-empty { color:var(--text-muted); font-size:13px; }
 
     /* Top Header Bar */
     .top-header {
@@ -905,45 +917,33 @@
   <div class="app-layout">
     <!-- Left Navigation Sidebar -->
     <aside class="sidebar">
-      <a href="#" class="brand-logo">
-        <svg viewBox="0 0 40 40" fill="none">
-          <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2.5"/>
-          <path d="M 12 10 Q 20 20 12 30 M 28 10 Q 20 20 28 30" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-        </svg>
-        <span>Maths</span>
-      </a>
+      <a href="../../index.html" class="brand-logo" title="Maths Universe home"><img src="../../assets/logo.png" alt="Maths Universe" /></a>
       <ul class="nav-list">
-        <li class="nav-item active">
-          <button title="Explore Visuals">
+        <li class="nav-item active" data-nav="explore">
+          <a href="#explore" title="Explore Visuals">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
             Explore
-          </button>
+          </a>
         </li>
-        <li class="nav-item">
-          <button title="Proofs">
+        <li class="nav-item" data-nav="proofs">
+          <a href="#proofs" title="Proofs">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 01-2 2h-0a2 2 0 01-2-2v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
             Proofs
-          </button>
+          </a>
         </li>
-        <li class="nav-item">
-          <button title="Practice">
+        <li class="nav-item" data-nav="practice">
+          <a href="#practice" title="Practice">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
             Practice
-          </button>
+          </a>
         </li>
-        <li class="nav-item">
-          <button title="Library">
+        <li class="nav-item" data-nav="saved">
+          <a href="#saved" title="Saved">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-            Library
-          </button>
+            Saved
+          </a>
         </li>
       </ul>
-      <div class="sidebar-footer nav-item">
-        <button title="Settings">
-          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
-          Settings
-        </button>
-      </div>
     </aside>
 
     <!-- Main Workspace Area -->
@@ -951,7 +951,8 @@
       <!-- Top Header -->
       <header class="top-header">
         <div class="header-title-area">
-          <a href="#" class="breadcrumb">&lsaquo; Visual Proofs / Conic Sections</a>
+          <a href="../../index.html" class="home-link">&larr; Back to Main</a>
+          <a href="#proofs" class="breadcrumb">Visual Proofs / Conic Sections</a>
           <h1>Directrix, Focus, and Standard Equations</h1>
           <p class="header-subtitle">A locus definition that generates conic sections</p>
         </div>
@@ -966,7 +967,7 @@
       </header>
 
       <!-- Top Controls Card (Conic Selector, Orientation, Dynamic Parameters) -->
-      <section class="top-controls-card">
+      <section class="top-controls-card page-section" id="explore">
         <!-- 1. Select Conic -->
         <div class="control-block-unit">
           <label>1. Select conic</label>
@@ -1158,7 +1159,7 @@
         </div>
 
         <!-- Viewport 3: Right Educational Panel (Why it works) -->
-        <aside class="why-panel" id="why-panel">
+        <aside class="why-panel page-section" id="proofs">
           <div class="why-panel-header">
             <span class="why-header-icon">&#9672;</span>
             <h2>Why it works</h2>
@@ -1232,7 +1233,7 @@
       </div>
 
       <!-- Bottom Dashboard Grid: Conic Summary, Visual Proof, Exact Challenge -->
-      <div class="bottom-grid">
+      <div class="bottom-grid page-section" id="practice">
         <!-- Conic Summary Card -->
         <section class="bottom-card">
           <h3>Conic summary</h3>
@@ -1302,6 +1303,15 @@
           <div id="challenge-feedback" class="feedback-msg" style="display:none;"></div>
         </section>
       </div>
+      <section class="saved-section page-section" id="saved" aria-labelledby="saved-title">
+        <h2 id="saved-title">Saved explorations</h2>
+        <p>Keep a directrix–focus configuration to revisit its model, orientation, parameter, and point.</p>
+        <div class="saved-actions">
+          <button class="btn-secondary" id="btn-save-exploration">Save current setup</button>
+          <button class="btn-secondary" id="btn-clear-saved">Clear saved</button>
+        </div>
+        <div class="saved-list" id="saved-list" aria-live="polite"></div>
+      </section>
     </main>
   </div>
 
@@ -1746,8 +1756,71 @@
       btnCheckChallenge: document.getElementById('btn-check-challenge'),
       btnHintChallenge: document.getElementById('btn-hint-challenge'),
       btnNewChallenge: document.getElementById('btn-new-challenge'),
-      challengeFeedback: document.getElementById('challenge-feedback')
+      challengeFeedback: document.getElementById('challenge-feedback'),
+      btnSaveExploration: document.getElementById('btn-save-exploration'),
+      btnClearSaved: document.getElementById('btn-clear-saved'),
+      savedList: document.getElementById('saved-list')
     };
+
+    // Same-page navigation: Saved is deliberately excluded from scroll observation.
+    const navItems = [...document.querySelectorAll('.nav-item[data-nav]')];
+    function setActiveNav(name) {
+      navItems.forEach(item => item.classList.toggle('active', item.dataset.nav === name));
+    }
+    navItems.forEach(item => item.querySelector('a').addEventListener('click', () => setActiveNav(item.dataset.nav)));
+    const observedSections = ['explore', 'proofs', 'practice']
+      .map(id => document.getElementById(id)).filter(Boolean);
+    const sectionObserver = new IntersectionObserver(entries => {
+      const visible = entries.filter(entry => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (visible) setActiveNav(visible.target.id);
+    }, { threshold: [0.25, 0.55], rootMargin: '-10% 0px -45% 0px' });
+    observedSections.forEach(section => sectionObserver.observe(section));
+
+    const savedStorageKey = 'maths-universe-directrix-focus-saved-v1';
+    function readSavedExplorations() {
+      try { return JSON.parse(localStorage.getItem(savedStorageKey) || '[]'); }
+      catch { return []; }
+    }
+    function renderSavedExplorations() {
+      const saved = readSavedExplorations();
+      if (!saved.length) {
+        elements.savedList.innerHTML = '<div class="saved-empty">No saved explorations yet.</div>';
+        return;
+      }
+      elements.savedList.innerHTML = saved.map((item, index) =>
+        `<button class="saved-item" type="button" data-saved-index="${index}">Setup ${index + 1}: ${item.type}, ${item.orientation}, t = ${item.t.toFixed(2)}</button>`
+      ).join('');
+      elements.savedList.querySelectorAll('[data-saved-index]').forEach(button => button.addEventListener('click', () => {
+        const item = readSavedExplorations()[Number(button.dataset.savedIndex)];
+        if (!item) return;
+        conicState.type = item.type;
+        conicState.orientation = item.orientation;
+        conicState.t = item.t;
+        conicState.parabolaParams = item.parabolaParams;
+        conicState.ellipseParams = item.ellipseParams;
+        conicState.hyperbolaParams = item.hyperbolaParams;
+        conicState.circleParams = item.circleParams;
+        renderParametersControls();
+        renderUI();
+        document.getElementById('explore').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setActiveNav('explore');
+      }));
+    }
+    elements.btnSaveExploration.addEventListener('click', () => {
+      const saved = readSavedExplorations();
+      saved.unshift(JSON.parse(JSON.stringify({
+        type: conicState.type, orientation: conicState.orientation, t: conicState.t,
+        parabolaParams: conicState.parabolaParams, ellipseParams: conicState.ellipseParams,
+        hyperbolaParams: conicState.hyperbolaParams, circleParams: conicState.circleParams
+      })));
+      try { localStorage.setItem(savedStorageKey, JSON.stringify(saved.slice(0, 12))); } catch { /* storage unavailable */ }
+      renderSavedExplorations();
+    });
+    elements.btnClearSaved.addEventListener('click', () => {
+      try { localStorage.removeItem(savedStorageKey); } catch { /* storage unavailable */ }
+      renderSavedExplorations();
+    });
 
     // Update Orientation Buttons State
     function updateOrientationButtons() {
@@ -2401,6 +2474,7 @@
     // Initial Execution
     renderParametersControls();
     renderAccordionStates();
+    renderSavedExplorations();
     renderUI();
   </script>
 </body>

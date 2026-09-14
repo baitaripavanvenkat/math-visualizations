@@ -87,9 +87,14 @@
       letter-spacing: 0.5px;
     }
 
-    .brand-logo svg {
+    .brand-logo-img {
       width: 36px;
       height: 36px;
+      object-fit: contain;
+      border-radius: 6px;
+    }
+    section[id], div[id], aside[id] {
+      scroll-margin-top: 24px;
     }
 
     .nav-list {
@@ -1177,36 +1182,33 @@
   <div class="app-layout">
     <!-- Left Navigation Sidebar -->
     <aside class="sidebar">
-      <a href="#" class="brand-logo">
-        <svg viewBox="0 0 40 40" fill="none">
-          <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2.5"/>
-          <path d="M 12 10 Q 20 20 12 30 M 28 10 Q 20 20 28 30" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-        </svg>
+      <a href="../../index.html" class="brand-logo" title="Back to Catalog">
+        <img src="../../assets/logo.png" alt="Maths Universe" class="brand-logo-img">
         <span>Maths</span>
       </a>
       <ul class="nav-list">
-        <li class="nav-item active">
-          <button title="Explore Visuals">
+        <li class="nav-item active" data-nav="explore">
+          <button title="Explore Visuals" data-target="explore">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
             Explore
           </button>
         </li>
-        <li class="nav-item">
-          <button title="Proofs">
+        <li class="nav-item" data-nav="proofs">
+          <button title="Proofs" data-target="proofs">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 01-2 2h-0a2 2 0 01-2-2v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
             Proofs
           </button>
         </li>
-        <li class="nav-item">
-          <button title="Practice">
+        <li class="nav-item" data-nav="practice">
+          <button title="Practice" data-target="practice">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
             Practice
           </button>
         </li>
-        <li class="nav-item">
-          <button title="Library">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-            Library
+        <li class="nav-item" data-nav="saved">
+          <button title="Saved Configurations" data-target="saved">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+            Saved
           </button>
         </li>
       </ul>
@@ -1277,7 +1279,7 @@
       </section>
 
       <!-- Main Dashboard Grid -->
-      <div class="dashboard-grid">
+      <div class="dashboard-grid" id="explore">
         <!-- Interactive Graph Area -->
         <section class="graph-card">
           <!-- Canvas / SVG Viewport Container -->
@@ -1465,7 +1467,7 @@
         </section>
 
         <!-- REBUILT RIGHT-SIDE EDUCATIONAL PANEL WITH INDEPENDENT FLEX SCROLLING -->
-        <aside class="why-panel" id="why-panel">
+        <aside class="why-panel" id="proofs">
           <div class="why-panel-header">
             <span class="why-header-icon">&#9672;</span>
             <h2>Why it works</h2>
@@ -1836,7 +1838,7 @@
         </section>
 
         <!-- Bottom-right section: Exact challenge -->
-        <section class="exact-challenge-card">
+        <section class="exact-challenge-card" id="practice">
           <h3>
             <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             Exact challenge
@@ -1854,6 +1856,22 @@
           <div id="exact-feedback" class="feedback-msg" style="display: none;"></div>
         </section>
       </div>
+    
+        <!-- Saved Configurations Card -->
+        <section class="exact-challenge-card" id="saved">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin:0;">Saved Configurations</h3>
+            <button class="btn-secondary" id="btn-save-state" style="padding: 4px 10px; font-size: 12px;">+ Save Current</button>
+          </div>
+          <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">
+            Bookmark eccentricity setting e, locus point P, and conic classification.
+          </p>
+          <div id="saved-list" style="margin-top: 6px; display: flex; flex-direction: column; gap: 8px;">
+            <div style="font-size: 12px; color: var(--text-muted); font-style: italic;" id="saved-empty-msg">
+              No saved configurations yet. Click "+ Save Current" to bookmark state.
+            </div>
+          </div>
+        </section>
     </main>
   </div>
 
@@ -2848,6 +2866,154 @@
     renderAccordionStates();
     updateViewportDimensions();
     render();
-  </script>
+  
+    // --- 8. Sidebar Navigation & Active State Controller ---
+    let isManualNavigating = false;
+    let manualNavTimeout = null;
+
+    function updateActiveNavItem(targetId) {
+      const validTargets = ['explore', 'proofs', 'practice', 'saved'];
+      if (!targetId || !validTargets.includes(targetId)) return;
+
+      document.querySelectorAll('.nav-list .nav-item').forEach(item => {
+        if (item.getAttribute('data-nav') === targetId) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+    }
+
+    function navigateToSection(targetId) {
+      if (!targetId) return;
+
+      isManualNavigating = true;
+      if (manualNavTimeout) clearTimeout(manualNavTimeout);
+
+      if (targetId === 'proofs') {
+        openSections.verification = true;
+        renderAccordionStates();
+      }
+
+      updateActiveNavItem(targetId);
+
+      const targetEl = document.getElementById(targetId);
+      if (targetEl) {
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      manualNavTimeout = setTimeout(() => {
+        isManualNavigating = false;
+      }, 800);
+    }
+
+    document.querySelectorAll('.nav-list button[data-target]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = btn.getAttribute('data-target');
+        navigateToSection(targetId);
+      });
+    });
+
+    // IntersectionObserver for active section highlight (ONLY observe main page sections: explore, proofs, practice)
+    const pageSectionIds = ['explore', 'proofs', 'practice'];
+    const sectionObserver = new IntersectionObserver((entries) => {
+      if (isManualNavigating) return;
+
+      let bestEntry = null;
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          if (!bestEntry || entry.intersectionRatio > bestEntry.intersectionRatio) {
+            bestEntry = entry;
+          }
+        }
+      });
+
+      if (bestEntry && bestEntry.target && pageSectionIds.includes(bestEntry.target.id)) {
+        updateActiveNavItem(bestEntry.target.id);
+      }
+    }, {
+      threshold: [0.15, 0.4, 0.7]
+    });
+
+    pageSectionIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) sectionObserver.observe(el);
+    });
+
+    // Saved Configurations State Handler
+    let savedStates = [];
+    try {
+      savedStates = JSON.parse(localStorage.getItem('eccentricity_saved_states') || '[]');
+    } catch (err) {
+      savedStates = [];
+    }
+
+    function renderSavedList() {
+      const listEl = document.getElementById('saved-list');
+      if (!listEl) return;
+      if (savedStates.length === 0) {
+        listEl.innerHTML = '<div style="font-size: 12px; color: var(--text-muted); font-style: italic;">No saved configurations yet. Click "+ Save Current" to bookmark state.</div>';
+        return;
+      }
+      listEl.innerHTML = savedStates.map((item, idx) => `
+        <div style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border: 1px solid var(--border); padding: 8px 12px; border-radius: 6px;">
+          <div>
+            <strong>e = ${item.e.toFixed(2)} (${item.conicType})</strong> &nbsp;|&nbsp;
+            <span style="color: var(--accent-green); font-weight: 600;">PF/PD = ${item.ratio.toFixed(3)}</span>
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn-secondary" style="padding: 2px 8px; font-size: 11px;" onclick="loadSavedState(${idx})">Load</button>
+            <button class="btn-secondary" style="padding: 2px 8px; font-size: 11px; color: #ef4444;" onclick="deleteSavedState(${idx})">Delete</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('btn-save-state')?.addEventListener('click', () => {
+      const geom = MathEngine.getConicGeometry(state.eccentricity);
+      let P = { x: 0, y: 0 };
+      if (geom.type === 'Hyperbola') {
+        P = geom.pointFromParam(state.paramT, state.branch);
+      } else {
+        P = geom.pointFromParam(state.paramT);
+      }
+      const pf = MathEngine.calculatePF(P.x, P.y, geom.focus);
+      const pd = MathEngine.calculatePD(P.x, geom.directrixX);
+      const ratio = pd > 0 ? pf / pd : 0;
+      const conic = MathEngine.classifyConic(state.eccentricity);
+
+      savedStates.push({
+        e: state.eccentricity,
+        conicType: conic.type,
+        ratio: ratio,
+        time: new Date().toLocaleTimeString()
+      });
+      try {
+        localStorage.setItem('eccentricity_saved_states', JSON.stringify(savedStates));
+      } catch (e) {}
+      renderSavedList();
+    });
+
+    window.loadSavedState = function(idx) {
+      const item = savedStates[idx];
+      if (!item) return;
+      state.eccentricity = item.e;
+      if (elements.sliderEccentricity) elements.sliderEccentricity.value = item.e;
+      if (elements.inputTargetE) elements.inputTargetE.value = item.e.toFixed(2);
+      render();
+      navigateToSection('explore');
+    };
+
+    window.deleteSavedState = function(idx) {
+      savedStates.splice(idx, 1);
+      try {
+        localStorage.setItem('eccentricity_saved_states', JSON.stringify(savedStates));
+      } catch (e) {}
+      renderSavedList();
+    };
+
+    renderSavedList();
+</script>
 </body>
 </html>

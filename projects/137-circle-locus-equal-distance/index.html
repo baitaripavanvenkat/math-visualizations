@@ -3,361 +3,1952 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maths Universe — Circle as Equal Distance from Center</title>
-    <link rel="stylesheet" href="styles.css">
-    <!-- Font Awesome / Icons -->
+    <title>Circle as Equal Distance from Center — Maths Universe</title>
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+/* =========================================================
+   MATHS UNIVERSE — APPLICATION SHELL & CIRCLE PROOF STYLES
+   ========================================================= */
+
+:root {
+    --bg-main: #f5f7fc;
+    --card-bg: #ffffff;
+    --border-color: #e2e8f0;
+    --border-hover: #cbd5e1;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    
+    --primary: #4f46e5;
+    --primary-light: #eeeffe;
+    --primary-hover: #4338ca;
+    --primary-dark: #3730a3;
+    
+    --purple: #8b5cf6;
+    --purple-light: #f3e8ff;
+    --green: #10b981;
+    --green-light: #d1fae5;
+    --blue: #3b82f6;
+    --blue-light: #dbeafe;
+    --pink: #ec4899;
+    --pink-light: #fce7f3;
+    --orange: #f59e0b;
+    --orange-light: #fef3c7;
+    --red: #ef4444;
+    --red-light: #fee2e2;
+
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-full: 9999px;
+
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    line-height: 1.5;
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+}
+
+.app-shell {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* =========================================================
+   1. LEFT SLIM NAVIGATION SIDEBAR (Matching Reference Image)
+   ========================================================= */
+
+.app-sidebar {
+    width: 82px;
+    background: var(--card-bg);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    z-index: 50;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.nav-item-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 10px 6px;
+    width: 66px;
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
+}
+
+.nav-item-btn i, .nav-item-btn svg {
+    font-size: 20px;
+    color: var(--text-secondary);
+}
+
+.nav-item-btn:hover {
+    background: #f1f5f9;
+    color: var(--primary);
+}
+
+.nav-item-btn:hover i, .nav-item-btn:hover svg {
+    color: var(--primary);
+}
+
+.nav-item-btn.active {
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+.nav-item-btn.active i, .nav-item-btn.active svg {
+    color: var(--primary);
+}
+
+.sidebar-bottom {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+}
+
+/* =========================================================
+   2. MAIN WORKSPACE CONTENT AREA
+   ========================================================= */
+
+.app-main-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 28px;
+    gap: 20px;
+    min-width: 0;
+    max-width: 1600px;
+}
+
+/* Top Header Bar */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.header-brand-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.brand-logo-img {
+    height: 42px;
+    width: auto;
+    object-fit: contain;
+}
+
+.breadcrumbs {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.breadcrumbs a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+}
+
+.page-subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.badge {
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.badge-difficulty {
+    background-color: var(--primary-light);
+    color: var(--primary);
+}
+
+.badge-duration {
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+.btn-new-proof {
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    color: var(--primary);
+    padding: 8px 16px;
+    border-radius: var(--radius-full);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-new-proof:hover {
+    background-color: var(--primary-light);
+    border-color: var(--primary-light);
+}
+
+/* Cards */
+.card {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    padding: 20px;
+}
+
+/* =========================================================
+   3. WORKSPACE THREE-COLUMN GRID
+   ========================================================= */
+
+.workspace-grid {
+    display: grid;
+    grid-template-columns: 290px 1fr 340px;
+    gap: 20px;
+    align-items: start;
+}
+
+/* Left Control Panel */
+.controls-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.control-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border-color);
+    gap: 16px;
+    padding-bottom: 8px;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 4px 0;
+    position: relative;
+}
+
+.tab-btn.active {
+    color: var(--primary);
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -9px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--primary);
+    border-radius: 2px;
+}
+
+.object-block {
+    background: #f8fafc;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.object-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.object-title-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dot-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot-center { background: var(--purple); }
+.dot-point { background: var(--blue); }
+.dot-radius { background: var(--green); }
+.dot-directrix { background: var(--pink); }
+
+.drag-icon {
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.input-row input[type="number"] {
+    width: 65px;
+    padding: 6px 8px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 13px;
+    background: #ffffff;
+    color: var(--text-primary);
+    outline: none;
+}
+
+.input-row input[type="number"]:focus {
+    border-color: var(--primary);
+}
+
+.input-row input[type="range"] {
+    flex: 1;
+    accent-color: var(--primary);
+}
+
+.show-hide-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.show-hide-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    accent-color: var(--primary);
+    width: 14px;
+    height: 14px;
+}
+
+.btn-reset-view {
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 4px;
+}
+
+.btn-reset-view:hover {
+    text-decoration: underline;
+}
+
+/* Center Canvas Viewport */
+.canvas-card {
+    position: relative;
+    height: 600px;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.canvas-viewport {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #fcfcfd;
+}
+
+/* Floating Overlays on Canvas */
+.canvas-overlay-eq {
+    position: absolute;
+    top: 16px;
+    right: 200px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid var(--primary-light);
+    padding: 10px 16px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    z-index: 10;
+    font-size: 13px;
+    text-align: center;
+}
+
+.eq-gen { font-weight: 800; color: var(--primary-dark); }
+.eq-num { font-weight: 700; color: var(--text-secondary); margin-top: 2px; }
+
+.canvas-overlay-legend {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid var(--border-color);
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    z-index: 10;
+    font-size: 11px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.legend-line {
+    width: 16px;
+    height: 2px;
+    display: inline-block;
+}
+
+.legend-circle { border-top: 2px dashed var(--primary); }
+.legend-directrix-line { border-top: 2px dashed var(--pink); }
+.legend-radius-line { border-top: 2px solid var(--green); }
+
+/* Floating Distance & Directrix Badges */
+.floating-badge {
+    position: absolute;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    font-size: 12px;
+    font-weight: 700;
+    z-index: 10;
+}
+
+.badge-center-dist { color: var(--text-primary); }
+.badge-directrix-dist { color: var(--blue); }
+
+.floating-directrix-header {
+    position: absolute;
+    top: 60px;
+    left: 140px;
+    background: var(--pink-light);
+    border: 1px solid var(--pink);
+    color: #be185d;
+    padding: 4px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 700;
+    z-index: 10;
+}
+
+/* Floating Bottom Toolbar */
+.canvas-toolbar {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 10;
+}
+
+.btn-tb {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 14px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+}
+
+.btn-tb:hover {
+    background: #f1f5f9;
+    color: var(--primary);
+}
+
+.zoom-text {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-primary);
+    min-width: 42px;
+    text-align: center;
+}
+
+/* Right Educational Panel */
+.why-card-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.why-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary);
+    font-size: 15px;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.step-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.step-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    font-size: 12px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.step-body h4 {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.step-body p {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.45;
+}
+
+/* Predict & Check Card */
+.predict-card-box {
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.predict-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary);
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.predict-formula-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f8fafc;
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.predict-status-tag {
+    padding: 8px 12px;
+    border-radius: var(--radius-md);
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--green-light);
+    color: #065f46;
+}
+
+.btn-reveal-proof {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.2s;
+}
+
+.btn-reveal-proof:hover {
+    background: var(--primary-hover);
+}
+
+/* Bottom Grid Section */
+.bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.proof-card-bottom {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.proof-content-area {
+    flex: 1;
+}
+
+.proof-content-area h3 {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.proof-math-box {
+    background: #f8fafc;
+    border-left: 3px solid var(--primary);
+    padding: 10px 14px;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    margin: 8px 0;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.proof-mini-diagram {
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+}
+
+/* Challenge Card Bottom */
+.challenge-card-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.challenge-card-bottom h3 {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.challenge-input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-check-challenge {
+    background: var(--primary-light);
+    color: var(--primary);
+    border: 1px solid var(--border-purple);
+    padding: 8px 18px;
+    border-radius: var(--radius-full);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-check-challenge:hover {
+    background: #e0e7ff;
+}
+
+/* Footer Mission Bar */
+.footer-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    background: #ffffff;
+    border-top: 1px solid var(--border-color);
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.mission-text {
+    font-weight: 600;
+    color: var(--primary);
+}
+
+/* Responsive Queries */
+@media (max-width: 1200px) {
+    .workspace-grid {
+        grid-template-columns: 270px 1fr;
+    }
+    .why-card-stack {
+        grid-column: span 2;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+    .bottom-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 900px) {
+    .app-shell {
+        flex-direction: column;
+    }
+    .app-sidebar {
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        padding: 10px 16px;
+        position: relative;
+        justify-content: space-between;
+    }
+    .sidebar-nav {
+        flex-direction: row;
+        margin-top: 0;
+        gap: 8px;
+    }
+    .nav-item-btn {
+        width: auto;
+        padding: 6px 10px;
+    }
+    .workspace-grid {
+        grid-template-columns: 1fr;
+    }
+    .why-card-stack {
+        grid-column: span 1;
+        grid-template-columns: 1fr;
+    }
+}
+    </style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Top Header Navigation -->
+
+<div class="app-shell">
+
+    <!-- 1. LEFT SLIM NAVIGATION SIDEBAR -->
+    <aside class="app-sidebar">
+        <a href="../../index.html" title="Return to Visualizations Catalog">
+            <img src="../../assets/logo.png" alt="Maths Universe Logo" class="brand-logo-img">
+        </a>
+
+        <nav class="sidebar-nav">
+            <a href="#explore" class="nav-item-btn active" data-tab="explore">
+                <i class="fa-solid fa-compass"></i>
+                <span>Explore</span>
+            </a>
+            <a href="#proofs" class="nav-item-btn" data-tab="proofs">
+                <i class="fa-regular fa-lightbulb"></i>
+                <span>Proofs</span>
+            </a>
+            <a href="#practice" class="nav-item-btn" data-tab="practice">
+                <i class="fa-solid fa-pen-ruler"></i>
+                <span>Practice</span>
+            </a>
+            <a href="#saved" class="nav-item-btn" data-tab="saved">
+                <i class="fa-regular fa-bookmark"></i>
+                <span>Saved</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="#settings" class="nav-item-btn">
+                <i class="fa-solid fa-gear"></i>
+                <span>Settings</span>
+            </a>
+            <button class="nav-item-btn" style="background:none; border:none; cursor:pointer;">
+                <i class="fa-solid fa-angles-left"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- 2. MAIN WORKSPACE AREA -->
+    <main class="app-main-area">
+
+        <!-- Header Section -->
         <header class="main-header">
-            <div class="header-left">
-                <div class="logo">
-                    <i class="fa-solid fa-compass-drafting logo-icon"></i>
-                    <div class="logo-text">
-                        <span class="brand">MATHS</span>
-                        <span class="subbrand">UNIVERSE</span>
-                    </div>
-                </div>
+            <div>
                 <div class="breadcrumbs">
-                    <span>Visual Proofs</span> / <span>Coordinate Geometry</span>
-                    <h1 class="page-title">Circle as Equal Distance from Center</h1>
-                    <p class="page-subtitle">Every point on a circle is the exact same distance from its center.</p>
+                    <a href="../../index.html">Visual Proofs</a> / Coordinate Geometry
                 </div>
+                <h1 class="page-title">Circle as Equal Distance from Center</h1>
+                <p class="page-subtitle">Every point on a circle is the same distance from its center.</p>
             </div>
-            <div class="header-right">
-                <span class="badge difficulty-intermediate"><i class="fa-solid fa-signal"></i> Intermediate</span>
-                <span class="badge duration-badge"><i class="fa-regular fa-clock"></i> 12 min</span>
-                <button class="btn btn-secondary" id="btnNewProof"><i class="fa-solid fa-wand-magic-sparkles"></i> Reset Sandbox</button>
+
+            <div class="header-actions">
+                <span class="badge badge-difficulty"><i class="fa-solid fa-signal"></i> Intermediate</span>
+                <span class="badge badge-duration"><i class="fa-regular fa-clock"></i> 12 min</span>
+                <button class="btn-new-proof" id="btnNewProof">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> New proof
+                </button>
             </div>
         </header>
 
-        <!-- Main Workspace Grid -->
+        <!-- Three-Column Main Workspace Grid -->
         <div class="workspace-grid">
-            
-            <!-- Left Sidebar Controls -->
-            <aside class="sidebar-left card">
-                <div class="sidebar-tabs">
-                    <button class="tab-btn active" data-tab="objects"><i class="fa-solid fa-shapes"></i> Objects</button>
-                    <button class="tab-btn" data-tab="view"><i class="fa-solid fa-eye"></i> View</button>
+
+            <!-- Left Controls Card -->
+            <div class="card controls-card">
+                <div class="control-tabs">
+                    <button class="tab-btn active" data-panel="objects">Objects</button>
+                    <button class="tab-btn" data-panel="tools">Tools</button>
+                    <button class="tab-btn" data-panel="view">View</button>
                 </div>
 
-                <div class="tab-content" id="tab-objects">
-                    <!-- Mode Switch Bar -->
-                    <div class="mode-switch-container">
-                        <div class="mode-switch">
-                            <button class="mode-btn active" id="modeTestBtn" data-mode="test">
-                                <i class="fa-solid fa-location-crosshairs"></i> Test Any Point
-                            </button>
-                            <button class="mode-btn" id="modeLocusBtn" data-mode="locus">
-                                <i class="fa-solid fa-circle-dot"></i> Point on Circle
-                            </button>
+                <!-- Control Blocks -->
+                <div class="object-block">
+                    <div class="object-header">
+                        <div class="object-title-group">
+                            <span class="dot-indicator dot-center"></span>
+                            <span>Center (C(h, k))</span>
                         </div>
+                        <i class="fa-solid fa-grip-vertical drag-icon"></i>
                     </div>
-
-                    <!-- Center C(h,k) Section -->
-                    <div class="control-group">
-                        <div class="group-header">
-                            <span class="color-dot dot-purple"></span>
-                            <label>Center C(h, k)</label>
-                        </div>
-                        <div class="input-row dual-inputs">
-                            <div class="input-field">
-                                <span>h</span>
-                                <input type="number" id="inputH" step="0.5" value="1">
-                            </div>
-                            <div class="input-field">
-                                <span>k</span>
-                                <input type="number" id="inputK" step="0.5" value="-1">
-                            </div>
-                        </div>
+                    <div class="input-row">
+                        <span>h</span>
+                        <input type="number" id="inputH" value="1" step="0.5">
+                        <span>k</span>
+                        <input type="number" id="inputK" value="-1" step="0.5">
                     </div>
-
-                    <!-- Radius r Section -->
-                    <div class="control-group">
-                        <div class="group-header">
-                            <span class="color-dot dot-green"></span>
-                            <label>Radius r</label>
-                        </div>
-                        <div class="input-row flex-row">
-                            <div class="input-field radius-input">
-                                <span>r</span>
-                                <input type="number" id="inputR" min="0.1" max="15" step="0.1" value="4.12">
-                            </div>
-                            <input type="range" id="sliderR" min="0.1" max="15" step="0.05" value="4.12" class="range-slider">
-                        </div>
-                    </div>
-
-                    <!-- Test Point P(x,y) Section -->
-                    <div class="control-group">
-                        <div class="group-header">
-                            <span class="color-dot dot-blue"></span>
-                            <label>Test Point P(x, y)</label>
-                        </div>
-                        <div class="input-row dual-inputs">
-                            <div class="input-field">
-                                <span>x</span>
-                                <input type="number" id="inputPX" step="0.1" value="3.91">
-                            </div>
-                            <div class="input-field">
-                                <span>y</span>
-                                <input type="number" id="inputPY" step="0.1" value="1.91">
-                            </div>
-                        </div>
-                        <div class="action-buttons-row">
-                            <button class="btn btn-sm btn-outline" id="btnSnapP">
-                                <i class="fa-solid fa-magnet"></i> Snap P to Circle
-                            </button>
-                            <button class="btn btn-sm btn-outline" id="btnRandomP">
-                                <i class="fa-solid fa-dice"></i> Random Point
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Plot & Random Circle Section -->
-                    <div class="control-group highlight-group">
-                        <div class="group-header">
-                            <label><i class="fa-solid fa-compass"></i> Create Your Circle</label>
-                        </div>
-                        <div class="action-buttons-row">
-                            <button class="btn btn-primary" id="btnPlotCircle">
-                                <i class="fa-solid fa-draw-polygon"></i> Plot Circle
-                            </button>
-                            <button class="btn btn-secondary" id="btnRandomCircle">
-                                <i class="fa-solid fa-shuffle"></i> Random Circle
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Optional Directrix Section -->
-                    <div class="control-group optional-group">
-                        <div class="group-header">
-                            <span class="color-dot dot-pink"></span>
-                            <label>Directrix x = a</label>
-                            <input type="checkbox" id="chkShowDirectrix" class="toggle-checkbox">
-                        </div>
-                        <div class="input-row input-single" id="directrixInputRow" style="display: none;">
-                            <div class="input-field">
-                                <span>a</span>
-                                <input type="number" id="inputDirectrixA" step="0.5" value="-5">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Show / Hide Toggles -->
                 </div>
 
-                <div class="tab-content" id="tab-view" hidden>
-                    <div class="control-group">
-                        <label class="section-subtitle">Show / Hide</label>
-                        <div class="checkbox-grid">
-                            <label class="checkbox-item"><input type="checkbox" id="chkDistances" checked> Distances</label>
-                            <label class="checkbox-item"><input type="checkbox" id="chkEquation" checked> Equation</label>
-                            <label class="checkbox-item"><input type="checkbox" id="chkGrid" checked> Grid</label>
-                            <label class="checkbox-item"><input type="checkbox" id="chkInequalityRegions"> Inequality Regions</label>
+                <div class="object-block">
+                    <div class="object-header">
+                        <div class="object-title-group">
+                            <span class="dot-indicator dot-point"></span>
+                            <span>Point on Locus (P(x,y))</span>
                         </div>
+                        <i class="fa-solid fa-hand-pointer drag-icon"></i>
                     </div>
-
-                    <div class="control-group">
-                        <div class="group-header">
-                            <i class="fa-solid fa-arrows-to-circle"></i>
-                            <label>Canvas View</label>
-                        </div>
-                        <p class="view-help">Use the graph controls to zoom, fit the circle, or drag the canvas to pan.</p>
+                    <div class="input-row">
+                        <span>x</span>
+                        <input type="number" id="inputPX" value="4.2" step="0.1">
+                        <span>y</span>
+                        <input type="number" id="inputPY" value="2.6" step="0.1">
                     </div>
-
-                    <button class="btn btn-text" id="btnResetView">
-                        <i class="fa-solid fa-rotate-left"></i> Reset view & coordinates
-                    </button>
                 </div>
-            </aside>
 
-            <!-- Center Interactive Canvas View -->
-            <main class="main-canvas-area card">
-                <!-- SVG Canvas Container -->
-                <div class="canvas-wrapper" id="canvasWrapper">
+                <div class="object-block">
+                    <div class="object-header">
+                        <div class="object-title-group">
+                            <span class="dot-indicator dot-radius"></span>
+                            <span>Radius (r)</span>
+                        </div>
+                    </div>
+                    <div class="input-row">
+                        <span>r</span>
+                        <input type="number" id="inputR" value="4.12" step="0.1" min="0.5">
+                        <input type="range" id="sliderR" value="4.12" step="0.1" min="0.5" max="10">
+                    </div>
+                </div>
+
+                <div class="object-block">
+                    <div class="object-header">
+                        <div class="object-title-group">
+                            <span class="dot-indicator dot-directrix"></span>
+                            <span>Directrix (x = a)</span>
+                        </div>
+                    </div>
+                    <div class="input-row">
+                        <span>a</span>
+                        <input type="number" id="inputDirectrixA" value="-5" step="0.5">
+                    </div>
+                </div>
+
+                <!-- Show/Hide Toggles -->
+                <div class="show-hide-section">
+                    <span class="show-hide-title">Show / Hide</span>
+                    <div class="checkbox-grid">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="chkDistances" checked> Distances
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="chkEquation" checked> Equation
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="chkGrid" checked> Grid
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="chkInequalityRegions"> Inequality Regions
+                        </label>
+                    </div>
+                </div>
+
+                <button class="btn-reset-view" id="btnResetView">
+                    <i class="fa-solid fa-rotate-left"></i> Reset view
+                </button>
+            </div>
+
+            <!-- Center Interactive SVG Canvas -->
+            <main class="card canvas-card">
+                <div class="canvas-viewport" id="canvasWrapper">
                     <svg id="geoCanvas" width="100%" height="100%"></svg>
-                    
-                    <!-- Floating Graph Badges / Overlay Info -->
-                    <div class="graph-overlay-equation" id="graphEquationBadge">
-                        <div class="eq-general">(x - h)&sup2; + (y - k)&sup2; = r&sup2;</div>
-                        <div class="eq-numeric" id="graphNumericEq">(x - 1)&sup2; + (y + 1)&sup2; = 16.97</div>
+
+                    <!-- Floating Equation Badge Overlay -->
+                    <div class="canvas-overlay-eq" id="graphEquationBadge">
+                        <div class="eq-gen">(x - h)&sup2; + (y - k)&sup2; = r&sup2;</div>
+                        <div class="eq-num" id="graphNumericEq">(x - 1)&sup2; + (y + 1)&sup2; = 4.12&sup2;</div>
                     </div>
 
-                    <!-- Floating Distance Badges -->
-                    <div class="floating-badge badge-cp" id="badgeCP">
-                        <span class="badge-label">Distance to center</span>
-                        <span class="badge-value" id="badgeCPValue">CP = 4.12</span>
+                    <!-- Floating Legend Overlay -->
+                    <div class="canvas-overlay-legend">
+                        <div class="legend-item"><span class="legend-line legend-circle"></span> Locus (Circle)</div>
+                        <div class="legend-item"><span class="dot-indicator dot-center"></span> Center</div>
+                        <div class="legend-item"><span class="dot-indicator dot-point"></span> Point P</div>
+                        <div class="legend-item legend-directrix-item" style="display:none;"><span class="legend-line legend-directrix-line"></span> Directrix</div>
+                        <div class="legend-item"><span class="legend-line legend-radius-line"></span> Radius</div>
                     </div>
 
-                    <div class="floating-badge badge-directrix" id="badgeDirectrix" style="display: none;">
-                        <span class="badge-label">Distance to directrix</span>
-                        <span class="badge-value" id="badgeDirectrixValue">|x - a| = 9.20</span>
+                    <!-- Distance Badges on Graph -->
+                    <div class="floating-badge badge-center-dist" id="badgeCP" style="top: 240px; right: 80px;">
+                        <span id="badgeCPValue">CP = 4.12</span>
                     </div>
 
-                    <!-- Real-Time Classification Banner -->
-                    <div class="classification-banner" id="classBanner">
-                        <i class="fa-solid fa-circle-info" id="classIcon"></i>
-                        <span id="classMessage">P is on the circle — CP = r</span>
+                    <div class="floating-badge badge-directrix-dist" id="badgeDirectrix" style="top: 220px; left: 130px; display: none;">
+                        <span id="badgeDirectrixValue">|x - a| = 9.20</span>
                     </div>
 
-                    <!-- Canvas Navigation & Zoom Controls -->
-                    <div class="canvas-controls">
-                        <button class="btn-canvas-ctrl" id="btnPanReset" title="Reset View"><i class="fa-solid fa-rotate-left"></i></button>
-                        <button class="btn-canvas-ctrl" id="btnZoomOut" title="Zoom Out"><i class="fa-solid fa-minus"></i></button>
-                        <span class="zoom-level" id="zoomLevelText">100%</span>
-                        <button class="btn-canvas-ctrl" id="btnZoomIn" title="Zoom In"><i class="fa-solid fa-plus"></i></button>
-                        <button class="btn-canvas-ctrl" id="btnFitCircle" title="Fit Circle"><i class="fa-solid fa-expand"></i></button>
+                    <div class="floating-directrix-header" id="directrixHeaderTag" style="display: none;">
+                        Directrix x = -5
                     </div>
 
-                    <!-- Legend Overlay -->
-                    <div class="graph-legend">
-                        <div class="legend-item"><span class="legend-symbol line-circle"></span> Locus (Circle)</div>
-                        <div class="legend-item"><span class="legend-symbol dot-center"></span> Center C</div>
-                        <div class="legend-item"><span class="legend-symbol dot-point"></span> Point P</div>
-                        <div class="legend-item legend-directrix-item" style="display: none;"><span class="legend-symbol line-directrix"></span> Directrix</div>
-                        <div class="legend-item"><span class="legend-symbol line-radius"></span> Radius</div>
+                    <!-- Floating Bottom View Toolbar -->
+                    <div class="canvas-toolbar">
+                        <button class="btn-tb" id="btnPanReset" title="Reset View"><i class="fa-solid fa-rotate-left"></i></button>
+                        <button class="btn-tb" id="btnPanMode" title="Pan Mode"><i class="fa-regular fa-hand"></i></button>
+                        <button class="btn-tb" id="btnZoomOut" title="Zoom Out"><i class="fa-solid fa-minus"></i></button>
+                        <span class="zoom-text" id="zoomLevelText">100%</span>
+                        <button class="btn-tb" id="btnZoomIn" title="Zoom In"><i class="fa-solid fa-plus"></i></button>
+                        <button class="btn-tb" id="btnFitCircle" title="Fit View"><i class="fa-solid fa-expand"></i></button>
                     </div>
                 </div>
             </main>
 
-            <!-- Right Sidebar: Why it works & Predict/Check & Challenge -->
-            <aside class="sidebar-right">
-                
-                <!-- Section 1: Why it works -->
-                <div class="card panel-card">
-                    <div class="card-title"><i class="fa-solid fa-lightbulb"></i> Why it works</div>
-                    <ol class="steps-list">
-                        <li>
-                            <span class="step-num">1</span>
-                            <div class="step-content">
-                                <strong>Locus definition</strong>
-                                <p>A circle is the set of all points P such that the distance from P to the center C is constant radius r.</p>
-                            </div>
-                        </li>
-                        <li>
-                            <span class="step-num">2</span>
-                            <div class="step-content">
-                                <strong>Equal distance</strong>
-                                <p>As P moves along the circle, CP stays equal to r. All such points form the circle.</p>
-                            </div>
-                        </li>
-                        <li>
-                            <span class="step-num">3</span>
-                            <div class="step-content">
-                                <strong>Equation obtained</strong>
-                                <p>Using distance formula: &radic;((x-h)&sup2; + (y-k)&sup2;) = r &rArr; (x-h)&sup2; + (y-k)&sup2; = r&sup2;</p>
-                            </div>
-                        </li>
-                    </ol>
-                </div>
-
-                <!-- Section 2: Predict & Check -->
-                <div class="card panel-card">
-                    <div class="card-title">
-                        <i class="fa-solid fa-calculator"></i> Predict & Check
+            <!-- Right Educational Panel -->
+            <div class="why-card-stack">
+                <!-- Why it works card -->
+                <div class="card">
+                    <div class="why-header">
+                        <i class="fa-solid fa-shapes"></i>
+                        <span>Why it works</span>
                     </div>
-                    <p class="card-subtitle">Enter or drag any point P. If it satisfies the equation, it lies on the circle.</p>
-                    
-                    <div class="predict-box">
-                        <div class="predict-point-display">
-                            P(x, y) = ( 
-                            <input type="number" id="predictX" step="0.1" value="3.91" class="inline-input"> 
-                            , 
-                            <input type="number" id="predictY" step="0.1" value="1.91" class="inline-input"> 
-                            )
-                        </div>
-                        <div class="predict-eval-row">
-                            <div class="eval-column">
-                                <span class="eval-label">Left side: (x-h)&sup2; + (y-k)&sup2;</span>
-                                <div class="eval-box" id="predictLeftVal">16.97</div>
-                            </div>
-                            <div class="eval-vs">?</div>
-                            <div class="eval-column">
-                                <span class="eval-label">Right side: r&sup2;</span>
-                                <div class="eval-box" id="predictRightVal">16.97</div>
-                            </div>
-                        </div>
 
-                        <div class="predict-result-badge" id="predictResultBadge">
-                            <i class="fa-solid fa-check" id="predictIcon"></i> <span id="predictResultText">Equal! Point is on the circle.</span>
+                    <div class="step-item">
+                        <div class="step-num">1</div>
+                        <div class="step-body">
+                            <h4>Locus definition</h4>
+                            <p>A circle is the set of all points P such that the distance from P to the center C is r.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-num">2</div>
+                        <div class="step-body">
+                            <h4>Equal distance</h4>
+                            <p>As P moves, CP stays equal to r. All such points form a circle.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-num">3</div>
+                        <div class="step-body">
+                            <h4>Equation obtained</h4>
+                            <p>Using the distance formula:<br><strong>(x - h)&sup2; + (y - k)&sup2; = r&sup2;</strong></p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Section 3: Exact Challenge Generator -->
-                <div class="card panel-card challenge-card">
-                    <div class="card-title">
-                        <i class="fa-solid fa-bullseye"></i> Your Exact Challenge
+                <!-- Predict & Check Card -->
+                <div class="predict-card-box">
+                    <div class="predict-header">
+                        <i class="fa-solid fa-calculator"></i>
+                        <span>Predict & Check</span>
                     </div>
-                    <div class="challenge-body" id="challengeBody">
-                        <p class="challenge-prompt" id="challengePrompt">
-                            Place or enter a point P that lies <strong>ON</strong> the circle with center C(2,-3) and radius r = 5.
-                        </p>
-                        <div class="challenge-input-row">
-                            <span>Your P(x, y) = (</span>
-                            <input type="number" id="challengeX" step="0.1" placeholder="x" class="inline-input">
-                            <span>,</span>
-                            <input type="number" id="challengeY" step="0.1" placeholder="y" class="inline-input">
-                            <span>)</span>
-                        </div>
-                        <div class="challenge-actions">
-                            <button class="btn btn-primary btn-sm" id="btnCheckChallenge">
-                                <i class="fa-solid fa-circle-check"></i> Check Solution
-                            </button>
-                            <button class="btn btn-outline btn-sm" id="btnNewChallenge">
-                                <i class="fa-solid fa-dice"></i> New Challenge
-                            </button>
-                        </div>
-                        <div class="challenge-feedback" id="challengeFeedback" style="display: none;"></div>
-                    </div>
-                </div>
 
-            </aside>
+                    <p style="font-size:12px; color:var(--text-secondary);">Enter any point P. If it satisfies the equation, it lies on the circle.</p>
+
+                    <div class="input-row">
+                        <span>P(x, y) = (</span>
+                        <input type="number" id="predictX" value="4.2" step="0.1" style="width:60px;">
+                        <span>,</span>
+                        <input type="number" id="predictY" value="2.6" step="0.1" style="width:60px;">
+                        <span>)</span>
+                    </div>
+
+                    <div class="predict-formula-row">
+                        <div>Left side: <span id="predictLeftVal" style="color:var(--green);">16.97</span></div>
+                        <div style="color:var(--text-muted);">?</div>
+                        <div>Right side: <span id="predictRightVal" style="color:var(--green);">16.97</span></div>
+                    </div>
+
+                    <div class="predict-status-tag" id="predictResultBadge">
+                        <i class="fa-solid fa-check" id="predictIcon"></i>
+                        <span id="predictResultText">Equal! Point is on the circle.</span>
+                    </div>
+
+                    <button class="btn-reveal-proof" id="btnRevealProof">
+                        <i class="fa-regular fa-eye"></i> Reveal proof
+                    </button>
+                </div>
+            </div>
         </div>
 
-        <!-- Bottom Visual Proof & Derivation Section -->
-        <footer class="bottom-proof-bar card">
-            <div class="proof-header">
-                <i class="fa-solid fa-graduation-cap proof-icon"></i>
-                <div class="proof-title-area">
-                    <h3>Visual Proof & Distance Derivation</h3>
-                    <p>Let P(x,y) be any point on the coordinate plane. The distance to center C(h,k) is compared to radius r:</p>
-                </div>
-            </div>
-            <div class="proof-steps-flex">
-                <div class="proof-step-box">
-                    <span class="proof-step-label">Distance Formula</span>
-                    <div class="proof-math" id="proofMathDistance">
-                        CP = &radic;((x - h)&sup2; + (y - k)&sup2;) = &radic;((3.91 - 1)&sup2; + (1.91 - (-1))&sup2;) = 4.12
+        <!-- Bottom Cards Grid (Visual Proof & Challenge) -->
+        <div class="bottom-grid">
+            <!-- Visual Proof Card -->
+            <div class="card proof-card-bottom" id="proofs">
+                <div class="proof-content-area">
+                    <h3><i class="fa-solid fa-graduation-cap" style="color:var(--primary);"></i> Visual Proof</h3>
+                    <p style="font-size:12px; color:var(--text-secondary); margin-bottom:6px;">Let P(x, y) be any point on the circle with center C(h, k) and radius r.</p>
+                    
+                    <div class="proof-math-box" id="proofMathDistance">
+                        Distance CP = &radic;((x - h)&sup2; + (y - k)&sup2;) = r &rarr; (x - h)&sup2; + (y - k)&sup2; = r&sup2; &nbsp;&check;
                     </div>
+                    
+                    <p style="font-size:12px; color:var(--text-primary); font-weight:600;">Thus, the locus of P is a circle.</p>
                 </div>
-                <div class="proof-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                <div class="proof-step-box">
-                    <span class="proof-step-label">Compare with r</span>
-                    <div class="proof-math" id="proofMathCompare">
-                        CP = 4.12 &nbsp; vs &nbsp; r = 4.12 &rArr; <strong>CP = r</strong>
-                    </div>
-                </div>
-                <div class="proof-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                <div class="proof-step-box highlight-step">
-                    <span class="proof-step-label">Locus Equation</span>
-                    <div class="proof-math" id="proofMathEquation">
-                        (x - 1)&sup2; + (y + 1)&sup2; = 4.12&sup2; = 16.97
-                    </div>
-                    <span class="proof-badge" id="proofStatusBadge"><i class="fa-solid fa-circle-check"></i> Point on locus</span>
-                </div>
-            </div>
-            
-            <div class="footer-mission">
-                <span><i class="fa-solid fa-rocket"></i> Mission: See the structure. Trust the logic. Build the truth.</span>
-                <span class="footer-credit">Maths Universe &mdash; Visual Proofs</span>
-            </div>
-        </footer>
-    </div>
 
-    <!-- Application Script -->
-    <script src="app.js"></script>
+                <svg class="proof-mini-diagram" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="35" fill="none" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="3,3"/>
+                    <circle cx="50" cy="50" r="3" fill="#8b5cf6"/>
+                    <text x="50" y="65" font-size="9" font-weight="bold" fill="#7c3aed" text-anchor="middle">C(h,k)</text>
+                    <circle cx="75" cy="25" r="4" fill="#3b82f6"/>
+                    <text x="82" y="22" font-size="9" font-weight="bold" fill="#1e293b">P(x,y)</text>
+                    <line x1="50" y1="50" x2="75" y2="25" stroke="#10b981" stroke-width="1.5" stroke-dasharray="2,2"/>
+                    <text x="60" y="34" font-size="9" font-weight="bold" fill="#059669">r</text>
+                </svg>
+            </div>
+
+            <!-- Your Exact Challenge Card -->
+            <div class="card challenge-card-bottom" id="practice">
+                <h3><i class="fa-solid fa-bullseye" style="color:var(--primary);"></i> Your Exact Challenge</h3>
+                <p id="challengePrompt" style="font-size:12px; color:var(--text-secondary);">Place P so that it lies on the circle with C(2, -3) and r = 5.</p>
+
+                <div class="challenge-input-group">
+                    <span style="font-size:13px; font-weight:600;">Your P(x, y) = (</span>
+                    <input type="number" id="challengeX" placeholder="x" step="0.1" style="width:65px; padding:6px; border:1px solid var(--border-color); border-radius:6px;">
+                    <span style="font-size:13px; font-weight:600;">,</span>
+                    <input type="number" id="challengeY" placeholder="y" step="0.1" style="width:65px; padding:6px; border:1px solid var(--border-color); border-radius:6px;">
+                    <span style="font-size:13px; font-weight:600;">)</span>
+                    <button class="btn-check-challenge" id="btnCheckChallenge">
+                        <i class="fa-solid fa-bullseye"></i> Check
+                    </button>
+                    <button class="btn-check-challenge" id="btnNewChallenge" style="background:#ffffff;">
+                        New
+                    </button>
+                </div>
+
+                <div id="challengeFeedback" style="display:none; padding:8px 12px; border-radius:8px; font-size:12px; font-weight:700;"></div>
+            </div>
+        </div>
+
+        <!-- Footer Bar -->
+        <footer class="footer-bar">
+            <span class="mission-text"><i class="fa-solid fa-rocket"></i> Mission: See the structure. Trust the logic. Build the truth.</span>
+            <span>Maths Universe &bull; Visual Proofs</span>
+        </footer>
+
+    </main>
+</div>
+
+<!-- Embedded Interactive Mathematical Engine Script -->
+<script>
+(function () {
+    'use strict';
+
+    // ---------------------------------------------------------
+    // 1. MATHEMATICAL STATE
+    // ---------------------------------------------------------
+    const state = {
+        center: { h: 1, k: -1 },
+        radius: 4.12,
+        point: { x: 4.2, y: 2.6 },
+        mode: "test", // "test" | "locus"
+        showGrid: true,
+        showDistances: true,
+        showEquation: true,
+        showInequality: false,
+        showDirectrix: false,
+        directrixA: -5,
+        
+        // Canvas View transform (Pan & Scale)
+        view: {
+            scale: 35, // pixels per coordinate unit
+            zoomLevel: 1.0,
+            originX: 0, // viewport center relative offset
+            originY: 0
+        },
+
+        // Challenge generator state
+        challenge: {
+            type: "ON", // "ON" | "INSIDE" | "OUTSIDE"
+            center: { h: 2, k: -3 },
+            radius: 5.0,
+            solved: false
+        }
+    };
+
+    function initDefaultPoint() {
+        state.point.x = parseFloat((state.center.h + state.radius * Math.cos(Math.PI / 4)).toFixed(2));
+        state.point.y = parseFloat((state.center.k + state.radius * Math.sin(Math.PI / 4)).toFixed(2));
+    }
+
+    // ---------------------------------------------------------
+    // 2. DOM ELEMENT REFERENCES
+    // ---------------------------------------------------------
+    const dom = {
+        inputH: document.getElementById('inputH'),
+        inputK: document.getElementById('inputK'),
+        inputR: document.getElementById('inputR'),
+        sliderR: document.getElementById('sliderR'),
+        inputPX: document.getElementById('inputPX'),
+        inputPY: document.getElementById('inputPY'),
+        inputDirectrixA: document.getElementById('inputDirectrixA'),
+        btnResetView: document.getElementById('btnResetView'),
+        btnNewProof: document.getElementById('btnNewProof'),
+        chkDistances: document.getElementById('chkDistances'),
+        chkEquation: document.getElementById('chkEquation'),
+        chkGrid: document.getElementById('chkGrid'),
+        chkInequalityRegions: document.getElementById('chkInequalityRegions'),
+        canvasWrapper: document.getElementById('canvasWrapper'),
+        geoCanvas: document.getElementById('geoCanvas'),
+        graphEquationBadge: document.getElementById('graphEquationBadge'),
+        graphNumericEq: document.getElementById('graphNumericEq'),
+        badgeCP: document.getElementById('badgeCP'),
+        badgeCPValue: document.getElementById('badgeCPValue'),
+        badgeDirectrix: document.getElementById('badgeDirectrix'),
+        badgeDirectrixValue: document.getElementById('badgeDirectrixValue'),
+        directrixHeaderTag: document.getElementById('directrixHeaderTag'),
+        btnPanReset: document.getElementById('btnPanReset'),
+        btnZoomOut: document.getElementById('btnZoomOut'),
+        zoomLevelText: document.getElementById('zoomLevelText'),
+        btnZoomIn: document.getElementById('btnZoomIn'),
+        btnFitCircle: document.getElementById('btnFitCircle'),
+        predictX: document.getElementById('predictX'),
+        predictY: document.getElementById('predictY'),
+        predictLeftVal: document.getElementById('predictLeftVal'),
+        predictRightVal: document.getElementById('predictRightVal'),
+        predictResultBadge: document.getElementById('predictResultBadge'),
+        predictResultText: document.getElementById('predictResultText'),
+        predictIcon: document.getElementById('predictIcon'),
+        challengePrompt: document.getElementById('challengePrompt'),
+        challengeX: document.getElementById('challengeX'),
+        challengeY: document.getElementById('challengeY'),
+        btnCheckChallenge: document.getElementById('btnCheckChallenge'),
+        btnNewChallenge: document.getElementById('btnNewChallenge'),
+        challengeFeedback: document.getElementById('challengeFeedback'),
+        proofMathDistance: document.getElementById('proofMathDistance')
+    };
+
+    let isDraggingP = false;
+    let isDraggingC = false;
+    let isPanning = false;
+    let panStart = { x: 0, y: 0 };
+
+    // ---------------------------------------------------------
+    // 3. UTILITY MATH FUNCTIONS
+    // ---------------------------------------------------------
+
+    function formatSquaredTerm(varName, val) {
+        if (Math.abs(val) < 0.001) return `${varName}²`;
+        if (val > 0) return `(${varName} - ${val.toFixed(val % 1 === 0 ? 0 : 2)})²`;
+        return `(${varName} + ${Math.abs(val).toFixed(val % 1 === 0 ? 0 : 2)})²`;
+    }
+
+    function getDistance(x1, y1, x2, y2) {
+        const dx = x2 - x1;
+        const dy = y2 - y1;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    function classifyPoint(h, k, r, x, y) {
+        const dist = getDistance(x, y, h, k);
+        const tol = Math.max(0.05, 0.005 * Math.max(1, r));
+
+        if (Math.abs(dist - r) <= tol) {
+            return { code: "ON", text: "ON the circle", class: "banner-on", color: "var(--green)" };
+        } else if (dist < r) {
+            return { code: "INSIDE", text: "INSIDE the circle", class: "banner-inside", color: "var(--orange)" };
+        } else {
+            return { code: "OUTSIDE", text: "OUTSIDE the circle", class: "banner-outside", color: "var(--red)" };
+        }
+    }
+
+    function mathToSvg(x, y) {
+        const rect = dom.geoCanvas.getBoundingClientRect();
+        const cx = rect.width / 2 + state.view.originX;
+        const cy = rect.height / 2 + state.view.originY;
+        const scale = state.view.scale * state.view.zoomLevel;
+
+        return {
+            x: cx + x * scale,
+            y: cy - y * scale
+        };
+    }
+
+    function svgToMath(svgX, svgY) {
+        const rect = dom.geoCanvas.getBoundingClientRect();
+        const cx = rect.width / 2 + state.view.originX;
+        const cy = rect.height / 2 + state.view.originY;
+        const scale = state.view.scale * state.view.zoomLevel;
+
+        return {
+            x: (svgX - cx) / scale,
+            y: (cy - svgY) / scale
+        };
+    }
+
+    // ---------------------------------------------------------
+    // 4. MAIN RENDER ENGINE
+    // ---------------------------------------------------------
+
+    function render() {
+        updateFormInputs();
+        renderSVGCanvas();
+        updatePredictAndCheck();
+        updateProof();
+    }
+
+    function updateFormInputs() {
+        if (dom.inputH) dom.inputH.value = state.center.h;
+        if (dom.inputK) dom.inputK.value = state.center.k;
+        if (dom.inputR) dom.inputR.value = state.radius;
+        if (dom.sliderR) dom.sliderR.value = state.radius;
+        if (dom.inputPX) dom.inputPX.value = state.point.x;
+        if (dom.inputPY) dom.inputPY.value = state.point.y;
+        if (dom.predictX) dom.predictX.value = state.point.x;
+        if (dom.predictY) dom.predictY.value = state.point.y;
+        if (dom.inputDirectrixA) dom.inputDirectrixA.value = state.directrixA;
+        if (dom.zoomLevelText) dom.zoomLevelText.textContent = `${Math.round(state.view.zoomLevel * 100)}%`;
+
+        if (dom.chkDistances) dom.chkDistances.checked = state.showDistances;
+        if (dom.chkEquation) dom.chkEquation.checked = state.showEquation;
+        if (dom.chkGrid) dom.chkGrid.checked = state.showGrid;
+        if (dom.chkInequalityRegions) dom.chkInequalityRegions.checked = state.showInequality;
+
+        if (dom.graphEquationBadge) dom.graphEquationBadge.style.display = state.showEquation ? 'block' : 'none';
+        if (dom.badgeCP) dom.badgeCP.style.display = state.showDistances ? 'block' : 'none';
+        if (dom.badgeDirectrix) dom.badgeDirectrix.style.display = (state.showDirectrix && state.showDistances) ? 'block' : 'none';
+        if (dom.directrixHeaderTag) dom.directrixHeaderTag.style.display = state.showDirectrix ? 'block' : 'none';
+
+        const eqStr = `${formatSquaredTerm('x', state.center.h)} + ${formatSquaredTerm('y', state.center.k)} = ${(state.radius * state.radius).toFixed(2)}`;
+        if (dom.graphNumericEq) dom.graphNumericEq.textContent = eqStr;
+    }
+
+    function renderSVGCanvas() {
+        const svg = dom.geoCanvas;
+        if (!svg) return;
+        svg.innerHTML = '';
+
+        const rect = svg.getBoundingClientRect();
+        const width = rect.width || 600;
+        const height = rect.height || 500;
+        const scale = state.view.scale * state.view.zoomLevel;
+
+        const centerSvg = mathToSvg(0, 0);
+
+        // 1. Grid
+        if (state.showGrid) {
+            const gridGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            const minMath = svgToMath(0, height);
+            const maxMath = svgToMath(width, 0);
+
+            const startX = Math.floor(minMath.x) - 1;
+            const endX = Math.ceil(maxMath.x) + 1;
+            const startY = Math.floor(minMath.y) - 1;
+            const endY = Math.ceil(maxMath.y) + 1;
+
+            let step = 1;
+            if (scale < 20) step = 2;
+            if (scale < 10) step = 5;
+
+            for (let x = Math.floor(startX / step) * step; x <= endX; x += step) {
+                const pt = mathToSvg(x, 0);
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', pt.x);
+                line.setAttribute('y1', 0);
+                line.setAttribute('x2', pt.x);
+                line.setAttribute('y2', height);
+                line.setAttribute('stroke', x === 0 ? '#94a3b8' : '#e2e8f0');
+                line.setAttribute('stroke-width', x === 0 ? '2' : '1');
+                gridGroup.appendChild(line);
+
+                if (x !== 0 && pt.x > 10 && pt.x < width - 10) {
+                    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    text.setAttribute('x', pt.x);
+                    text.setAttribute('y', Math.min(Math.max(centerSvg.y + 15, 15), height - 5));
+                    text.setAttribute('font-size', '11');
+                    text.setAttribute('fill', '#64748b');
+                    text.setAttribute('text-anchor', 'middle');
+                    text.textContent = x;
+                    gridGroup.appendChild(text);
+                }
+            }
+
+            for (let y = Math.floor(startY / step) * step; y <= endY; y += step) {
+                const pt = mathToSvg(0, y);
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', 0);
+                line.setAttribute('y1', pt.y);
+                line.setAttribute('x2', width);
+                line.setAttribute('y2', pt.y);
+                line.setAttribute('stroke', y === 0 ? '#94a3b8' : '#e2e8f0');
+                line.setAttribute('stroke-width', y === 0 ? '2' : '1');
+                gridGroup.appendChild(line);
+
+                if (y !== 0 && pt.y > 10 && pt.y < height - 10) {
+                    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    text.setAttribute('x', Math.min(Math.max(centerSvg.x - 12, 15), width - 15));
+                    text.setAttribute('y', pt.y + 4);
+                    text.setAttribute('font-size', '11');
+                    text.setAttribute('fill', '#64748b');
+                    text.setAttribute('text-anchor', 'end');
+                    text.textContent = y;
+                    gridGroup.appendChild(text);
+                }
+            }
+
+            const text0 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text0.setAttribute('x', centerSvg.x - 8);
+            text0.setAttribute('y', centerSvg.y + 14);
+            text0.setAttribute('font-size', '11');
+            text0.setAttribute('font-weight', 'bold');
+            text0.setAttribute('fill', '#64748b');
+            text0.textContent = '0';
+            gridGroup.appendChild(text0);
+
+            const xAxisLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            xAxisLabel.setAttribute('x', width - 15);
+            xAxisLabel.setAttribute('y', Math.min(Math.max(centerSvg.y - 8, 15), height - 15));
+            xAxisLabel.setAttribute('font-size', '12');
+            xAxisLabel.setAttribute('font-weight', 'bold');
+            xAxisLabel.setAttribute('fill', '#334155');
+            xAxisLabel.textContent = 'x';
+            gridGroup.appendChild(xAxisLabel);
+
+            const yAxisLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            yAxisLabel.setAttribute('x', Math.min(Math.max(centerSvg.x + 8, 15), width - 15));
+            yAxisLabel.setAttribute('y', 15);
+            yAxisLabel.setAttribute('font-size', '12');
+            yAxisLabel.setAttribute('font-weight', 'bold');
+            yAxisLabel.setAttribute('fill', '#334155');
+            yAxisLabel.textContent = 'y';
+            gridGroup.appendChild(yAxisLabel);
+
+            svg.appendChild(gridGroup);
+        }
+
+        // 2. Inequality Regions (Optional Shade)
+        if (state.showInequality) {
+            const centerPt = mathToSvg(state.center.h, state.center.k);
+            const radiusPx = state.radius * scale;
+
+            const circleShade = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circleShade.setAttribute('cx', centerPt.x);
+            circleShade.setAttribute('cy', centerPt.y);
+            circleShade.setAttribute('r', radiusPx);
+            circleShade.setAttribute('fill', 'rgba(79, 70, 229, 0.06)');
+            svg.appendChild(circleShade);
+        }
+
+        // 3. Directrix Line
+        if (state.showDirectrix) {
+            const dirPt = mathToSvg(state.directrixA, 0);
+            const dirLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            dirLine.setAttribute('x1', dirPt.x);
+            dirLine.setAttribute('y1', 0);
+            dirLine.setAttribute('x2', dirPt.x);
+            dirLine.setAttribute('y2', height);
+            dirLine.setAttribute('stroke', '#ec4899');
+            dirLine.setAttribute('stroke-width', '2');
+            dirLine.setAttribute('stroke-dasharray', '6,4');
+            svg.appendChild(dirLine);
+        }
+
+        // 4. Circle Locus
+        const centerPt = mathToSvg(state.center.h, state.center.k);
+        const radiusPx = state.radius * scale;
+
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', centerPt.x);
+        circle.setAttribute('cy', centerPt.y);
+        circle.setAttribute('r', radiusPx);
+        circle.setAttribute('fill', 'none');
+        circle.setAttribute('stroke', '#4f46e5');
+        circle.setAttribute('stroke-width', '2.5');
+        circle.setAttribute('stroke-dasharray', state.mode === 'locus' ? 'none' : '6,4');
+        svg.appendChild(circle);
+
+        // 5. Radius Segment Line
+        const radPt = mathToSvg(state.center.h + state.radius, state.center.k);
+        const radiusLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        radiusLine.setAttribute('x1', centerPt.x);
+        radiusLine.setAttribute('y1', centerPt.y);
+        radiusLine.setAttribute('x2', radPt.x);
+        radiusLine.setAttribute('y2', radPt.y);
+        radiusLine.setAttribute('stroke', '#10b981');
+        radiusLine.setAttribute('stroke-width', '2');
+        radiusLine.setAttribute('stroke-dasharray', '4,3');
+        svg.appendChild(radiusLine);
+
+        // 6. Point P & Line CP
+        const ptSvg = mathToSvg(state.point.x, state.point.y);
+        const classification = classifyPoint(state.center.h, state.center.k, state.radius, state.point.x, state.point.y);
+
+        if (state.showDistances) {
+            const cpLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            cpLine.setAttribute('x1', centerPt.x);
+            cpLine.setAttribute('y1', centerPt.y);
+            cpLine.setAttribute('x2', ptSvg.x);
+            cpLine.setAttribute('y2', ptSvg.y);
+            cpLine.setAttribute('stroke', classification.color);
+            cpLine.setAttribute('stroke-width', '2.5');
+            cpLine.setAttribute('stroke-dasharray', '5,3');
+            svg.appendChild(cpLine);
+
+            const midX = (centerPt.x + ptSvg.x) / 2;
+            const midY = (centerPt.y + ptSvg.y) / 2;
+            const distVal = getDistance(state.point.x, state.point.y, state.center.h, state.center.k).toFixed(2);
+
+            const cpTagBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            cpTagBg.setAttribute('x', midX - 35);
+            cpTagBg.setAttribute('y', midY - 14);
+            cpTagBg.setAttribute('width', '70');
+            cpTagBg.setAttribute('height', '20');
+            cpTagBg.setAttribute('rx', '4');
+            cpTagBg.setAttribute('fill', '#ffffff');
+            cpTagBg.setAttribute('stroke', classification.color);
+            cpTagBg.setAttribute('stroke-width', '1');
+            svg.appendChild(cpTagBg);
+
+            const cpTagText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            cpTagText.setAttribute('x', midX);
+            cpTagText.setAttribute('y', midY + 1);
+            cpTagText.setAttribute('font-size', '11');
+            cpTagText.setAttribute('font-weight', 'bold');
+            cpTagText.setAttribute('fill', classification.color);
+            cpTagText.setAttribute('text-anchor', 'middle');
+            cpTagText.textContent = `CP = ${distVal}`;
+            svg.appendChild(cpTagText);
+
+            if (state.showDirectrix) {
+                const dirPtX = mathToSvg(state.directrixA, 0).x;
+                const dirDistLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                dirDistLine.setAttribute('x1', ptSvg.x);
+                dirDistLine.setAttribute('y1', ptSvg.y);
+                dirDistLine.setAttribute('x2', dirPtX);
+                dirDistLine.setAttribute('y2', ptSvg.y);
+                dirDistLine.setAttribute('stroke', '#3b82f6');
+                dirDistLine.setAttribute('stroke-width', '2');
+                dirDistLine.setAttribute('stroke-dasharray', '4,3');
+                svg.appendChild(dirDistLine);
+            }
+        }
+
+        // 7. Center Point C Marker
+        const centerGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        centerGroup.setAttribute('cursor', 'pointer');
+
+        const centerCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        centerCircle.setAttribute('cx', centerPt.x);
+        centerCircle.setAttribute('cy', centerPt.y);
+        centerCircle.setAttribute('r', '7');
+        centerCircle.setAttribute('fill', '#8b5cf6');
+        centerCircle.setAttribute('stroke', '#ffffff');
+        centerCircle.setAttribute('stroke-width', '2');
+        centerGroup.appendChild(centerCircle);
+
+        const centerLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        centerLabel.setAttribute('x', centerPt.x - 12);
+        centerLabel.setAttribute('y', centerPt.y + 20);
+        centerLabel.setAttribute('font-size', '12');
+        centerLabel.setAttribute('font-weight', 'bold');
+        centerLabel.setAttribute('fill', '#7c3aed');
+        centerLabel.textContent = `C (${state.center.h}, ${state.center.k})`;
+        centerGroup.appendChild(centerLabel);
+
+        svg.appendChild(centerGroup);
+
+        // 8. Test Point P Marker (Draggable)
+        const pGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        pGroup.setAttribute('class', 'draggable-p');
+        pGroup.setAttribute('cursor', 'grab');
+
+        const pOuterGlow = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        pOuterGlow.setAttribute('cx', ptSvg.x);
+        pOuterGlow.setAttribute('cy', ptSvg.y);
+        pOuterGlow.setAttribute('r', '14');
+        pOuterGlow.setAttribute('fill', classification.color);
+        pOuterGlow.setAttribute('fill-opacity', '0.2');
+        pGroup.appendChild(pOuterGlow);
+
+        const pCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        pCircle.setAttribute('cx', ptSvg.x);
+        pCircle.setAttribute('cy', ptSvg.y);
+        pCircle.setAttribute('r', '8');
+        pCircle.setAttribute('fill', classification.color);
+        pCircle.setAttribute('stroke', '#ffffff');
+        pCircle.setAttribute('stroke-width', '2.5');
+        pGroup.appendChild(pCircle);
+
+        const pLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        pLabel.setAttribute('x', ptSvg.x + 14);
+        pLabel.setAttribute('y', ptSvg.y + 4);
+        pLabel.setAttribute('font-size', '13');
+        pLabel.setAttribute('font-weight', 'bold');
+        pLabel.setAttribute('fill', '#1e293b');
+        pLabel.textContent = `P (${state.point.x}, ${state.point.y})`;
+        pGroup.appendChild(pLabel);
+
+        svg.appendChild(pGroup);
+    }
+
+    function updatePredictAndCheck() {
+        const h = state.center.h;
+        const k = state.center.k;
+        const r = state.radius;
+        const x = state.point.x;
+        const y = state.point.y;
+
+        const leftVal = (x - h) * (x - h) + (y - k) * (y - k);
+        const rightVal = r * r;
+
+        if (dom.predictLeftVal) dom.predictLeftVal.textContent = leftVal.toFixed(2);
+        if (dom.predictRightVal) dom.predictRightVal.textContent = rightVal.toFixed(2);
+
+        const distanceDiff = Math.abs(Math.sqrt(leftVal) - r);
+        const onTolerance = Math.max(0.05, 0.005 * Math.max(1, r));
+
+        if (dom.predictResultBadge && dom.predictResultText && dom.predictIcon) {
+            if (distanceDiff <= onTolerance) {
+                dom.predictResultBadge.style.backgroundColor = 'var(--green-light)';
+                dom.predictResultBadge.style.color = '#065f46';
+                dom.predictIcon.className = 'fa-solid fa-check';
+                dom.predictResultText.textContent = 'Equal! Point is on the circle.';
+            } else if (leftVal < rightVal) {
+                dom.predictResultBadge.style.backgroundColor = 'var(--orange-light)';
+                dom.predictResultBadge.style.color = '#92400e';
+                dom.predictIcon.className = 'fa-solid fa-less-than';
+                dom.predictResultText.textContent = 'Left < Right. Point is inside the circle.';
+            } else {
+                dom.predictResultBadge.style.backgroundColor = 'var(--red-light)';
+                dom.predictResultBadge.style.color = '#991b1b';
+                dom.predictIcon.className = 'fa-solid fa-greater-than';
+                dom.predictResultText.textContent = 'Left > Right. Point is outside the circle.';
+            }
+        }
+    }
+
+    function updateProof() {
+        const h = state.center.h;
+        const k = state.center.k;
+        const r = state.radius;
+        const x = state.point.x;
+        const y = state.point.y;
+
+        const dx = x - h;
+        const dy = y - k;
+        const cp = Math.sqrt(dx * dx + dy * dy);
+
+        const hStr = h < 0 ? ` - (${h})` : ` - ${h}`;
+        const kStr = k < 0 ? ` - (${k})` : ` - ${k}`;
+
+        if (dom.proofMathDistance) {
+            dom.proofMathDistance.innerHTML = `Distance CP = &radic;((${x}${hStr})&sup2; + (${y}${kStr})&sup2;) = &radic;(${dx.toFixed(2)}&sup2; + ${dy.toFixed(2)}&sup2;) = <strong>${cp.toFixed(2)}</strong> &rarr; (${formatSquaredTerm('x', h)} + ${formatSquaredTerm('y', k)} = ${(r * r).toFixed(2)}) &nbsp;&check;`;
+        }
+    }
+
+    function generateNewChallenge() {
+        const types = ["ON", "INSIDE", "OUTSIDE"];
+        const type = types[Math.floor(Math.random() * types.length)];
+        const h = Math.floor(Math.random() * 10) - 5;
+        const k = Math.floor(Math.random() * 10) - 5;
+        const r = Math.floor(Math.random() * 5) + 2;
+
+        state.challenge = {
+            type: type,
+            center: { h: h, k: k },
+            radius: r,
+            solved: false
+        };
+
+        if (dom.challengePrompt) {
+            dom.challengePrompt.innerHTML = `Place P so that it lies on the circle with C(${h}, ${k}) and r = ${r}.`;
+        }
+        if (dom.challengeX) dom.challengeX.value = '';
+        if (dom.challengeY) dom.challengeY.value = '';
+        if (dom.challengeFeedback) dom.challengeFeedback.style.display = 'none';
+    }
+
+    function checkChallenge() {
+        const x = parseFloat(dom.challengeX.value);
+        const y = parseFloat(dom.challengeY.value);
+
+        if (isNaN(x) || isNaN(y)) {
+            if (dom.challengeFeedback) {
+                dom.challengeFeedback.style.display = 'block';
+                dom.challengeFeedback.style.backgroundColor = 'var(--red-light)';
+                dom.challengeFeedback.style.color = '#991b1b';
+                dom.challengeFeedback.textContent = 'Please enter valid numerical x and y coordinates.';
+            }
+            return;
+        }
+
+        const ch = state.challenge;
+        const dist = getDistance(x, y, ch.center.h, ch.center.k);
+        const r = ch.radius;
+        const tol = 0.05 * r;
+
+        let userClass = "OUTSIDE";
+        if (Math.abs(dist - r) < tol) userClass = "ON";
+        else if (dist < r) userClass = "INSIDE";
+
+        if (dom.challengeFeedback) {
+            dom.challengeFeedback.style.display = 'block';
+            if (userClass === ch.type) {
+                dom.challengeFeedback.style.backgroundColor = 'var(--green-light)';
+                dom.challengeFeedback.style.color = '#065f46';
+                dom.challengeFeedback.innerHTML = `<i class="fa-solid fa-circle-check"></i> Correct! Distance CP = ${dist.toFixed(2)} (r = ${r}).`;
+                state.center.h = ch.center.h;
+                state.center.k = ch.center.k;
+                state.radius = ch.radius;
+                state.point.x = x;
+                state.point.y = y;
+                render();
+            } else {
+                dom.challengeFeedback.style.backgroundColor = 'var(--red-light)';
+                dom.challengeFeedback.style.color = '#991b1b';
+                dom.challengeFeedback.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Distance CP = ${dist.toFixed(2)} while r = ${r}. That point is ${userClass.toLowerCase()} the circle.`;
+            }
+        }
+    }
+
+    function snapPToCircle() {
+        const angle = Math.atan2(state.point.y - state.center.k, state.point.x - state.center.h);
+        state.point.x = parseFloat((state.center.h + state.radius * Math.cos(angle)).toFixed(2));
+        state.point.y = parseFloat((state.center.k + state.radius * Math.sin(angle)).toFixed(2));
+    }
+
+    function setupEventListeners() {
+        // Tab buttons
+        document.querySelectorAll('.tab-btn').forEach((button) => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach((b) => b.classList.remove('active'));
+                button.classList.add('active');
+            });
+        });
+
+        // Inputs
+        if (dom.inputH) dom.inputH.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            if (!isNaN(val)) { state.center.h = val; render(); }
+        });
+        if (dom.inputK) dom.inputK.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            if (!isNaN(val)) { state.center.k = val; render(); }
+        });
+
+        const updateR = (val) => {
+            if (!isNaN(val) && val > 0) {
+                state.radius = val;
+                if (state.mode === 'locus') snapPToCircle();
+                render();
+            }
+        };
+
+        if (dom.inputR) dom.inputR.addEventListener('input', (e) => updateR(parseFloat(e.target.value)));
+        if (dom.sliderR) dom.sliderR.addEventListener('input', (e) => updateR(parseFloat(e.target.value)));
+
+        if (dom.inputPX) dom.inputPX.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            if (!isNaN(val)) { state.point.x = val; render(); }
+        });
+        if (dom.inputPY) dom.inputPY.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            if (!isNaN(val)) { state.point.y = val; render(); }
+        });
+
+        if (dom.predictX) dom.predictX.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            if (!isNaN(val)) { state.point.x = val; render(); }
+        });
+        if (dom.predictY) dom.predictY.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            if (!isNaN(val)) { state.point.y = val; render(); }
+        });
+
+        if (dom.inputDirectrixA) dom.inputDirectrixA.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            if (!isNaN(val)) { state.directrixA = val; render(); }
+        });
+
+        if (dom.chkDistances) dom.chkDistances.addEventListener('change', (e) => { state.showDistances = e.target.checked; render(); });
+        if (dom.chkEquation) dom.chkEquation.addEventListener('change', (e) => { state.showEquation = e.target.checked; render(); });
+        if (dom.chkGrid) dom.chkGrid.addEventListener('change', (e) => { state.showGrid = e.target.checked; render(); });
+        if (dom.chkInequalityRegions) dom.chkInequalityRegions.addEventListener('change', (e) => { state.showInequality = e.target.checked; render(); });
+
+        if (dom.btnResetView) dom.btnResetView.addEventListener('click', () => {
+            state.center = { h: 1, k: -1 };
+            state.radius = 4.12;
+            initDefaultPoint();
+            state.view.zoomLevel = 1.0;
+            state.view.originX = 0;
+            state.view.originY = 0;
+            render();
+        });
+
+        if (dom.btnNewProof) dom.btnNewProof.addEventListener('click', () => {
+            state.center = { h: 1, k: -1 };
+            state.radius = 4.12;
+            initDefaultPoint();
+            render();
+        });
+
+        if (dom.btnPanReset) dom.btnPanReset.addEventListener('click', () => {
+            state.view.originX = 0;
+            state.view.originY = 0;
+            state.view.zoomLevel = 1.0;
+            render();
+        });
+
+        if (dom.btnZoomIn) dom.btnZoomIn.addEventListener('click', () => {
+            state.view.zoomLevel = Math.min(state.view.zoomLevel * 1.25, 3.0);
+            render();
+        });
+
+        if (dom.btnZoomOut) dom.btnZoomOut.addEventListener('click', () => {
+            state.view.zoomLevel = Math.max(state.view.zoomLevel / 1.25, 0.4);
+            render();
+        });
+
+        if (dom.btnFitCircle) dom.btnFitCircle.addEventListener('click', () => {
+            const wrapperRect = dom.canvasWrapper.getBoundingClientRect();
+            const minDim = Math.min(wrapperRect.width, wrapperRect.height);
+            const targetScale = (minDim * 0.35) / state.radius;
+            state.view.scale = targetScale;
+            state.view.zoomLevel = 1.0;
+            state.view.originX = -state.center.h * targetScale;
+            state.view.originY = state.center.k * targetScale;
+            render();
+        });
+
+        if (dom.btnNewChallenge) dom.btnNewChallenge.addEventListener('click', generateNewChallenge);
+        if (dom.btnCheckChallenge) dom.btnCheckChallenge.addEventListener('click', checkChallenge);
+
+        // Pointer Drag Handler for SVG Canvas
+        const canvas = dom.geoCanvas;
+
+        function handlePointerDown(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            const mouseSvg = { x: clientX - rect.left, y: clientY - rect.top };
+            const mouseMath = svgToMath(mouseSvg.x, mouseSvg.y);
+
+            const distToP = getDistance(mouseMath.x, mouseMath.y, state.point.x, state.point.y);
+            const distToC = getDistance(mouseMath.x, mouseMath.y, state.center.h, state.center.k);
+            const threshold = 25 / (state.view.scale * state.view.zoomLevel);
+
+            if (distToP < threshold) {
+                isDraggingP = true;
+            } else if (distToC < threshold) {
+                isDraggingC = true;
+            } else {
+                isPanning = true;
+                panStart = { x: clientX, y: clientY };
+            }
+        }
+
+        function handlePointerMove(e) {
+            if (!isDraggingP && !isDraggingC && !isPanning) return;
+
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            const mouseSvg = { x: clientX - rect.left, y: clientY - rect.top };
+            const mouseMath = svgToMath(mouseSvg.x, mouseSvg.y);
+
+            if (isDraggingP) {
+                if (state.mode === 'locus') {
+                    const angle = Math.atan2(mouseMath.y - state.center.k, mouseMath.x - state.center.h);
+                    state.point.x = parseFloat((state.center.h + state.radius * Math.cos(angle)).toFixed(2));
+                    state.point.y = parseFloat((state.center.k + state.radius * Math.sin(angle)).toFixed(2));
+                } else {
+                    state.point.x = parseFloat(mouseMath.x.toFixed(2));
+                    state.point.y = parseFloat(mouseMath.y.toFixed(2));
+                }
+                render();
+            } else if (isDraggingC) {
+                state.center.h = parseFloat(mouseMath.x.toFixed(2));
+                state.center.k = parseFloat(mouseMath.y.toFixed(2));
+                if (state.mode === 'locus') snapPToCircle();
+                render();
+            } else if (isPanning) {
+                const dx = clientX - panStart.x;
+                const dy = clientY - panStart.y;
+                state.view.originX += dx;
+                state.view.originY += dy;
+                panStart = { x: clientX, y: clientY };
+                render();
+            }
+        }
+
+        function handlePointerUp() {
+            isDraggingP = false;
+            isDraggingC = false;
+            isPanning = false;
+        }
+
+        canvas.addEventListener('mousedown', handlePointerDown);
+        window.addEventListener('mousemove', handlePointerMove);
+        window.addEventListener('mouseup', handlePointerUp);
+
+        canvas.addEventListener('touchstart', handlePointerDown, { passive: true });
+        window.addEventListener('touchmove', handlePointerMove, { passive: true });
+        window.addEventListener('touchend', handlePointerUp);
+    }
+
+    function init() {
+        setupEventListeners();
+        generateNewChallenge();
+        render();
+
+        window.addEventListener('resize', () => {
+            render();
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
+</script>
 </body>
 </html>
